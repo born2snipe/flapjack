@@ -1,0 +1,10 @@
+package commonline.core.model;
+
+import commonline.core.layout.RecordLayout;
+
+/**
+ * Resolves what RecordFactory should be used based on the RecordLayout
+ */
+public interface RecordFactoryResolver {
+    RecordFactory resolve(RecordLayout layout);
+}

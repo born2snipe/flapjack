@@ -1,0 +1,7 @@
+package commonline.core.util;
+
+
+public interface ValueConverter {
+    Object convert(String text);
+    Class type();
+}

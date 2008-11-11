@@ -1,0 +1,26 @@
+package commonline.core.layout;
+
+
+public class RecordTerminatorFieldDefinition extends SimpleFieldDefinition implements CommonLineFieldDefinition {
+
+    public RecordTerminatorFieldDefinition(int position) {
+        super("Record Terminator", position, 1);
+    }
+
+
+    public Type getType() {
+        return Type.ALPHA_NUMERIC;
+    }
+
+    public Justified getJustified() {
+        return null;
+    }
+
+    public Padding getPadding() {
+        return null;
+    }
+
+    public String toString() {
+        return getName() + "@" + getPosition() + ",length=" + getLength() + "," + getType();
+    }
+}

@@ -1,0 +1,59 @@
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/!svn/ver/85/trunk/commonline/commonline-core/src/test/java/commonline/core/parser
+END
+DefaultBadRecordFactoryTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 119
+/svn/!svn/ver/75/trunk/commonline/commonline-core/src/test/java/commonline/core/parser/DefaultBadRecordFactoryTest.java
+END
+FlatFileParserTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/svn/!svn/ver/62/trunk/commonline/commonline-core/src/test/java/commonline/core/parser/FlatFileParserTest.java
+END
+ByteRecordFieldParserTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 117
+/svn/!svn/ver/86/trunk/commonline/commonline-core/src/test/java/commonline/core/parser/ByteRecordFieldParserTest.java
+END
+CommoneLineRecordLayoutResolverTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 127
+/svn/!svn/ver/53/trunk/commonline/commonline-core/src/test/java/commonline/core/parser/CommoneLineRecordLayoutResolverTest.java
+END
+DefaultParseResultFactoryTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 121
+/svn/!svn/ver/49/trunk/commonline/commonline-core/src/test/java/commonline/core/parser/DefaultParseResultFactoryTest.java
+END
+StringRecordFieldParserTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 119
+/svn/!svn/ver/86/trunk/commonline/commonline-core/src/test/java/commonline/core/parser/StringRecordFieldParserTest.java
+END
+StringFieldParserTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/svn/!svn/ver/18/trunk/commonline/commonline-core/src/test/java/commonline/core/parser/StringFieldParserTest.java
+END
+RecordParserImplTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/svn/!svn/ver/85/trunk/commonline/commonline-core/src/test/java/commonline/core/parser/RecordParserImplTest.java
+END
+DefaultParseResultTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/svn/!svn/ver/76/trunk/commonline/commonline-core/src/test/java/commonline/core/parser/DefaultParseResultTest.java
+END

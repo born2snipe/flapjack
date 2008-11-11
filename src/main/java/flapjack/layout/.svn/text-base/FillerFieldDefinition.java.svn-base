@@ -1,0 +1,27 @@
+package commonline.core.layout;
+
+/**
+ * A field definition for a Filler field
+ */
+public class FillerFieldDefinition extends SimpleFieldDefinition implements CommonLineFieldDefinition {
+
+    public FillerFieldDefinition(int position, int length) {
+        super("Filler", position, length);
+    }
+
+    public Type getType() {
+        return Type.ALPHA_NUMERIC;
+    }
+
+    public Justified getJustified() {
+        return null;
+    }
+
+    public Padding getPadding() {
+        return null;
+    }
+
+    public String toString() {
+        return getName() + "@" + getPosition() + ",length=" + getLength() + "," + getType();
+    }
+}

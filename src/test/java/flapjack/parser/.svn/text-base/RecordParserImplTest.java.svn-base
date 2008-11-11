@@ -1,0 +1,207 @@
+package commonline.core.parser;
+
+import commonline.core.io.StubRecordReader;
+import commonline.core.layout.FieldDefinition;
+import commonline.core.layout.SimpleFieldDefinition;
+import commonline.core.layout.SimpleRecordLayout;
+import commonline.core.model.RecordFactory;
+import commonline.core.model.RecordFactoryResolver;
+import org.jmock.Mock;
+import org.jmock.MockObjectTestCase;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+
+public class RecordParserImplTest extends MockObjectTestCase {
+    private RecordParserImpl parser;
+    private Mock parseResultFactory;
+    private DefaultParseResult result;
+    private StubRecordReader recordReader;
+    private Mock recordLayoutResolver;
+    private SimpleRecordLayout recordLayout;
+    private Mock recordFieldParser;
+    private static final byte[] RECORD = "record #1".getBytes();
+    private static final byte[] RECORD2 = "record #2".getBytes();
+    private List fields;
+    private Mock recordFactory;
+    private Mock badRecordFactory;
+    private Mock recordFactoryResolver;
+
+    public void setUp() {
+        parseResultFactory = mock(ParseResultFactory.class);
+        recordLayoutResolver = mock(RecordLayoutResolver.class);
+        recordFieldParser = mock(RecordFieldParser.class);
+        recordFactory = mock(RecordFactory.class);
+        badRecordFactory = mock(BadRecordFactory.class);
+        recordFactoryResolver = mock(RecordFactoryResolver.class);
+
+        recordReader = new StubRecordReader();
+
+        result = new DefaultParseResult();
+        recordReader.addRecord(RECORD);
+
+        recordLayout = new SimpleRecordLayout();
+        recordLayout.addFieldDefinition(new SimpleFieldDefinition("label", 0, 9));
+
+        fields = new ArrayList();
+        fields.add(RECORD);
+
+        parser = new RecordParserImpl();
+        parser.setParseResultFactory((ParseResultFactory) parseResultFactory.proxy());
+        parser.setRecordLayoutResolver((RecordLayoutResolver) recordLayoutResolver.proxy());
+        parser.setRecordFieldParser((RecordFieldParser) recordFieldParser.proxy());
+        parser.setBadRecordFactory((BadRecordFactory) badRecordFactory.proxy());
+        parser.setRecordFactoryResolver((RecordFactoryResolver) recordFactoryResolver.proxy());
+    }
+
+    public void test_parse_ParseExceptionThrown() throws IOException {
+        parseResultFactory.expects(once()).method("build").will(returnValue(this.result));
+
+        recordLayoutResolver.expects(once()).method("resolve").with(eq(RECORD)).will(returnValue(recordLayout));
+
+        recordFactoryResolver.expects(once()).method("resolve").with(eq(recordLayout)).will(returnValue(recordFactory.proxy()));
+
+        ParseException parseException = new ParseException(null, recordLayout, (FieldDefinition) recordLayout.getFieldDefinitions().get(0));
+        BadRecord badRecord = new BadRecord(RECORD);
+        badRecordFactory.expects(once()).method("build").with(eq(RECORD), eq(parseException)).will(returnValue(badRecord));
+
+        recordFieldParser.expects(once()).method("parse").with(eq(RECORD), eq(recordLayout)).will(throwException(parseException));
+
+        ParseResult result = parser.parse(recordReader);
+
+        assertNotNull(result);
+        assertEquals(this.result, result);
+        assertEquals(0, this.result.getPartialRecords().size());
+        assertEquals(0, this.result.getUnresolvedRecords().size());
+        assertEquals(0, this.result.getRecords().size());
+        assertEquals(1, this.result.getUnparseableRecords().size());
+        assertEquals(badRecord, this.result.getUnparseableRecords().get(0));
+        assertTrue(recordReader.isClosed());
+    }
+
+
+    public void test_parse_RecordDoesNotMatchTheRecordLayoutLength() throws IOException {
+        SimpleRecordLayout recordLayout = new SimpleRecordLayout();
+        recordLayout.addFieldDefinition(new SimpleFieldDefinition("label", 0, 12));
+
+        parseResultFactory.expects(once()).method("build").will(returnValue(this.result));
+
+        recordLayoutResolver.expects(once()).method("resolve").with(eq(RECORD)).will(returnValue(recordLayout));
+
+        recordFactoryResolver.expects(once()).method("resolve").with(eq(recordLayout)).will(returnValue(recordFactory.proxy()));
+
+        BadRecord badRecord = new BadRecord(RECORD);
+        badRecordFactory.expects(once()).method("build").with(eq(RECORD)).will(returnValue(badRecord));
+
+        ParseResult result = parser.parse(recordReader);
+
+        assertNotNull(result);
+        assertEquals(this.result, result);
+        assertEquals(1, this.result.getPartialRecords().size());
+        assertEquals(0, this.result.getUnresolvedRecords().size());
+        assertEquals(0, this.result.getRecords().size());
+        assertEquals(0, this.result.getUnparseableRecords().size());
+        assertEquals(badRecord, this.result.getPartialRecords().get(0));
+        assertTrue(recordReader.isClosed());
+    }
+
+
+    public void test_parse_UnableToResolveRecordLayout() throws IOException {
+        parseResultFactory.expects(once()).method("build").will(returnValue(this.result));
+
+        recordLayoutResolver.expects(once()).method("resolve").with(eq(RECORD)).will(returnValue(null));
+
+        recordFactoryResolver.expects(once()).method("resolve").with(eq(null)).will(returnValue(recordFactory.proxy()));
+
+        BadRecord badRecord = new BadRecord(RECORD);
+        badRecordFactory.expects(once()).method("build").with(eq(RECORD)).will(returnValue(badRecord));
+
+        ParseResult result = parser.parse(recordReader);
+
+        assertNotNull(result);
+        assertEquals(this.result, result);
+        assertEquals(0, this.result.getPartialRecords().size());
+        assertEquals(1, this.result.getUnresolvedRecords().size());
+        assertEquals(0, this.result.getRecords().size());
+        assertEquals(0, this.result.getUnparseableRecords().size());
+        assertEquals(badRecord, this.result.getUnresolvedRecords().get(0));
+        assertTrue(recordReader.isClosed());
+    }
+    
+    public void test_parse_UnableToResolveRecordFactory() throws IOException {
+        parseResultFactory.expects(once()).method("build").will(returnValue(this.result));
+
+        recordLayoutResolver.expects(once()).method("resolve").with(eq(RECORD)).will(returnValue(recordLayout));
+
+        recordFactoryResolver.expects(once()).method("resolve").with(eq(recordLayout)).will(returnValue(null));
+
+        BadRecord badRecord = new BadRecord(RECORD);
+        badRecordFactory.expects(once()).method("build").with(eq(RECORD)).will(returnValue(badRecord));
+
+        ParseResult result = parser.parse(recordReader);
+
+        assertNotNull(result);
+        assertEquals(this.result, result);
+        assertEquals(0, this.result.getPartialRecords().size());
+        assertEquals(1, this.result.getUnresolvedRecords().size());
+        assertEquals(0, this.result.getRecords().size());
+        assertEquals(0, this.result.getUnparseableRecords().size());
+        assertEquals(badRecord, this.result.getUnresolvedRecords().get(0));
+        assertTrue(recordReader.isClosed());
+    }
+
+    public void test_parse_SingleRecord() throws IOException {
+        parseResultFactory.expects(once()).method("build").will(returnValue(this.result));
+
+        recordLayoutResolver.expects(once()).method("resolve").with(eq(RECORD)).will(returnValue(recordLayout));
+
+        recordFieldParser.expects(once()).method("parse").with(eq(RECORD), eq(recordLayout)).will(returnValue(fields));
+
+        recordFactoryResolver.expects(once()).method("resolve").with(eq(recordLayout)).will(returnValue(recordFactory.proxy()));
+
+        recordFactory.expects(once()).method("build").with(eq(fields), eq(recordLayout)).will(returnValue("record"));
+
+        ParseResult result = parser.parse(recordReader);
+
+        assertNotNull(result);
+        assertEquals(this.result, result);
+        assertEquals(0, this.result.getPartialRecords().size());
+        assertEquals(0, this.result.getUnresolvedRecords().size());
+        assertEquals(1, this.result.getRecords().size());
+        assertEquals(0, this.result.getUnparseableRecords().size());
+        assertEquals("record", this.result.getRecords().get(0));
+        assertTrue(recordReader.isClosed());
+    }
+
+    public void test_parse_MultipleRecord() throws IOException {
+        parseResultFactory.expects(once()).method("build").will(returnValue(this.result));
+
+        recordLayoutResolver.expects(once()).method("resolve").with(eq(RECORD)).will(returnValue(recordLayout));
+        recordLayoutResolver.expects(once()).method("resolve").with(eq(RECORD2)).will(returnValue(recordLayout));
+
+        recordFieldParser.expects(once()).method("parse").with(eq(RECORD), eq(recordLayout)).will(returnValue(fields));
+        recordFieldParser.expects(once()).method("parse").with(eq(RECORD2), eq(recordLayout)).will(returnValue(fields));
+
+        recordFactoryResolver.expects(once()).method("resolve").with(eq(recordLayout)).will(returnValue(recordFactory.proxy()));
+        recordFactoryResolver.expects(once()).method("resolve").with(eq(recordLayout)).will(returnValue(recordFactory.proxy()));
+
+        recordFactory.expects(once()).method("build").with(eq(fields), eq(recordLayout)).will(returnValue("record-2"));
+        recordFactory.expects(once()).method("build").with(eq(fields), eq(recordLayout)).will(returnValue("record-1"));
+
+        recordReader.addRecord(RECORD2);
+
+        ParseResult result = parser.parse(recordReader);
+
+        assertNotNull(result);
+        assertEquals(this.result, result);
+        assertEquals(0, this.result.getPartialRecords().size());
+        assertEquals(0, this.result.getUnresolvedRecords().size());
+        assertEquals(2, this.result.getRecords().size());
+        assertEquals(0, this.result.getUnparseableRecords().size());
+        assertEquals("record-1", this.result.getRecords().get(0));
+        assertEquals("record-2", this.result.getRecords().get(1));
+        assertTrue(recordReader.isClosed());
+    }
+}

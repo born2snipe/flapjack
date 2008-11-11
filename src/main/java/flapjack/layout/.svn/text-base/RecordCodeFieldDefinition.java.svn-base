@@ -1,0 +1,27 @@
+package commonline.core.layout;
+
+/**
+ * Represents the record code for each record
+ */
+public class RecordCodeFieldDefinition extends SimpleFieldDefinition implements CommonLineFieldDefinition {
+
+    public RecordCodeFieldDefinition() {
+        super("Record Code", 0, 2);
+    }
+
+    public Type getType() {
+        return Type.ALPHA_NUMERIC;
+    }
+
+    public Justified getJustified() {
+        return null;
+    }
+
+    public Padding getPadding() {
+        return null;
+    }
+
+    public String toString() {
+        return getName() + "@" + getPosition() + ",length=" + getLength() + "," + getType();
+    }
+}

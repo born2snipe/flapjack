@@ -1,0 +1,10 @@
+package commonline.core.parser;
+
+import commonline.core.io.RecordReader;
+
+import java.io.IOException;
+
+
+public interface RecordParser {
+    ParseResult parse(RecordReader recordReader) throws IOException;
+}

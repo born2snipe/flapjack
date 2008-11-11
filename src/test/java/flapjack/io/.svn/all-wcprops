@@ -1,0 +1,77 @@
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/!svn/ver/58/trunk/commonline/commonline-core/src/test/java/commonline/core/io
+END
+NioRecordReaderFactoryTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/svn/!svn/ver/56/trunk/commonline/commonline-core/src/test/java/commonline/core/io/NioRecordReaderFactoryTest.java
+END
+StubRecordReader.java
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svn/!svn/ver/58/trunk/commonline/commonline-core/src/test/java/commonline/core/io/StubRecordReader.java
+END
+MappedRecordReaderFactoryTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 117
+/svn/!svn/ver/56/trunk/commonline/commonline-core/src/test/java/commonline/core/io/MappedRecordReaderFactoryTest.java
+END
+LineRecordReaderFactoryTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 115
+/svn/!svn/ver/90/trunk/commonline/commonline-core/src/test/java/commonline/core/io/LineRecordReaderFactoryTest.java
+END
+FileStreamRecordReaderFactoryTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 121
+/svn/!svn/ver/56/trunk/commonline/commonline-core/src/test/java/commonline/core/io/FileStreamRecordReaderFactoryTest.java
+END
+NioRecordReaderTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svn/!svn/ver/56/trunk/commonline/commonline-core/src/test/java/commonline/core/io/NioRecordReaderTest.java
+END
+StubRecordReaderFactory.java
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/svn/!svn/ver/35/trunk/commonline/commonline-core/src/test/java/commonline/core/io/StubRecordReaderFactory.java
+END
+MappedRecordReaderTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/svn/!svn/ver/56/trunk/commonline/commonline-core/src/test/java/commonline/core/io/MappedRecordReaderTest.java
+END
+LineRecordReaderTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svn/!svn/ver/91/trunk/commonline/commonline-core/src/test/java/commonline/core/io/LineRecordReaderTest.java
+END
+ByteArrayChannel.java
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svn/!svn/ver/34/trunk/commonline/commonline-core/src/test/java/commonline/core/io/ByteArrayChannel.java
+END
+FileLengthRecordReaderFactoryTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 121
+/svn/!svn/ver/56/trunk/commonline/commonline-core/src/test/java/commonline/core/io/FileLengthRecordReaderFactoryTest.java
+END
+StreamRecordReaderTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/svn/!svn/ver/57/trunk/commonline/commonline-core/src/test/java/commonline/core/io/StreamRecordReaderTest.java
+END
