@@ -1,6 +1,5 @@
 package flapjack.parser;
 
-import java.util.List;
 import java.io.File;
 import java.io.IOException;
 
