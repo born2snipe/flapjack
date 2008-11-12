@@ -1,8 +1,0 @@
-package commonline.core.layout;
-
-
-public class LineEndingFieldDefinition extends SimpleFieldDefinition {
-    public LineEndingFieldDefinition(int position) {
-        super("line-ending", position, 2);
-    }
-}
