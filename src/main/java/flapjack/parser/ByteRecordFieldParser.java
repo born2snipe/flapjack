@@ -7,7 +7,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-
+/**
+ * Parses the current record in to a List of byte arrays
+ */
 public class ByteRecordFieldParser implements RecordFieldParser {
     public Object parse(byte[] bytes, RecordLayout recordLayout) throws ParseException {
         List fields = new ArrayList();

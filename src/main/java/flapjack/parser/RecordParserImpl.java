@@ -4,9 +4,9 @@ import flapjack.io.RecordReader;
 import flapjack.layout.RecordLayout;
 import flapjack.model.RecordFactory;
 import flapjack.model.RecordFactoryResolver;
+import flapjack.model.SimpleRecordFactoryResolver;
 
 import java.io.IOException;
-
 
 public class RecordParserImpl implements RecordParser {
     private ParseResultFactory parseResultFactory;
@@ -19,6 +19,7 @@ public class RecordParserImpl implements RecordParser {
         setBadRecordFactory(new DefaultBadRecordFactory());
         setRecordFieldParser(new ByteRecordFieldParser());
         setParseResultFactory(new DefaultParseResultFactory());
+        setRecordFactoryResolver(new SimpleRecordFactoryResolver());
     }
 
     public ParseResult parse(RecordReader recordReader) throws IOException {

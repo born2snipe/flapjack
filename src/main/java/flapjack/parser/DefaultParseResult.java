@@ -3,9 +3,10 @@ package flapjack.parser;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.beans.beancontext.BeanContextMembershipEvent;
 
-
+/**
+ * A basic ParseResult that holds on to a collection of records, partial records, unresolvable records, and unparseable records.
+ */
 public class DefaultParseResult implements ParseResult {
     private List records = new ArrayList();
     private List partialRecords = new ArrayList();

@@ -4,7 +4,11 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-
+/**
+ * Converts a text value to a java.util.Date
+ *
+ * It takes in multiple date patterns and will go until if finds a match otherwise it will return null.
+ */
 public class DateValueConverter implements ValueConverter {
     private String[] patterns;
 

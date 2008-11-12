@@ -1,6 +1,8 @@
 package flapjack.layout;
 
-
+/**
+ * Basic implementation of a FieldDefinition
+ */
 public class SimpleFieldDefinition implements FieldDefinition {
     private int position;
     private int length;

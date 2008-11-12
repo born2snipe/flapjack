@@ -5,7 +5,10 @@ import flapjack.io.RecordReaderFactory;
 import java.io.File;
 import java.io.IOException;
 
-public class FlatFileParser {
+/**
+ * Basic FileParser that defaults the RecordParser to RecordParserImpl.
+ */
+public class FlatFileParser implements FileParser {
     private RecordReaderFactory recordReaderFactory;
     private RecordParser recordParser;
 

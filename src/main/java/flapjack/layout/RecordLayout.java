@@ -16,7 +16,7 @@ public interface RecordLayout {
     List getFieldDefinitions();
 
     /**
-     * The length of this type of record, including the record code and the record terminator
+     * The length of this type of record
      *
      * @return the number bytes
      */

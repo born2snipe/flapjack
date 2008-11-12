@@ -3,7 +3,9 @@ package flapjack.util;
 import java.util.HashMap;
 import java.util.Map;
 
-
+/**
+ * Holds on to a collection of ValueConverters.
+ */
 public class TypeConverter {
     private Map stringConverters = new HashMap();
 
@@ -11,10 +13,23 @@ public class TypeConverter {
         registerConverter(new IntegerValueConverter());
     }
 
-    public void registerConverter(ValueConverter stringConverter) {
-        stringConverters.put(stringConverter.type(), stringConverter);
+    /**
+     * Call to register additional ValueConverters
+     *
+     * @param valueConverter - the ValueConverter to be registered
+     */
+    public void registerConverter(ValueConverter valueConverter) {
+        stringConverters.put(valueConverter.type(), valueConverter);
     }
 
+    /**
+     * Attempts to convert the given text to the class type given
+     *
+     * @param clazz - the class to convert the text to
+     * @param text - the text to be converted
+     * @return the result of the coversion attempt
+     * @throws IllegalArgumentException thrown when an error is encoutered during convesion
+     */
     public Object convert(Class clazz, String text) throws IllegalArgumentException {
         ValueConverter converter = (ValueConverter) stringConverters.get(clazz);
         if (converter == null) {
@@ -27,7 +42,15 @@ public class TypeConverter {
         }
     }
 
+
     public Object convert(Class clazz, String text, String text2) {
-        return convert(clazz, text + text2);
+        return convert(clazz, new String[]{text, text2});
+    }
+
+    public Object convert(Class clazz, String[] texts) {
+        StringBuilder builder = new StringBuilder();
+        for (int i=0;i<texts.length;i++)
+            builder.append(texts[i]);
+        return convert(clazz, builder.toString());
     }
 }

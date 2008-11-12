@@ -2,7 +2,6 @@ package flapjack.parser;
 
 import flapjack.layout.RecordLayout;
 
-import java.util.List;
 
 public interface RecordFieldParser {
 
