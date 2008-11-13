@@ -21,7 +21,6 @@ import java.util.List;
 
 
 public class AdvanceTest extends TestCase {
-
     public void test() throws IOException {
         String records = "#1030Joe       Smith     jsmith    #20371234 Easy St        Chicago        IL";
 
