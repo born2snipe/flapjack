@@ -64,12 +64,19 @@ public class BasicTest extends TestCase {
      */
     private static class BasicRecordLayoutResolver implements RecordLayoutResolver {
         public RecordLayout resolve(byte[] bytes) {
-            SimpleRecordLayout recordLayout = new SimpleRecordLayout();
-            recordLayout.addFieldDefinition(new SimpleFieldDefinition("First Name", 0, 11));
-            recordLayout.addFieldDefinition(new SimpleFieldDefinition("Last Name", 11, 11));
-            recordLayout.addFieldDefinition(new SimpleFieldDefinition("Username", 22, 11));
-            recordLayout.addFieldDefinition(new SimpleFieldDefinition("Record Terminator", 33, 1));
-            return recordLayout;
+            return new UserRecordLayout();
+        }
+    }
+
+    /**
+     * These RecordLayouts represent the different possible record types that should be encounted in out data
+     */
+    private static class UserRecordLayout extends SimpleRecordLayout {
+        private UserRecordLayout() {
+            field("First Name", 11);
+            field("Last Name", 11);
+            field("Username", 11);
+            field("Terminator", 1);
         }
     }
 
