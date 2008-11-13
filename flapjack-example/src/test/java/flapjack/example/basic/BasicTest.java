@@ -24,13 +24,23 @@ public class BasicTest extends TestCase {
         String records = "Joe        Schmoe     jschmoe111 #\n" +
                 "Jimmy      Smith      jsmith     #";
 
+        /**
+         * Initialize the RecordParser with our RecordLayoutResolver and RecordFactoryResolver
+         */
         RecordParserImpl recordParser = new RecordParserImpl();
         recordParser.setRecordLayoutResolver(new BasicRecordLayoutResolver());
         recordParser.setRecordFactoryResolver(new BasicRecordFactoryResolver());
         recordParser.setRecordFieldParser(new StringRecordFieldParser());
 
-        DefaultParseResult result = (DefaultParseResult) recordParser.parse(new LineRecordReader(new ByteArrayInputStream(records.getBytes())));
+        /**
+         * Actually call the parser with our RecordReader
+         */
+        LineRecordReader recordReader = new LineRecordReader(new ByteArrayInputStream(records.getBytes()));
+        DefaultParseResult result = (DefaultParseResult) recordParser.parse(recordReader);
 
+        /**
+         * Verify the contents read from the records have not been altered
+         */
         assertNotNull(result);
         assertEquals(0, result.getPartialRecords().size());
         assertEquals(0, result.getUnparseableRecords().size());
@@ -48,6 +58,9 @@ public class BasicTest extends TestCase {
         assertEquals("jsmith     ", user2.userName);
     }
 
+    /**
+     * This class is responsible for determining what RecordLayout should be used based on the current record being processed.
+     */
     private static class BasicRecordLayoutResolver implements RecordLayoutResolver {
         public RecordLayout resolve(byte[] bytes) {
             SimpleRecordLayout recordLayout = new SimpleRecordLayout();
@@ -59,6 +72,9 @@ public class BasicTest extends TestCase {
         }
     }
 
+    /**
+     * This class is responsible for creating the POJO that represents the given record.
+     */
     private static class UserRecordFactory implements RecordFactory {
         public Object build(Object fields, RecordLayout recordLayout) {
             List strings = (List) fields;
@@ -66,13 +82,18 @@ public class BasicTest extends TestCase {
         }
     }
 
+    /**
+     * This class is responsible for determining what RecordFactory should be used for the current RecordLayout
+     */
     private static class BasicRecordFactoryResolver implements RecordFactoryResolver {
-
         public RecordFactory resolve(RecordLayout layout) {
             return new UserRecordFactory();
         }
     }
 
+    /**
+     * My simple POJO representing a record
+     */
     private static class User {
         public final String firstName, lastName, userName;
 
