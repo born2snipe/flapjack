@@ -14,6 +14,7 @@ public class StreamRecordReader implements RecordReader {
     }
 
     public byte[] readRecord() throws IOException {
+        validateRecordLength();
         byte[] buffer = new byte[recordLength];
         int lengthRead = input.read(buffer);
         if (lengthRead == -1) {
@@ -35,10 +36,14 @@ public class StreamRecordReader implements RecordReader {
     }
 
     public void setRecordLength(int recordLength) {
-        if (recordLength <= 0) {
+        this.recordLength = recordLength;
+        validateRecordLength();
+    }
+
+    private void validateRecordLength() {
+        if (this.recordLength <= 0) {
             throw new IllegalArgumentException("Record length MUST be greater than zero");
         }
-        this.recordLength = recordLength;
     }
 
     public int getRecordLength() {

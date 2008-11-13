@@ -9,13 +9,27 @@ import java.nio.ByteBuffer;
 
 public class MappedRecordReaderTest extends TestCase {
     private ShuntMappedRecordReader reader;
+    private static final File FILE = new File("/commonline/core/io/test.txt");
 
     public void setUp() {
-        reader = new ShuntMappedRecordReader(new File("/commonline/core/io/test.txt"));
+        reader = new ShuntMappedRecordReader(FILE);
         reader.setRecordLength(5);
     }
-    
-    public void test_readRecord_NegativeRecordLength() {
+
+
+    public void test_readRecord_RecordLengthNotSet() throws IOException {
+        try {
+            reader = new ShuntMappedRecordReader(FILE);
+            reader.buffer = ByteBuffer.wrap("123".getBytes());
+
+            reader.readRecord();
+            fail();
+        } catch (IllegalArgumentException err) {
+            assertEquals("Record length MUST be greater than zero", err.getMessage());
+        }
+    }
+
+    public void test_setRecordLength_NegativeRecordLength() {
         try {
             reader.setRecordLength(-1);
             fail();
@@ -24,7 +38,7 @@ public class MappedRecordReaderTest extends TestCase {
         }
     }
 
-    public void test_readRecord_ZeroRecordLength() {
+    public void test_setRecordLength_ZeroRecordLength() {
         try {
             reader.setRecordLength(0);
             fail();

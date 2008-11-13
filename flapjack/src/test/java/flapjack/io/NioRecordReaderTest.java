@@ -9,15 +9,28 @@ import java.nio.channels.ScatteringByteChannel;
 
 public class NioRecordReaderTest extends TestCase {
     private ShuntNioRecordReader reader;
+    private static final File FILE = new File("/commonline/core/io/test.txt");
 
     protected void setUp() throws Exception {
         super.setUp();
 
-        reader = new ShuntNioRecordReader(new File("/commonline/core/io/test.txt"));
+        reader = new ShuntNioRecordReader(FILE);
         reader.setRecordLength(5);
     }
 
-    public void test_readRecord_NegativeRecordLength() {
+    public void test_readRecord_RecordLengthNeverSet() throws IOException {
+        try {
+            reader = new ShuntNioRecordReader(FILE);
+            reader.channel = new ByteArrayChannel("".getBytes());
+
+            reader.readRecord();
+            fail();
+        } catch (IllegalArgumentException err) {
+            assertEquals("Record length MUST be greater than zero", err.getMessage());
+        }
+    }
+
+    public void test_setRecordLength_NegativeRecordLength() {
         try {
             reader.setRecordLength(-1);
             fail();
@@ -26,7 +39,7 @@ public class NioRecordReaderTest extends TestCase {
         }
     }
 
-    public void test_readRecord_ZeroRecordLength() {
+    public void test_setRecordLength_ZeroRecordLength() {
         try {
             reader.setRecordLength(0);
             fail();

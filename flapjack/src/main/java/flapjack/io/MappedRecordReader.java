@@ -22,6 +22,7 @@ public class MappedRecordReader implements RecordReader {
     }
 
     public byte[] readRecord() throws IOException {
+        validateRecordLength();
         byte[] buffer = new byte[recordLength];
         ByteBuffer fileBuffer = mapSection();
 
@@ -55,10 +56,14 @@ public class MappedRecordReader implements RecordReader {
     }
 
     public void setRecordLength(int recordLength) {
+        this.recordLength = recordLength;
+        validateRecordLength();
+    }
+
+    private void validateRecordLength() {
         if (recordLength <= 0) {
             throw new IllegalArgumentException("Record length MUST be greater than zero");
         }
-        this.recordLength = recordLength;
     }
 
     public int getRecordLength() {

@@ -14,7 +14,17 @@ public class StreamRecordReaderTest extends TestCase {
         return reader;
     }
 
-    public void test_readRecord_NegativeRecordLength() {
+    public void test_readRecord_RecordLengthNotSet() throws IOException {
+        StreamRecordReader reader = new StreamRecordReader(new ByteArrayInputStream("".getBytes()));
+        try {
+            reader.readRecord();
+            fail();
+        } catch (IllegalArgumentException err) {
+            assertEquals("Record length MUST be greater than zero", err.getMessage());
+        }
+    }
+
+    public void test_setRecordLength_NegativeRecordLength() {
         StreamRecordReader reader = createRecordReader("");
         try {
             reader.setRecordLength(-1);
@@ -24,7 +34,7 @@ public class StreamRecordReaderTest extends TestCase {
         }
     }
 
-    public void test_readRecord_ZeroRecordLength() {
+    public void test_setRecordLength_ZeroRecordLength() {
         StreamRecordReader reader = createRecordReader("");
         try {
             reader.setRecordLength(0);
