@@ -1,0 +1,18 @@
+************************************************************
+*** WELCOME TO THE WONDERFUL WORLD A FLAT RECORD PARSING ***
+************************************************************
+
+Flapjack is the PREMIER flat record parser....yea right.....
+for all I know there is a better flat record parser out there.
+This project has really materialized into a learning exercise
+on how complicated flat record parsing really can be and how
+I approached it.
+
+To see how to use Flapjack please check:
+
+Project site: http://code.google.com/p/flapjack
+
+Usage Examples: there is a flap-jack example module that has
+	different complexities of implementations.
+
+Happy Parsing!  :0)
