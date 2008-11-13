@@ -5,6 +5,7 @@ import junit.framework.TestCase;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Arrays;
 
 
 public class DateValueConverterTest extends TestCase {
@@ -15,7 +16,7 @@ public class DateValueConverterTest extends TestCase {
     }
     
     public void test_type() {
-        assertEquals(Date.class, converter.type());
+        assertTrue(Arrays.equals(new Class[]{Date.class}, converter.types()));
     }
 
     public void test_convert() {

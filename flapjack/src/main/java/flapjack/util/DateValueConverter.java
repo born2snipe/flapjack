@@ -6,7 +6,7 @@ import java.util.Date;
 
 /**
  * Converts a text value to a java.util.Date
- *
+ * <p/>
  * It takes in multiple date patterns and will go until if finds a match otherwise it will return null.
  */
 public class DateValueConverter implements ValueConverter {
@@ -28,7 +28,7 @@ public class DateValueConverter implements ValueConverter {
         return null;
     }
 
-    public Class type() {
-        return Date.class;
+    public Class[] types() {
+        return new Class[]{Date.class};
     }
 }

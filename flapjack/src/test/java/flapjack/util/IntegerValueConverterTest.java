@@ -2,6 +2,8 @@ package flapjack.util;
 
 import junit.framework.TestCase;
 
+import java.util.Arrays;
+
 
 public class IntegerValueConverterTest extends TestCase {
     private IntegerValueConverter converter;
@@ -11,7 +13,7 @@ public class IntegerValueConverterTest extends TestCase {
     }
     
     public void test_type() {
-        assertEquals(Integer.class, converter.type());
+        assertTrue(Arrays.equals(new Class[]{Integer.class, int.class}, converter.types()));
     }
 
     public void test_convert() {

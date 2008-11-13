@@ -9,7 +9,7 @@ public class IntegerValueConverter implements ValueConverter {
         return new Integer(Integer.parseInt(text));
     }
 
-    public Class type() {
-        return Integer.class;
+    public Class[] types() {
+        return new Class[]{Integer.class, int.class};
     }
 }

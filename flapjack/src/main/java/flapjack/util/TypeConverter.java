@@ -19,26 +19,28 @@ public class TypeConverter {
      * @param valueConverter - the ValueConverter to be registered
      */
     public void registerConverter(ValueConverter valueConverter) {
-        stringConverters.put(valueConverter.type(), valueConverter);
+        for (int i = 0; i < valueConverter.types().length; i++) {
+            stringConverters.put(valueConverter.types()[i], valueConverter);
+        }
     }
 
     /**
      * Attempts to convert the given text to the class type given
      *
      * @param clazz - the class to convert the text to
-     * @param text - the text to be converted
+     * @param text  - the text to be converted
      * @return the result of the coversion attempt
      * @throws IllegalArgumentException thrown when an error is encoutered during convesion
      */
     public Object convert(Class clazz, String text) throws IllegalArgumentException {
         ValueConverter converter = (ValueConverter) stringConverters.get(clazz);
         if (converter == null) {
-            throw new IllegalArgumentException("No " + ValueConverter.class.getName() + " registered for type " + clazz.getName());
+            throw new IllegalArgumentException("No " + ValueConverter.class.getName() + " registered for types " + clazz.getName());
         }
         try {
             return converter.convert(text);
         } catch (RuntimeException err) {
-            throw new IllegalArgumentException("Problem converting \""+text+"\" to "+clazz.getName(), err);
+            throw new IllegalArgumentException("Problem converting \"" + text + "\" to " + clazz.getName(), err);
         }
     }
 
@@ -46,7 +48,7 @@ public class TypeConverter {
      * Attempts to covert the two given text values appended together into the class type given
      *
      * @param clazz - the class to covert the text to
-     * @param text - the text to be converted
+     * @param text  - the text to be converted
      * @param text2 - the text to be converted
      * @return the result of the conversion attempt
      * @throws IllegalArgumentException thrown when an error is encoutered during convesion
@@ -66,7 +68,7 @@ public class TypeConverter {
 
     public Object convert(Class clazz, String[] texts) {
         StringBuilder builder = new StringBuilder();
-        for (int i=0;i<texts.length;i++)
+        for (int i = 0; i < texts.length; i++)
             builder.append(texts[i]);
         return convert(clazz, builder.toString());
     }

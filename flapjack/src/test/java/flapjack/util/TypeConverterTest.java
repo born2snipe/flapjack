@@ -1,7 +1,7 @@
 package flapjack.util;
 
-import org.jmock.MockObjectTestCase;
 import org.jmock.Mock;
+import org.jmock.MockObjectTestCase;
 
 
 public class TypeConverterTest extends MockObjectTestCase {
@@ -28,7 +28,7 @@ public class TypeConverterTest extends MockObjectTestCase {
             converter.convert(Double.class, "text");
             fail();
         } catch (IllegalArgumentException err) {
-            assertEquals("No flapjack.util.ValueConverter registered for type java.lang.Double", err.getMessage());
+            assertEquals("No flapjack.util.ValueConverter registered for types java.lang.Double", err.getMessage());
         }
     }
 
@@ -65,8 +65,8 @@ public class TypeConverterTest extends MockObjectTestCase {
             return mock.convert(text);
         }
 
-        public Class type() {
-            return type;
+        public Class[] types() {
+            return new Class[]{type};
         }
     }
 }
