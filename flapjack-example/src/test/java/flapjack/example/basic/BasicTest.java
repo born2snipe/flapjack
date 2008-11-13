@@ -9,6 +9,7 @@ import flapjack.layout.SimpleRecordLayout;
 import flapjack.parser.*;
 import flapjack.model.RecordFactory;
 import flapjack.model.RecordFactoryResolver;
+import flapjack.example.model.User;
 import junit.framework.TestCase;
 
 import java.io.File;
@@ -91,16 +92,4 @@ public class BasicTest extends TestCase {
         }
     }
 
-    /**
-     * My simple POJO representing a record
-     */
-    private static class User {
-        public final String firstName, lastName, userName;
-
-        private User(String firstName, String lastName, String userName) {
-            this.firstName = firstName;
-            this.lastName = lastName;
-            this.userName = userName;
-        }
-    }
 }

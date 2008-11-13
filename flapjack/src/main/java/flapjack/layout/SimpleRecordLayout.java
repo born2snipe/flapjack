@@ -10,9 +10,15 @@ import java.util.List;
  */
 public class SimpleRecordLayout implements RecordLayout {
     private List fieldDefinitions = new ArrayList();
+    private int offset = 0;
 
     public void addFieldDefinition(FieldDefinition fieldDef) {
         fieldDefinitions.add(fieldDef);
+    }
+
+    protected void field(String name, int length) {
+        addFieldDefinition(new SimpleFieldDefinition(name, offset, length));
+        offset += length;
     }
 
     public List getFieldDefinitions() {
