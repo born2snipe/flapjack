@@ -10,25 +10,17 @@ import java.util.List;
 /**
  * Breaks up the array of bytes into fields and converts them to Strings
  */
-public class StringRecordFieldParser implements RecordFieldParser {
+public class StringRecordFieldParser extends ByteRecordFieldParser {
     public Object parse(byte[] bytes, RecordLayout recordLayout) throws ParseException {
+        List byteArrays = (List) super.parse(bytes, recordLayout);
+        if (byteArrays.size() == 0) {
+            return byteArrays;
+        }
+
         List fields = new ArrayList();
-
-        if (bytes.length > 0) {
-            String line = new String(bytes);
-            StringFieldParser fieldParser = new StringFieldParser();
-
-
-            Iterator it = recordLayout.getFieldDefinitions().iterator();
-            while (it.hasNext()) {
-                FieldDefinition fieldDefinition = (FieldDefinition) it.next();
-                try {
-                    fields.add(fieldParser.parse(line, fieldDefinition));
-                } catch (Exception err) {
-                    throw new ParseException(err, recordLayout, fieldDefinition);
-                }
-            }
-
+        Iterator it = byteArrays.iterator();
+        while (it.hasNext()) {
+            fields.add(new String((byte[]) it.next()));
         }
 
         return fields;
