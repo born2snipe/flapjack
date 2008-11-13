@@ -19,6 +19,15 @@ public class StringRecordFieldParserTest extends TestCase {
         recordLayout.addFieldDefinition(new SimpleFieldDefinition("", 1, 4));
     }
 
+    public void test_parse_ThrowsException() {
+        try {
+            parser.parse("1".getBytes(), recordLayout);
+            fail();
+        } catch (ParseException err) {
+            assertNotNull(err.getCause());
+        }
+    }
+
     public void test_parse() throws ParseException {
         List fields = (List) parser.parse("@1234".getBytes(), recordLayout);
 

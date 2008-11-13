@@ -18,11 +18,17 @@ public class StringRecordFieldParser implements RecordFieldParser {
             String line = new String(bytes);
             StringFieldParser fieldParser = new StringFieldParser();
 
+
             Iterator it = recordLayout.getFieldDefinitions().iterator();
             while (it.hasNext()) {
                 FieldDefinition fieldDefinition = (FieldDefinition) it.next();
-                fields.add(fieldParser.parse(line, fieldDefinition));
+                try {
+                    fields.add(fieldParser.parse(line, fieldDefinition));
+                } catch (Exception err) {
+                    throw new ParseException(err, recordLayout, fieldDefinition);
+                }
             }
+
         }
 
         return fields;
