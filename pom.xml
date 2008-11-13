@@ -3,12 +3,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>flapjack</groupId>
-    <artifactId>flapjack</artifactId>
-    <packaging>jar</packaging>
+    <artifactId>flapjack-aggregate</artifactId>
+    <packaging>pom</packaging>
     <version>1.0.1-SNAPSHOT</version>
-    <name>flapjack</name>
+    <name>Flapjack Aggregate</name>
     <url>http://code.google.com/p/flapjack/</url>
-    <description>Flat Record Parser</description>
 
     <licenses>
         <license>
@@ -23,96 +22,9 @@
         <developerConnection>scm:git:git://github.com/born2snipe/flapjack.git</developerConnection>
     </scm>
 
-
-    <dependencies>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>3.8.1</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>jmock</groupId>
-            <artifactId>jmock</artifactId>
-            <version>1.1.0</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
-
-    <reporting>
-        <plugins>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>cobertura-maven-plugin</artifactId>
-            </plugin>
-
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>javancss-maven-plugin</artifactId>
-                <version>2.0-beta-2</version>
-            </plugin>
-
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>emma-maven-plugin</artifactId>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-pmd-plugin</artifactId>
-                <version>2.4</version>
-            </plugin>
-
-
-        </plugins>
-    </reporting>
-
-
-    <build>
-        <plugins>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>1.4</source>
-                    <target>1.4</target>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.5</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-release-plugin</artifactId>
-                <version>2.0-beta-8</version>
-            </plugin>
-
-        </plugins>
-    </build>
+    <modules>
+        <module>flapjack</module>
+    </modules>
 
 
 </project>
