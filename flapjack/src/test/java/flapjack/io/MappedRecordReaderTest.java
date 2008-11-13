@@ -14,6 +14,24 @@ public class MappedRecordReaderTest extends TestCase {
         reader = new ShuntMappedRecordReader(new File("/commonline/core/io/test.txt"));
         reader.setRecordLength(5);
     }
+    
+    public void test_readRecord_NegativeRecordLength() {
+        try {
+            reader.setRecordLength(-1);
+            fail();
+        } catch (IllegalArgumentException err) {
+            assertEquals("Record length MUST be greater than zero", err.getMessage());
+        }
+    }
+
+    public void test_readRecord_ZeroRecordLength() {
+        try {
+            reader.setRecordLength(0);
+            fail();
+        } catch (IllegalArgumentException err) {
+            assertEquals("Record length MUST be greater than zero", err.getMessage());
+        }
+    }
 
     public void test_readRecord_EOF() throws IOException {
         reader.buffer = ByteBuffer.wrap("".getBytes());

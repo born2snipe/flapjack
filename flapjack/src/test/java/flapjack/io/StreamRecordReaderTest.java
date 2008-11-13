@@ -3,9 +3,7 @@ package flapjack.io;
 import junit.framework.TestCase;
 
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 
 
 public class StreamRecordReaderTest extends TestCase {
@@ -14,6 +12,26 @@ public class StreamRecordReaderTest extends TestCase {
         StreamRecordReader reader = new StreamRecordReader(new ByteArrayInputStream(content.getBytes()));
         reader.setRecordLength(5);
         return reader;
+    }
+
+    public void test_readRecord_NegativeRecordLength() {
+        StreamRecordReader reader = createRecordReader("");
+        try {
+            reader.setRecordLength(-1);
+            fail();
+        } catch (IllegalArgumentException err) {
+            assertEquals("Record length MUST be greater than zero", err.getMessage());
+        }
+    }
+
+    public void test_readRecord_ZeroRecordLength() {
+        StreamRecordReader reader = createRecordReader("");
+        try {
+            reader.setRecordLength(0);
+            fail();
+        } catch (IllegalArgumentException err) {
+            assertEquals("Record length MUST be greater than zero", err.getMessage());
+        }
     }
 
     public void test_readRecord_EOF() throws IOException {

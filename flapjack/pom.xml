@@ -6,7 +6,7 @@
     <artifactId>flapjack</artifactId>
     <packaging>jar</packaging>
     <version>1.0.1-SNAPSHOT</version>
-    <name>flapjack</name>
+    <name>Flapjack</name>
     <url>http://code.google.com/p/flapjack/</url>
     <description>Flat Record Parser</description>
 

@@ -17,6 +17,24 @@ public class NioRecordReaderTest extends TestCase {
         reader.setRecordLength(5);
     }
 
+    public void test_readRecord_NegativeRecordLength() {
+        try {
+            reader.setRecordLength(-1);
+            fail();
+        } catch (IllegalArgumentException err) {
+            assertEquals("Record length MUST be greater than zero", err.getMessage());
+        }
+    }
+
+    public void test_readRecord_ZeroRecordLength() {
+        try {
+            reader.setRecordLength(0);
+            fail();
+        } catch (IllegalArgumentException err) {
+            assertEquals("Record length MUST be greater than zero", err.getMessage());
+        }
+    }
+
     public void test_readRecord_ReachedEndOfFile() throws IOException {
         reader.channel = new ByteArrayChannel("".getBytes());
 

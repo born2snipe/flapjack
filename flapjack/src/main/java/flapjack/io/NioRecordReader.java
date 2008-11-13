@@ -55,6 +55,8 @@ public class NioRecordReader implements RecordReader {
     }
 
     public void setRecordLength(int recordLength) {
+        if (recordLength <= 0)
+            throw new IllegalArgumentException("Record length MUST be greater than zero");
         this.recordLength = recordLength;
     }
 
