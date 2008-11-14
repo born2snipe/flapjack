@@ -1,4 +1,4 @@
-package flapjack.example.basic;
+package flapjack.example;
 
 import flapjack.io.LineRecordReaderFactory;
 import flapjack.io.StreamRecordReader;
@@ -19,7 +19,7 @@ import java.util.Enumeration;
 import java.net.URL;
 
 
-public class BasicTest extends TestCase {
+public class SameRecordTypeTest extends TestCase {
 
     public void test_success() throws Exception {
         String records = "Joe        Schmoe     jschmoe111 #\n" +
