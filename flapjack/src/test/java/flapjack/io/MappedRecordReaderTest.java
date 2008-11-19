@@ -4,7 +4,10 @@ import junit.framework.TestCase;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.FileNotFoundException;
 import java.nio.ByteBuffer;
+import java.util.List;
+import java.util.ArrayList;
 
 
 public class MappedRecordReaderTest extends TestCase {
@@ -20,7 +23,7 @@ public class MappedRecordReaderTest extends TestCase {
     public void test_readRecord_RecordLengthNotSet() throws IOException {
         try {
             reader = new ShuntMappedRecordReader(FILE);
-            reader.buffer = ByteBuffer.wrap("123".getBytes());
+            reader.buffers.add(ByteBuffer.wrap("123".getBytes()));
 
             reader.readRecord();
             fail();
@@ -48,13 +51,13 @@ public class MappedRecordReaderTest extends TestCase {
     }
 
     public void test_readRecord_EOF() throws IOException {
-        reader.buffer = ByteBuffer.wrap("".getBytes());
+        reader.buffers.add(ByteBuffer.wrap("".getBytes()));
 
         assertNull(reader.readRecord());
     }
 
     public void test_readRecord_PartialRecord() throws IOException {
-        reader.buffer = ByteBuffer.wrap("123".getBytes());
+        reader.buffers.add(ByteBuffer.wrap("123".getBytes()));
 
         byte[] actualRecord = reader.readRecord();
 
@@ -63,8 +66,19 @@ public class MappedRecordReaderTest extends TestCase {
         assertEquals("123", new String(actualRecord));
     }
 
+    public void test_readRecord_SingleRecord_MapRegionNotBigEnough() throws IOException {
+        reader.buffers.add(ByteBuffer.wrap("123".getBytes()));
+        reader.buffers.add(ByteBuffer.wrap("45".getBytes()));
+
+        byte[] actualRecord = reader.readRecord();
+
+        assertNotNull(actualRecord);
+        assertEquals(5, actualRecord.length);
+        assertEquals("12345", new String(actualRecord));
+    }
+
     public void test_readRecord_SingleRecord() throws IOException {
-        reader.buffer = ByteBuffer.wrap("12345".getBytes());
+        reader.buffers.add(ByteBuffer.wrap("12345".getBytes()));
 
         byte[] actualRecord = reader.readRecord();
 
@@ -74,7 +88,7 @@ public class MappedRecordReaderTest extends TestCase {
     }
 
     public void test_readRecord_TwoRecords() throws IOException {
-        reader.buffer = ByteBuffer.wrap("1234567890".getBytes());
+        reader.buffers.add(ByteBuffer.wrap("1234567890".getBytes()));
 
         reader.readRecord();
         byte[] actualRecord = reader.readRecord();
@@ -85,14 +99,21 @@ public class MappedRecordReaderTest extends TestCase {
     }
 
     private static class ShuntMappedRecordReader extends MappedRecordReader {
-        private ByteBuffer buffer;
+        private List buffers = new ArrayList();
+        private int offset = 0;
+        private long mappedOffset, mappedLength;
 
         public ShuntMappedRecordReader(File file) {
             super(file);
         }
 
-        protected ByteBuffer mapSection() {
-            return buffer;
+        protected ByteBuffer mapSection(long offset, long length) {
+            mappedOffset = offset;
+            mappedLength = length;
+            return (ByteBuffer) buffers.get(this.offset++);
+        }
+
+        protected void initializeChannel() throws FileNotFoundException {
         }
     }
 }

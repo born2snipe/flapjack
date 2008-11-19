@@ -2,6 +2,7 @@ package flapjack.io;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
@@ -10,12 +11,17 @@ import java.nio.channels.FileChannel;
  * RecordReader implementation using the Java NIO Mapped File API
  * <p/>
  * If you choose to use this it is recommended to only use it on large files.
+ *
+ * Defaults the mapped region size to 10MB.
  */
 public class MappedRecordReader implements RecordReader {
+    private static final long TEN_MEGABYTES = 10L * 1024L * 1024L;
     private File file;
     private int recordLength;
     private FileChannel channel;
-    private ByteBuffer fileBuffer;
+    private ByteBuffer mappedRegion;
+    private int offset = 0;
+    private long mappedRegionSize = TEN_MEGABYTES;
 
     public MappedRecordReader(File file) {
         this.file = file;
@@ -23,28 +29,36 @@ public class MappedRecordReader implements RecordReader {
 
     public byte[] readRecord() throws IOException {
         validateRecordLength();
+        initializeChannel();
         byte[] buffer = new byte[recordLength];
-        ByteBuffer fileBuffer = mapSection();
 
-        if (fileBuffer.remaining() == 0) {
+        if (mappedRegion == null) {
+            mappedRegion = mapSection(offset, mappedRegionSize);
+        }
+
+        if (mappedRegion.remaining() == 0) {
             return null;
-        } else if (fileBuffer.remaining() > buffer.length) {
-            fileBuffer.get(buffer);
+        } else if (mappedRegion.remaining() > buffer.length) {
+            mappedRegion.get(buffer);
+            offset += buffer.length;
         } else {
-            byte[] temp = new byte[fileBuffer.remaining()];
-            fileBuffer.get(temp);
+            byte[] temp = new byte[mappedRegion.remaining()];
+            mappedRegion.get(temp);
+            offset += temp.length;
             return temp;
         }
 
         return buffer;
     }
 
-    protected ByteBuffer mapSection() throws IOException {
+    protected void initializeChannel() throws FileNotFoundException {
         if (channel == null) {
             channel = new FileInputStream(file).getChannel();
-            fileBuffer = channel.map(FileChannel.MapMode.READ_ONLY, 0, file.length());
         }
-        return fileBuffer;
+    }
+
+    protected ByteBuffer mapSection(long offset, long length) throws IOException {
+        return channel.map(FileChannel.MapMode.READ_ONLY, offset, length);
     }
 
     public void close() {
@@ -68,5 +82,9 @@ public class MappedRecordReader implements RecordReader {
 
     public int getRecordLength() {
         return recordLength;
+    }
+
+    public void setMappedRegionSize(long mappedRegionSize) {
+        this.mappedRegionSize = mappedRegionSize;
     }
 }
