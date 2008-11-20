@@ -25,7 +25,7 @@ public class MappedRecordReaderTest extends MockObjectTestCase {
         ByteArrayChannel channel = new ByteArrayChannel(null);
 
         expect_channel(channel);
-        expect_map(channel, 0L, MappedRecordReader.TEN_MEGABYTES, "");
+        expect_map(channel, 0L, 0L, "");
         fileUtil.expects(once()).method("close").with(isA(ByteArrayChannel.class));
         expect_length(0L);
 
@@ -68,7 +68,7 @@ public class MappedRecordReaderTest extends MockObjectTestCase {
         ByteArrayChannel channel = new ByteArrayChannel(null);
 
         expect_channel(channel);
-        expect_map(channel, 0L, MappedRecordReader.TEN_MEGABYTES, "");
+        expect_map(channel, 0L, 0L, "");
         expect_length(0L);
 
         assertNull(reader.readRecord());
@@ -78,7 +78,7 @@ public class MappedRecordReaderTest extends MockObjectTestCase {
         ByteArrayChannel channel = new ByteArrayChannel(null);
 
         expect_channel(channel);
-        expect_map(channel, 0L, MappedRecordReader.TEN_MEGABYTES, "123");
+        expect_map(channel, 0L, 3L, "123");
         expect_length(3L);
 
         byte[] actualRecord = reader.readRecord();
@@ -92,8 +92,8 @@ public class MappedRecordReaderTest extends MockObjectTestCase {
         ByteArrayChannel channel = new ByteArrayChannel(null);
 
         expect_channel(channel);
-        expect_map(channel, 0L, MappedRecordReader.TEN_MEGABYTES, "123");
-        expect_map(channel, 3L, MappedRecordReader.TEN_MEGABYTES, "45");
+        expect_map(channel, 0L, 5L, "123");
+        expect_map(channel, 3L, 2L, "45");
         expect_length(5L);
 
         byte[] actualRecord = reader.readRecord();
@@ -107,7 +107,7 @@ public class MappedRecordReaderTest extends MockObjectTestCase {
         ByteArrayChannel channel = new ByteArrayChannel(null);
 
         expect_channel(channel);
-        expect_map(channel, 0L, MappedRecordReader.TEN_MEGABYTES, "12345");
+        expect_map(channel, 0L, 5L, "12345");
         expect_length(5L);
 
         byte[] actualRecord = reader.readRecord();
@@ -121,7 +121,7 @@ public class MappedRecordReaderTest extends MockObjectTestCase {
         ByteArrayChannel channel = new ByteArrayChannel(null);
 
         expect_channel(channel);
-        expect_map(channel, 0L, MappedRecordReader.TEN_MEGABYTES, "1234567890");
+        expect_map(channel, 0L, 10L, "1234567890");
         expect_length(10L);
         expect_length(10L);
 

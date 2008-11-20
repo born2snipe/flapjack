@@ -35,7 +35,7 @@ public class MappedRecordReader implements RecordReader {
         long fileLength = fileUtil.length(file);
 
         if (mappedRegion == null) {
-            mappedRegion = fileUtil.map(channel, offset, mappedRegionSize);
+            mapNextRegion(fileLength);
         }
 
         if (mappedRegion.remaining() == 0) {
@@ -53,13 +53,18 @@ public class MappedRecordReader implements RecordReader {
             ByteArrayOutputStream output = new ByteArrayOutputStream();
             output.write(buffer);
             byte[] temp = new byte[recordLength - buffer.length];
-            mappedRegion = fileUtil.map(channel, offset, mappedRegionSize);
+            mapNextRegion(fileLength);
             readBytes(temp);
             output.write(temp);
             return output.toByteArray();            
         }
 
         return buffer;
+    }
+
+    private void mapNextRegion(long fileLength) {
+        long diff = fileLength - offset;
+        mappedRegion = fileUtil.map(channel, offset, Math.min(mappedRegionSize, diff));
     }
 
     private void readBytes(byte[] buffer) {
