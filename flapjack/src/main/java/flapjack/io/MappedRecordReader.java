@@ -29,6 +29,7 @@ public class MappedRecordReader implements RecordReader {
     }
 
     public byte[] readRecord() throws IOException {
+        long start = System.nanoTime();
         validateRecordLength();
         initializeChannel();
         byte[] buffer = new byte[recordLength];
@@ -49,14 +50,14 @@ public class MappedRecordReader implements RecordReader {
             if (offset == fileLength) {
                 return buffer;
             }
-            
+
             ByteArrayOutputStream output = new ByteArrayOutputStream();
             output.write(buffer);
             byte[] temp = new byte[recordLength - buffer.length];
             mapNextRegion(fileLength);
             readBytes(temp);
             output.write(temp);
-            return output.toByteArray();            
+            return output.toByteArray();
         }
 
         return buffer;

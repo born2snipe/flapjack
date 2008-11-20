@@ -27,7 +27,7 @@ public class FileTest extends TestCase {
         fileParser.setRecordParser(recordParser);
         
         ClassLoader loader = Thread.currentThread().getContextClassLoader();
-        file = new File(loader.getResource("flapjack/io/large-dataset.txt").toURI());
+        file = new File(loader.getResource("flapjack/io/two_megs.txt").toURI());
     }
 
     public void test_MappedFile() throws IOException, URISyntaxException {
