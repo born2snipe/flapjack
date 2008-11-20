@@ -8,7 +8,7 @@ import java.io.File;
 public class NioRecordReaderFactoryTest extends TestCase {
 
     public void test_build() {
-        RecordReader reader = new NioRecordReaderFactory(10).build(new File("/commonline/core/io/test.txt"));
+        RecordReader reader = new NioRecordReaderFactory(10).build(new File("test.txt"));
         assertNotNull(reader);
         assertTrue(reader instanceof NioRecordReader);
 

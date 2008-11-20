@@ -12,7 +12,7 @@ import org.jmock.Mock;
 
 public class NioRecordReaderTest extends MockObjectTestCase {
     private NioRecordReader reader;
-    private static final File FILE = new File("/commonline/core/io/test.txt");
+    private static final File FILE = new File("test.txt");
     private Mock fileUtil;
 
     protected void setUp() throws Exception {

@@ -15,7 +15,7 @@ public class FileLengthRecordReaderFactoryTest extends TestCase {
     public void test_build_SmallFile() {
         factory.fileLength = 5;
 
-        RecordReader recordReader = factory.build(new File("/commonline/core/io/test.txt"));
+        RecordReader recordReader = factory.build(new File("test.txt"));
 
         assertNotNull(recordReader);
         assertTrue(recordReader instanceof NioRecordReader);
@@ -24,7 +24,7 @@ public class FileLengthRecordReaderFactoryTest extends TestCase {
     public void test_build_LargeFile() {
         factory.fileLength = 2000;
 
-        RecordReader recordReader = factory.build(new File("/commonline/core/io/test.txt"));
+        RecordReader recordReader = factory.build(new File("test.txt"));
 
         assertNotNull(recordReader);
         assertTrue(recordReader instanceof MappedRecordReader);
@@ -34,7 +34,7 @@ public class FileLengthRecordReaderFactoryTest extends TestCase {
         factory.setSmallFileLimit(1000);
         factory.fileLength = 1000;
 
-        RecordReader recordReader = factory.build(new File("/commonline/core/io/test.txt"));
+        RecordReader recordReader = factory.build(new File("test.txt"));
 
         assertNotNull(recordReader);
         assertTrue(recordReader instanceof NioRecordReader);

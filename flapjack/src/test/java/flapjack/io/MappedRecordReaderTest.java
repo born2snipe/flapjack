@@ -10,7 +10,7 @@ import java.nio.ByteBuffer;
 
 public class MappedRecordReaderTest extends MockObjectTestCase {
     private MappedRecordReader reader;
-    private static final File FILE = new File("/commonline/core/io/test.txt");
+    private static final File FILE = new File("test.txt");
     private Mock fileUtil;
 
     public void setUp() {
