@@ -66,7 +66,7 @@ public class MappedRecordReaderTest extends TestCase {
         assertEquals("123", new String(actualRecord));
     }
 
-    public void FAILING_test_readRecord_SingleRecord_MapRegionNotBigEnough() throws IOException {
+    public void test_readRecord_SingleRecord_MapRegionNotBigEnough() throws IOException {
         reader.buffers.add(ByteBuffer.wrap("123".getBytes()));
         reader.buffers.add(ByteBuffer.wrap("45".getBytes()));
 

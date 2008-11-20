@@ -1,8 +1,6 @@
 package flapjack.io;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.ScatteringByteChannel;
@@ -15,6 +13,7 @@ public class NioRecordReader implements RecordReader {
     private int recordLength;
     private ByteBuffer buffer;
     private ScatteringByteChannel channel;
+    private FileUtil fileUtil;
 
     public NioRecordReader(File file) {
         this.file = file;
@@ -28,7 +27,7 @@ public class NioRecordReader implements RecordReader {
             buffer.clear();
         }
         if (channel == null) {
-            channel = createChannel(file);
+            channel = fileUtil.channel(file);
         }
         int lengthRead = channel.read(buffer);
 
@@ -43,16 +42,8 @@ public class NioRecordReader implements RecordReader {
         return buffer.array();
     }
 
-    protected ScatteringByteChannel createChannel(File file) throws FileNotFoundException {
-        return new FileInputStream(file).getChannel();
-    }
-
     public void close() {
-        try {
-            channel.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        fileUtil.close(channel);
     }
 
     public void setRecordLength(int recordLength) {
@@ -67,5 +58,9 @@ public class NioRecordReader implements RecordReader {
 
     public int getRecordLength() {
         return recordLength;
+    }
+
+    public void setFileUtil(FileUtil fileUtil) {
+        this.fileUtil = fileUtil;
     }
 }

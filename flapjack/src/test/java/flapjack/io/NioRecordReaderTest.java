@@ -6,22 +6,28 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.channels.ScatteringByteChannel;
 
+import org.jmock.MockObjectTestCase;
+import org.jmock.Mock;
 
-public class NioRecordReaderTest extends TestCase {
-    private ShuntNioRecordReader reader;
+
+public class NioRecordReaderTest extends MockObjectTestCase {
+    private NioRecordReader reader;
     private static final File FILE = new File("/commonline/core/io/test.txt");
+    private Mock fileUtil;
 
     protected void setUp() throws Exception {
         super.setUp();
 
-        reader = new ShuntNioRecordReader(FILE);
+        fileUtil = mock(FileUtil.class);
+
+        reader = new NioRecordReader(FILE);
         reader.setRecordLength(5);
+        reader.setFileUtil((FileUtil) fileUtil.proxy());
     }
 
     public void test_readRecord_RecordLengthNeverSet() throws IOException {
         try {
-            reader = new ShuntNioRecordReader(FILE);
-            reader.channel = new ByteArrayChannel("".getBytes());
+            reader = new NioRecordReader(FILE);
 
             reader.readRecord();
             fail();
@@ -49,13 +55,13 @@ public class NioRecordReaderTest extends TestCase {
     }
 
     public void test_readRecord_ReachedEndOfFile() throws IOException {
-        reader.channel = new ByteArrayChannel("".getBytes());
+        fileUtil.expects(once()).method("channel").with(eq(FILE)).will(returnValue(new ByteArrayChannel("".getBytes())));
 
         assertNull(reader.readRecord());
     }
 
     public void test_readRecord_HasPartialRecord() throws IOException {
-        reader.channel = new ByteArrayChannel("123".getBytes());
+        fileUtil.expects(once()).method("channel").with(eq(FILE)).will(returnValue(new ByteArrayChannel("123".getBytes())));
 
         byte[] actualRecord = reader.readRecord();
 
@@ -65,7 +71,7 @@ public class NioRecordReaderTest extends TestCase {
     }
 
     public void test_readRecord_HasOneRecord() throws IOException {
-        reader.channel = new ByteArrayChannel("12345".getBytes());
+        fileUtil.expects(once()).method("channel").with(eq(FILE)).will(returnValue(new ByteArrayChannel("12345".getBytes())));
 
         byte[] actualRecord = reader.readRecord();
 
@@ -75,7 +81,7 @@ public class NioRecordReaderTest extends TestCase {
     }
 
     public void test_readRecord_HasTwoRecords() throws IOException {
-        reader.channel = new ByteArrayChannel("1234567890".getBytes());
+        fileUtil.expects(once()).method("channel").with(eq(FILE)).will(returnValue(new ByteArrayChannel("1234567890".getBytes())));
 
         byte[] actualRecord = reader.readRecord();
 
@@ -90,16 +96,15 @@ public class NioRecordReaderTest extends TestCase {
         assertEquals("67890", new String(actualRecord));
     }
 
-    private static class ShuntNioRecordReader extends NioRecordReader {
-        private ScatteringByteChannel channel;
+    public void test_close() throws IOException {
+        ByteArrayChannel channel = new ByteArrayChannel("12345".getBytes());
+        fileUtil.expects(once()).method("channel").with(eq(FILE)).will(returnValue(channel));
 
-        public ShuntNioRecordReader(File file) {
-            super(file);
-        }
+        reader.readRecord();
 
-        protected ScatteringByteChannel createChannel(File file) {
-            return channel;
-        }
+        fileUtil.expects(once()).method("close").with(eq(channel));
+
+        reader.close();
     }
 
 }
