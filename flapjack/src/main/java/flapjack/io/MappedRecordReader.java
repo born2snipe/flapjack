@@ -22,7 +22,7 @@ public class MappedRecordReader implements RecordReader {
     private ByteBuffer mappedRegion;
     private long offset = 0L;
     private long mappedRegionSize = TEN_MEGABYTES;
-    private FileUtil fileUtil;
+    private FileUtil fileUtil = new FileUtilImpl();
 
     public MappedRecordReader(File file) {
         this.file = file;

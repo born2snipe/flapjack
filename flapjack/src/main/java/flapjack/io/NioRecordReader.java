@@ -13,7 +13,7 @@ public class NioRecordReader implements RecordReader {
     private int recordLength;
     private ByteBuffer buffer;
     private ScatteringByteChannel channel;
-    private FileUtil fileUtil;
+    private FileUtil fileUtil = new FileUtilImpl();
 
     public NioRecordReader(File file) {
         this.file = file;
