@@ -12,7 +12,19 @@ import java.nio.channels.ScatteringByteChannel;
  * <p/>
  * If you choose to use this it is recommended to only use it on large files.
  * <p/>
- * Defaults the mapped region size to 10MB.
+ * Defaults the max mapped region size to 10MB.  The mapped region size is determined on how big the file
+ * is that is being processed. So if the file size is less than the max mapped region size it will you the file size
+ * and if the max mapped region size is less than the file size it will you use the max mapped region size.
+ * <p/>
+ * For the visual folks:
+ * <p/>
+ * file size = 100MB
+ * max mapped region size = 10MB
+ * mapped region size = 10MB
+ * <p/>
+ * file size = 10MB
+ * max mapped region size = 100MB
+ * mapped region size = 10MB
  */
 public class MappedRecordReader implements RecordReader {
     public static final long TEN_MEGABYTES = 10L * 1024L * 1024L;
@@ -29,7 +41,6 @@ public class MappedRecordReader implements RecordReader {
     }
 
     public byte[] readRecord() throws IOException {
-        long start = System.nanoTime();
         validateRecordLength();
         initializeChannel();
         byte[] buffer = new byte[recordLength];
