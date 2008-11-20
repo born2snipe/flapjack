@@ -1,29 +1,42 @@
 package flapjack.io;
 
-import junit.framework.TestCase;
+import org.jmock.Mock;
+import org.jmock.MockObjectTestCase;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.FileNotFoundException;
 import java.nio.ByteBuffer;
-import java.util.List;
-import java.util.ArrayList;
 
 
-public class MappedRecordReaderTest extends TestCase {
-    private ShuntMappedRecordReader reader;
+public class MappedRecordReaderTest extends MockObjectTestCase {
+    private MappedRecordReader reader;
     private static final File FILE = new File("/commonline/core/io/test.txt");
+    private Mock fileUtil;
 
     public void setUp() {
-        reader = new ShuntMappedRecordReader(FILE);
+        fileUtil = mock(FileUtil.class);
+
+        reader = new MappedRecordReader(FILE);
         reader.setRecordLength(5);
+        reader.setFileUtil((FileUtil) fileUtil.proxy());
     }
 
+    public void test_close() throws IOException {
+        ByteArrayChannel channel = new ByteArrayChannel(null);
+
+        expect_channel(channel);
+        expect_map(channel, 0L, MappedRecordReader.TEN_MEGABYTES, "");
+        fileUtil.expects(once()).method("close").with(isA(ByteArrayChannel.class));
+        expect_length(0L);
+
+        reader.readRecord();
+
+        reader.close();
+    }
 
     public void test_readRecord_RecordLengthNotSet() throws IOException {
         try {
-            reader = new ShuntMappedRecordReader(FILE);
-            reader.buffers.add(ByteBuffer.wrap("123".getBytes()));
+            reader = new MappedRecordReader(FILE);
 
             reader.readRecord();
             fail();
@@ -31,6 +44,7 @@ public class MappedRecordReaderTest extends TestCase {
             assertEquals("Record length MUST be greater than zero", err.getMessage());
         }
     }
+
 
     public void test_setRecordLength_NegativeRecordLength() {
         try {
@@ -51,13 +65,21 @@ public class MappedRecordReaderTest extends TestCase {
     }
 
     public void test_readRecord_EOF() throws IOException {
-        reader.buffers.add(ByteBuffer.wrap("".getBytes()));
+        ByteArrayChannel channel = new ByteArrayChannel(null);
+
+        expect_channel(channel);
+        expect_map(channel, 0L, MappedRecordReader.TEN_MEGABYTES, "");
+        expect_length(0L);
 
         assertNull(reader.readRecord());
     }
 
     public void test_readRecord_PartialRecord() throws IOException {
-        reader.buffers.add(ByteBuffer.wrap("123".getBytes()));
+        ByteArrayChannel channel = new ByteArrayChannel(null);
+
+        expect_channel(channel);
+        expect_map(channel, 0L, MappedRecordReader.TEN_MEGABYTES, "123");
+        expect_length(3L);
 
         byte[] actualRecord = reader.readRecord();
 
@@ -67,8 +89,12 @@ public class MappedRecordReaderTest extends TestCase {
     }
 
     public void test_readRecord_SingleRecord_MapRegionNotBigEnough() throws IOException {
-        reader.buffers.add(ByteBuffer.wrap("123".getBytes()));
-        reader.buffers.add(ByteBuffer.wrap("45".getBytes()));
+        ByteArrayChannel channel = new ByteArrayChannel(null);
+
+        expect_channel(channel);
+        expect_map(channel, 0L, MappedRecordReader.TEN_MEGABYTES, "123");
+        expect_map(channel, 3L, MappedRecordReader.TEN_MEGABYTES, "45");
+        expect_length(5L);
 
         byte[] actualRecord = reader.readRecord();
 
@@ -78,7 +104,11 @@ public class MappedRecordReaderTest extends TestCase {
     }
 
     public void test_readRecord_SingleRecord() throws IOException {
-        reader.buffers.add(ByteBuffer.wrap("12345".getBytes()));
+        ByteArrayChannel channel = new ByteArrayChannel(null);
+
+        expect_channel(channel);
+        expect_map(channel, 0L, MappedRecordReader.TEN_MEGABYTES, "12345");
+        expect_length(5L);
 
         byte[] actualRecord = reader.readRecord();
 
@@ -88,7 +118,12 @@ public class MappedRecordReaderTest extends TestCase {
     }
 
     public void test_readRecord_TwoRecords() throws IOException {
-        reader.buffers.add(ByteBuffer.wrap("1234567890".getBytes()));
+        ByteArrayChannel channel = new ByteArrayChannel(null);
+
+        expect_channel(channel);
+        expect_map(channel, 0L, MappedRecordReader.TEN_MEGABYTES, "1234567890");
+        expect_length(10L);
+        expect_length(10L);
 
         reader.readRecord();
         byte[] actualRecord = reader.readRecord();
@@ -98,22 +133,16 @@ public class MappedRecordReaderTest extends TestCase {
         assertEquals("67890", new String(actualRecord));
     }
 
-    private static class ShuntMappedRecordReader extends MappedRecordReader {
-        private List buffers = new ArrayList();
-        private int offset = 0;
-        private long mappedOffset, mappedLength;
-
-        public ShuntMappedRecordReader(File file) {
-            super(file);
-        }
-
-        protected ByteBuffer mapSection(long offset, long length) {
-            mappedOffset = offset;
-            mappedLength = length;
-            return (ByteBuffer) buffers.get(this.offset++);
-        }
-
-        protected void initializeChannel() throws FileNotFoundException {
-        }
+    private void expect_map(ByteArrayChannel channel, long expectedOffset, long expectedLength, String data) {
+        fileUtil.expects(once()).method("map").with(eq(channel), eq(expectedOffset), eq(expectedLength)).will(returnValue(ByteBuffer.wrap(data.getBytes())));
     }
+
+    private void expect_channel(ByteArrayChannel channel) {
+        fileUtil.expects(once()).method("channel").with(eq(FILE)).will(returnValue(channel));
+    }
+
+    private void expect_length(long length) {
+        fileUtil.expects(once()).method("length").with(eq(FILE)).will(returnValue(length));
+    }
+
 }

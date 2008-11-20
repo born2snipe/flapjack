@@ -1,27 +1,28 @@
 package flapjack.io;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.nio.channels.FileChannel;
+import java.nio.channels.ScatteringByteChannel;
 
 /**
  * RecordReader implementation using the Java NIO Mapped File API
  * <p/>
  * If you choose to use this it is recommended to only use it on large files.
- *
+ * <p/>
  * Defaults the mapped region size to 10MB.
  */
 public class MappedRecordReader implements RecordReader {
-    private static final long TEN_MEGABYTES = 10L * 1024L * 1024L;
+    public static final long TEN_MEGABYTES = 10L * 1024L * 1024L;
     private File file;
     private int recordLength;
-    private FileChannel channel;
+    private ScatteringByteChannel channel;
     private ByteBuffer mappedRegion;
-    private int offset = 0;
+    private long offset = 0L;
     private long mappedRegionSize = TEN_MEGABYTES;
+    private FileUtil fileUtil;
 
     public MappedRecordReader(File file) {
         this.file = file;
@@ -31,42 +32,49 @@ public class MappedRecordReader implements RecordReader {
         validateRecordLength();
         initializeChannel();
         byte[] buffer = new byte[recordLength];
+        long fileLength = fileUtil.length(file);
 
         if (mappedRegion == null) {
-            mappedRegion = mapSection(offset, mappedRegionSize);
+            mappedRegion = fileUtil.map(channel, offset, mappedRegionSize);
         }
 
         if (mappedRegion.remaining() == 0) {
             return null;
-        } else if (mappedRegion.remaining() > buffer.length) {
-            mappedRegion.get(buffer);
-            offset += buffer.length;
-        } else {
-            byte[] temp = new byte[mappedRegion.remaining()];
-            mappedRegion.get(temp);
-            offset += temp.length;
-            return temp;
+        } else if (mappedRegion.remaining() < buffer.length) {
+            buffer = new byte[mappedRegion.remaining()];
+        }
+        readBytes(buffer);
+
+        if (buffer.length != recordLength) {
+            if (offset == fileLength) {
+                return buffer;
+            }
+            
+            ByteArrayOutputStream output = new ByteArrayOutputStream();
+            output.write(buffer);
+            byte[] temp = new byte[recordLength - buffer.length];
+            mappedRegion = fileUtil.map(channel, offset, mappedRegionSize);
+            readBytes(temp);
+            output.write(temp);
+            return output.toByteArray();            
         }
 
         return buffer;
     }
 
-    protected void initializeChannel() throws FileNotFoundException {
-        if (channel == null) {
-            channel = new FileInputStream(file).getChannel();
-        }
+    private void readBytes(byte[] buffer) {
+        mappedRegion.get(buffer);
+        offset += buffer.length;
     }
 
-    protected ByteBuffer mapSection(long offset, long length) throws IOException {
-        return channel.map(FileChannel.MapMode.READ_ONLY, offset, length);
+    private void initializeChannel() throws FileNotFoundException {
+        if (channel == null) {
+            channel = fileUtil.channel(file);
+        }
     }
 
     public void close() {
-        try {
-            channel.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        fileUtil.close(channel);
     }
 
     public void setRecordLength(int recordLength) {
@@ -86,5 +94,9 @@ public class MappedRecordReader implements RecordReader {
 
     public void setMappedRegionSize(long mappedRegionSize) {
         this.mappedRegionSize = mappedRegionSize;
+    }
+
+    protected void setFileUtil(FileUtil fileUtil) {
+        this.fileUtil = fileUtil;
     }
 }

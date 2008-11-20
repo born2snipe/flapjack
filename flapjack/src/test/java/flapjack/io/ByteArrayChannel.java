@@ -12,8 +12,10 @@ public class ByteArrayChannel implements ScatteringByteChannel {
     private boolean open = true;
 
     public ByteArrayChannel(byte[] data) {
-        this.data = data;
-        input = new ByteArrayInputStream(data);
+        if (data != null) {
+            this.data = data;
+            input = new ByteArrayInputStream(data);
+        }
     }
 
     public int read(ByteBuffer buf) throws IOException {
