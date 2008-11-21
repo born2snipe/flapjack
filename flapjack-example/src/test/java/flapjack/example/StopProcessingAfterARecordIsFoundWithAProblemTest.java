@@ -92,7 +92,7 @@ public class StopProcessingAfterARecordIsFoundWithAProblemTest extends TestCase 
 
     /**
      * These RecordLayouts represent the different possible record types that should be encounted in out data
-     */
+     */                                                             
     private static class UserRecordLayout extends SimpleRecordLayout {
         private UserRecordLayout() {
             field("First Name", 11);
