@@ -42,7 +42,8 @@ public class StopProcessingAfterARecordIsFoundWithAProblemTest extends TestCase 
     }
 
     /**
-     * This class is a different implementation of the ParseResult
+     * This class is a different implementation of the ParseResult that will
+     *  throw an exception when a BadRecord is found.
      */
     private static class ExplodingParseResult implements ParseResult {
         private List records = new ArrayList();
