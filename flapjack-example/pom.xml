@@ -3,10 +3,15 @@
 
     <modelVersion>4.0.0</modelVersion>
 
+    <parent>
+        <groupId>flapjack</groupId>
+        <artifactId>flapjack-parent</artifactId>
+        <version>1.0.1-SNAPSHOT</version>
+    </parent>
+
     <groupId>flapjack</groupId>
     <artifactId>flapjack-example</artifactId>
     <name>Flapjack Examples</name>
-    <version>1.0.1-SNAPSHOT</version>
 
 
     <dependencies>
@@ -20,7 +25,6 @@
         <dependency>
             <groupId>flapjack</groupId>
             <artifactId>flapjack</artifactId>
-            <version>${version}</version>
             <scope>test</scope>
         </dependency>
 

@@ -25,6 +25,7 @@
     </scm>
 
     <modules>
+        <module>flapjack-parent</module>
         <module>flapjack</module>
         <module>flapjack-example</module>
     </modules>

@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<project>
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>flapjack</groupId>
+    <artifactId>flapjack-parent</artifactId>
+    <name>Flapjack Parent (Dependency Management)</name>
+    <version>1.0.1-SNAPSHOT</version>
+    <url>http://code.google.com/p/flapjack/</url>
+    <packaging>pom</packaging>
+
+    <licenses>
+        <license>
+            <name>Apache 2</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+            <comments>A business-friendly OSS license</comments>
+        </license>
+    </licenses>
+
+    <dependencyManagement>
+
+        <dependencies>
+
+            <dependency>
+                <groupId>flapjack</groupId>
+                <artifactId>flapjack</artifactId>
+                <version>${version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>3.8.1</version>
+            </dependency>
+
+            <dependency>
+                <groupId>jmock</groupId>
+                <artifactId>jmock</artifactId>
+                <version>1.1.0</version>
+            </dependency>
+
+        </dependencies>
+
+    </dependencyManagement>
+
+
+</project>

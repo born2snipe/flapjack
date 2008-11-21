@@ -2,37 +2,32 @@
 
     <modelVersion>4.0.0</modelVersion>
 
+    <parent>
+        <groupId>flapjack</groupId>
+        <artifactId>flapjack-parent</artifactId>
+        <version>1.0.1-SNAPSHOT</version>
+    </parent>
+
     <groupId>flapjack</groupId>
     <artifactId>flapjack</artifactId>
     <packaging>jar</packaging>
-    <version>1.0.1-SNAPSHOT</version>
     <name>Flapjack</name>
-    <url>http://code.google.com/p/flapjack/</url>
     <description>Flat Record Parser</description>
 
-    <licenses>
-        <license>
-            <name>Apache 2</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-            <distribution>repo</distribution>
-            <comments>A business-friendly OSS license</comments>
-        </license>
-    </licenses>
-
-
     <dependencies>
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>3.8.1</version>
             <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>jmock</groupId>
             <artifactId>jmock</artifactId>
-            <version>1.1.0</version>
             <scope>test</scope>
         </dependency>
+
     </dependencies>
 
     <reporting>
@@ -58,8 +53,6 @@
                 <artifactId>maven-pmd-plugin</artifactId>
                 <version>2.4</version>
             </plugin>
-
-
         </plugins>
     </reporting>
 
