@@ -20,6 +20,7 @@
         <module>flapjack-dependency-management</module>
         <module>flapjack</module>
         <module>flapjack-example</module>
+        <module>flapjack-distribution</module>
     </modules>
 
     <build>

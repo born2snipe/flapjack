@@ -15,15 +15,6 @@
     <url>http://code.google.com/p/flapjack/</url>
     <packaging>pom</packaging>
 
-    <licenses>
-        <license>
-            <name>Apache 2</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-            <distribution>repo</distribution>
-            <comments>A business-friendly OSS license</comments>
-        </license>
-    </licenses>
-
     <dependencyManagement>
 
         <dependencies>
@@ -32,6 +23,27 @@
                 <groupId>flapjack</groupId>
                 <artifactId>flapjack</artifactId>
                 <version>${version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>flapjack</groupId>
+                <artifactId>flapjack</artifactId>
+                <version>${version}</version>
+                <classifier>sources</classifier>
+            </dependency>
+
+            <dependency>
+                <groupId>flapjack</groupId>
+                <artifactId>flapjack</artifactId>
+                <version>${version}</version>
+                <classifier>javadoc</classifier>
+            </dependency>
+
+            <dependency>
+                <groupId>flapjack</groupId>
+                <artifactId>flapjack-example</artifactId>
+                <version>${version}</version>
+                <classifier>test-sources</classifier>
             </dependency>
 
             <dependency>

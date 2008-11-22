@@ -1,0 +1,84 @@
+<?xml version="1.0"?>
+<project>
+    <parent>
+        <groupId>flapjack</groupId>
+        <artifactId>flapjack-dependency-management</artifactId>
+        <version>1.0.1-SNAPSHOT</version>
+    </parent>
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>flapjack</groupId>
+    <artifactId>flapjack-distribution</artifactId>
+    <name>Flapjack Distribution</name>
+    <version>1.0.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>flapjack</groupId>
+            <artifactId>flapjack</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>flapjack</groupId>
+            <artifactId>flapjack</artifactId>
+            <classifier>sources</classifier>
+        </dependency>
+
+        <dependency>
+            <groupId>flapjack</groupId>
+            <artifactId>flapjack</artifactId>
+            <classifier>javadoc</classifier>
+        </dependency>
+
+        <dependency>
+            <groupId>flapjack</groupId>
+            <artifactId>flapjack-example</artifactId>
+            <classifier>test-sources</classifier>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <descriptorRefs>
+                        <descriptorRef>bin</descriptorRef>
+                    </descriptorRefs>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>assembly</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+        </plugins>
+    </build>
+
+
+</project>
