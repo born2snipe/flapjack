@@ -3,10 +3,15 @@
 
     <modelVersion>4.0.0</modelVersion>
 
+    <parent>
+        <groupId>flapjack</groupId>
+        <artifactId>flapjack-parent</artifactId>
+        <version>1.0.1-SNAPSHOT</version>
+    </parent>
+
     <groupId>flapjack</groupId>
     <artifactId>flapjack-dependency-management</artifactId>
     <name>Flapjack Module (Dependency Management)</name>
-    <version>1.0.1-SNAPSHOT</version>
     <url>http://code.google.com/p/flapjack/</url>
     <packaging>pom</packaging>
 

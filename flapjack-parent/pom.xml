@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<project>
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>flapjack</groupId>
+    <artifactId>flapjack-parent</artifactId>
+    <name>Flapjack Parent</name>
+    <version>1.0.1-SNAPSHOT</version>
+    <url>http://code.google.com/p/flapjack/</url>
+    <packaging>pom</packaging>
+
+    <licenses>
+        <license>
+            <name>Apache 2</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+            <comments>A business-friendly OSS license</comments>
+        </license>
+    </licenses>
+
+    <scm>
+        <developerConnection>scm:git:git://github.com/born2snipe/flapjack.git</developerConnection>
+    </scm>
+
+    <pluginRepositories>
+
+        <pluginRepository>
+            <id>mc-release</id>
+            <name>Local Maven repository of releases</name>
+            <url>http://mc-repo.googlecode.com/svn/maven2/releases</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </pluginRepository>
+
+    </pluginRepositories>
+
+</project>
