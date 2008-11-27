@@ -1,11 +1,11 @@
 /**
  * Copyright 2008 Dan Dudley
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at:
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is
  * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and limitations under the License. 
@@ -23,11 +23,12 @@ import java.io.File;
  */
 public class FileLengthRecordReaderFactory implements RecordReaderFactory {
     private static final int DEFAULT_SMALL_FILE_LIMIT = 50;
-    private static final long MEGABYTE = 1024L * 1024L;
+    private static final long MEGABYTE = 1048576L;
 
     private NioRecordReaderFactory nioFactory;
     private MappedRecordReaderFactory mappedFactory;
     private int smallFileLimit = DEFAULT_SMALL_FILE_LIMIT;
+    private FileUtil fileUtil = new FileUtilImpl();
 
     public FileLengthRecordReaderFactory(int recordLength) {
         nioFactory = new NioRecordReaderFactory(recordLength);
@@ -35,19 +36,15 @@ public class FileLengthRecordReaderFactory implements RecordReaderFactory {
     }
 
     public RecordReader build(File file) {
-        if (getFileLength(file) <= smallFileLimit) {
+        if (convertToMegaBytes(fileUtil.length(file)) <= smallFileLimit) {
             return nioFactory.build(file);
         }
         return mappedFactory.build(file);
     }
 
-    protected int getFileLength(File file) {
-        return convertToMegaBytes(file.length());
-    }
 
-
-    private int convertToMegaBytes(long bytes) {
-        return (int) (bytes / MEGABYTE);
+    private long convertToMegaBytes(long bytes) {
+        return (bytes / MEGABYTE);
     }
 
     /**
@@ -57,5 +54,9 @@ public class FileLengthRecordReaderFactory implements RecordReaderFactory {
      */
     public void setSmallFileLimit(int smallFileLimit) {
         this.smallFileLimit = smallFileLimit;
+    }
+
+    protected void setFileUtil(FileUtil fileUtil) {
+        this.fileUtil = fileUtil;
     }
 }
