@@ -13,6 +13,7 @@
 package flapjack.io;
 
 import java.io.File;
+import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.ScatteringByteChannel;
