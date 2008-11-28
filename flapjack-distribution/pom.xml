@@ -34,6 +34,23 @@
 
         <dependency>
             <groupId>flapjack</groupId>
+            <artifactId>flapjack-annotation</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>flapjack</groupId>
+            <artifactId>flapjack-annotation</artifactId>
+            <classifier>sources</classifier>
+        </dependency>
+
+        <dependency>
+            <groupId>flapjack</groupId>
+            <artifactId>flapjack-annotation</artifactId>
+            <classifier>javadoc</classifier>
+        </dependency>
+
+        <dependency>
+            <groupId>flapjack</groupId>
             <artifactId>flapjack-example</artifactId>
             <classifier>test-sources</classifier>
         </dependency>
