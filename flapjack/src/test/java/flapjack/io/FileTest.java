@@ -22,6 +22,7 @@ import junit.framework.TestCase;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.net.URI;
 import java.util.Iterator;
 
 
@@ -39,7 +40,7 @@ public class FileTest extends TestCase {
         fileParser.setRecordParser(recordParser);
         
         ClassLoader loader = Thread.currentThread().getContextClassLoader();
-        file = new File(loader.getResource("flapjack/io/two_megs.txt").toURI());
+        file = new File(new URI(loader.getResource("flapjack/io/two_megs.txt").toString()));
     }
 
     public void test_MappedFile() throws IOException, URISyntaxException {
