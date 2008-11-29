@@ -16,6 +16,6 @@ import flapjack.annotation.Record;
 import flapjack.layout.SimpleRecordLayout;
 
 
-@Record(layout = SimpleRecordLayout.class)
+@Record(SimpleRecordLayout.class)
 public class User {
 }

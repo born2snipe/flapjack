@@ -27,5 +27,5 @@ public @interface Record {
      *
      * @return the record layout class
      */
-    Class<? extends RecordLayout> layout();
+    Class<? extends RecordLayout> value();
 }

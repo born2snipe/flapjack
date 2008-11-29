@@ -15,6 +15,6 @@ package flapjack.test2;
 import flapjack.annotation.Record;
 import flapjack.layout.SimpleRecordLayout;
 
-@Record(layout = SimpleRecordLayout.class)
+@Record(value = SimpleRecordLayout.class)
 public class Phone {
 }
