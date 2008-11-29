@@ -25,4 +25,13 @@ public class FieldLocator {
         }
         return fields;
     }
+
+    public java.lang.reflect.Field locateById(Class<?> clazz, String id) {
+        for (java.lang.reflect.Field field : locate(clazz)) {
+            if (id.equals(field.getAnnotation(Field.class).value())) {
+                return field;
+            }
+        }
+        return null;
+    }
 }

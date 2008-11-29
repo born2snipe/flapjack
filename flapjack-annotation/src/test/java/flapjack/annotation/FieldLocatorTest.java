@@ -25,6 +25,17 @@ public class FieldLocatorTest extends TestCase {
         locator = new FieldLocator();
     }
 
+    public void test_locateById_NotFoundField() {
+        assertNull(locator.locateById(Dummy.class, "field2"));
+    }
+
+    public void test_locateById_FoundField() {
+        java.lang.reflect.Field field = locator.locateById(Dummy.class, "field1");
+
+        assertNotNull(field);
+        assertEquals("field1", field.getName());
+    }
+
     public void test_locate() {
         List<java.lang.reflect.Field> fields = locator.locate(Dummy.class);
 
