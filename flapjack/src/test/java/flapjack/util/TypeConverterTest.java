@@ -37,10 +37,10 @@ public class TypeConverterTest extends MockObjectTestCase {
 
     public void test_typeNotRegistered() {
         try {
-            converter.convert(Double.class, "text");
+            converter.convert(MockWrappingValueConverter.class, "text");
             fail();
         } catch (IllegalArgumentException err) {
-            assertEquals("No flapjack.util.ValueConverter registered for types java.lang.Double", err.getMessage());
+            assertEquals("No flapjack.util.ValueConverter registered for types flapjack.util.TypeConverterTest$MockWrappingValueConverter", err.getMessage());
         }
     }
 
