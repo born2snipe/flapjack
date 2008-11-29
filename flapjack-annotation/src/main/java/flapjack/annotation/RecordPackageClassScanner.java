@@ -19,7 +19,9 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ * This class scans the given packages for classes that contain the flapjack.annotation.Record annotation.
+ */
 public class RecordPackageClassScanner {
     private List<String> packages = new ArrayList<String>();
 
