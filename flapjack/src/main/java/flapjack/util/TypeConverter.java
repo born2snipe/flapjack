@@ -22,6 +22,7 @@ public class TypeConverter {
     private Map stringConverters = new HashMap();
 
     public TypeConverter() {
+        registerConverter(new BooleanValueConverter());
         registerConverter(new IntegerValueConverter());
         registerConverter(new LongValueConverter());
         registerConverter(new DoubleValueConverter());
