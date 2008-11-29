@@ -23,13 +23,19 @@ import java.util.HashMap;
 
 
 public class ByteMapRecordFieldParser extends ByteRecordFieldParser {
+    private MappedFieldIdGenerator fieldIdGenerator = new FieldNameGenerator();
+
     public Object parse(byte[] bytes, RecordLayout recordLayout) throws ParseException {
         List<byte[]> byteArrays = (List) super.parse(bytes, recordLayout);
-        Map<String, byte[]> fields = new HashMap<String, byte[]>();
+        Map<Object, byte[]> fields = new HashMap<Object, byte[]>();
         for (int i = 0; i < byteArrays.size(); i++) {
             FieldDefinition fieldDef = (FieldDefinition) recordLayout.getFieldDefinitions().get(i);
-            fields.put(fieldDef.getName(), byteArrays.get(i));
+            fields.put(fieldIdGenerator.generate(fieldDef), byteArrays.get(i));
         }
         return fields;
+    }
+
+    public void setFieldIdGenerator(MappedFieldIdGenerator fieldIdGenerator) {
+        this.fieldIdGenerator = fieldIdGenerator;
     }
 }

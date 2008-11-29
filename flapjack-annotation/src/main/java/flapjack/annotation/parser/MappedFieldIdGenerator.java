@@ -1,31 +1,25 @@
 /**
  * Copyright 2008 Dan Dudley
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at:
- *
+ * 
  * http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software distributed under the License is
  * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and limitations under the License.
  */
-package flapjack.annotation;
+package flapjack.annotation.parser;
 
-import flapjack.layout.RecordLayout;
+import flapjack.layout.FieldDefinition;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-
-@Target(ElementType.TYPE)
-@Retention(RetentionPolicy.RUNTIME)
-public @interface Record {
+public interface MappedFieldIdGenerator {
     /**
-     * The RecordLayout that represents this type of record
+     * Generates the id that should be used to identify the given FieldDefinition
      *
-     * @return the record layout class
+     * @param fieldDef - the FieldDefinition to generate an id for
+     * @return the String id that represents this field definition
      */
-    Class<? extends RecordLayout> layout();
+    String generate(FieldDefinition fieldDef);
 }
