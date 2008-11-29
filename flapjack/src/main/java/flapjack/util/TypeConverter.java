@@ -26,6 +26,7 @@ public class TypeConverter {
         registerConverter(new LongValueConverter());
         registerConverter(new DoubleValueConverter());
         registerConverter(new FloatValueConverter());
+        registerConverter(new BigIntegerValueConverter());
     }
 
     /**
