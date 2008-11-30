@@ -17,6 +17,7 @@ import flapjack.annotation.RecordPackageClassScanner;
 import flapjack.layout.RecordLayout;
 import flapjack.model.RecordFactory;
 import flapjack.model.RecordFactoryResolver;
+import flapjack.util.TypeConverter;
 
 import java.util.HashMap;
 import java.util.List;
@@ -26,10 +27,11 @@ import java.util.Map;
 public class MappedRecordFactoryResolver implements RecordFactoryResolver {
     private RecordPackageClassScanner classScanner = new RecordPackageClassScanner();
     private Map<Class, Class> recordToClass = new HashMap<Class, Class>();
+    private TypeConverter typeConverter = new TypeConverter();
 
     public RecordFactory resolve(RecordLayout layout) {
         initializeLayoutToClassMap();
-        return new MappedRecordFactory(recordToClass.get(layout.getClass()));
+        return new MappedRecordFactory(recordToClass.get(layout.getClass()), typeConverter);
     }
 
     private void initializeLayoutToClassMap() {

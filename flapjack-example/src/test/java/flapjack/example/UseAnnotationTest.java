@@ -1,0 +1,127 @@
+/**
+ * Copyright 2008 Dan Dudley
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is
+ * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and limitations under the License. 
+ */
+package flapjack.example;
+
+import flapjack.annotation.Field;
+import flapjack.annotation.Record;
+import flapjack.annotation.model.MappedRecordFactoryResolver;
+import flapjack.annotation.parser.StringMapRecordFieldParser;
+import flapjack.io.LineRecordReader;
+import flapjack.layout.RecordLayout;
+import flapjack.layout.SimpleRecordLayout;
+import flapjack.parser.DefaultParseResult;
+import flapjack.parser.RecordLayoutResolver;
+import flapjack.parser.RecordParserImpl;
+import junit.framework.TestCase;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.util.Arrays;
+
+
+public class UseAnnotationTest extends TestCase {
+    public void test() throws IOException {
+        String records = "Coldplay  Clocks    03:45";
+
+        /**
+         * Initialize the MappedRecordFactoryResolver with what packages need to be scanned for the domain classes
+         * that contain the annotations.
+         */
+        MappedRecordFactoryResolver recordFactoryResolver = new MappedRecordFactoryResolver();
+        recordFactoryResolver.setPackages(Arrays.asList("flapjack.example"));
+
+        /**
+         * Initialize the RecordParser with our RecordLayoutResolver and RecordFactoryResolver
+         */
+        RecordParserImpl recordParser = new RecordParserImpl();
+        recordParser.setRecordLayoutResolver(new SongRecordLayoutResolver());
+        recordParser.setRecordFactoryResolver(recordFactoryResolver);
+        recordParser.setRecordFieldParser(new StringMapRecordFieldParser());
+
+        /**
+         * Actually call the parser with our RecordReader
+         */
+        LineRecordReader recordReader = new LineRecordReader(new ByteArrayInputStream(records.getBytes()));
+        DefaultParseResult result = (DefaultParseResult) recordParser.parse(recordReader);
+
+        assertEquals(0, result.getUnparseableRecords().size());
+        assertEquals(0, result.getUnresolvedRecords().size());
+        assertEquals(0, result.getPartialRecords().size());
+        assertEquals(1, result.getRecords().size());
+
+        Song song = (Song) result.getRecords().get(0);
+        assertEquals("Coldplay  ", song.getArtist());
+        assertEquals("Clocks    ", song.getTitle());
+        assertEquals("03:45", song.getLength());
+    }
+
+    /**
+     * Our RecordLayout definition for our record type
+     */
+    private static class SongRecordLayout extends SimpleRecordLayout {
+        private SongRecordLayout() {
+            field("Artist", 10);
+            field("Title", 10);
+            field("Length", 5);
+        }
+    }
+
+    /**
+     * Our RecordLayoutResolver to resolve what RecordLayout should be used
+     */
+    private static class SongRecordLayoutResolver implements RecordLayoutResolver {
+        public RecordLayout resolve(byte[] bytes) {
+            return new SongRecordLayout();
+        }
+    }
+
+    /**
+     * Our domain class to be used with the annotations telling what fields should be mapped.
+     * <p/>
+     * The names you give the the @Field annotation are very IMPORTANT they should match the descriptions
+     * you have defined in your RecordLayout you have defined in the @Record annotation.
+     */
+    @Record(SongRecordLayout.class)
+    public static class Song {
+        @Field("Artist")
+        private String artist;
+        @Field("Title")
+        private String title;
+        @Field("Length")
+        private String length;
+
+        public String getArtist() {
+            return artist;
+        }
+
+        public void setArtist(String artist) {
+            this.artist = artist;
+        }
+
+        public String getTitle() {
+            return title;
+        }
+
+        public void setTitle(String title) {
+            this.title = title;
+        }
+
+        public String getLength() {
+            return length;
+        }
+
+        public void setLength(String length) {
+            this.length = length;
+        }
+    }
+}

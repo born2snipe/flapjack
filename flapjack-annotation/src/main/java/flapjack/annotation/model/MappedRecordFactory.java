@@ -28,11 +28,11 @@ import java.util.Map;
 public class MappedRecordFactory implements RecordFactory {
     private static final FieldLocator FIELD_LOCATOR = new FieldLocator();
     private Class clazz;
-    // todo - may need to initialize this through constructor
-    private TypeConverter typeConverter = new TypeConverter();
+    private TypeConverter typeConverter;
 
-    public MappedRecordFactory(Class clazz) {
+    public MappedRecordFactory(Class clazz, TypeConverter typeConverter) {
         this.clazz = clazz;
+        this.typeConverter = typeConverter;
     }
 
     public Object build(Object obj, RecordLayout recordLayout) {
