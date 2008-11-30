@@ -12,9 +12,29 @@
  */
 package flapjack.test2;
 
+import flapjack.annotation.Field;
 import flapjack.annotation.Record;
-import flapjack.layout.SimpleRecordLayout;
 
-@Record(value = SimpleRecordLayout.class)
+@Record(PhoneRecordLayout.class)
 public class Phone {
+    @Field("Area")
+    private String areaCode;
+    @Field("Number")
+    private String number;
+
+    public String getAreaCode() {
+        return areaCode;
+    }
+
+    public void setAreaCode(String areaCode) {
+        this.areaCode = areaCode;
+    }
+
+    public String getNumber() {
+        return number;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
+    }
 }

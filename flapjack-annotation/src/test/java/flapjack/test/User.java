@@ -12,10 +12,39 @@
  */
 package flapjack.test;
 
+import flapjack.annotation.Field;
 import flapjack.annotation.Record;
-import flapjack.layout.SimpleRecordLayout;
 
 
-@Record(SimpleRecordLayout.class)
+@Record(UserRecordLayout.class)
 public class User {
+    @Field("First Name")
+    private String firstName;
+    @Field("Last Name")
+    private String lastName;
+    private String middleInitial;
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getMiddleInitial() {
+        return middleInitial;
+    }
+
+    public void setMiddleInitial(String middleInitial) {
+        this.middleInitial = middleInitial;
+    }
 }
