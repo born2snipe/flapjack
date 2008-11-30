@@ -18,6 +18,7 @@ import flapjack.layout.RecordLayout;
 import flapjack.model.RecordFactory;
 import flapjack.model.RecordFactoryResolver;
 import flapjack.util.TypeConverter;
+import flapjack.util.ValueConverter;
 
 import java.util.HashMap;
 import java.util.List;
@@ -31,14 +32,14 @@ public class MappedRecordFactoryResolver implements RecordFactoryResolver {
     private boolean hasPackages = false;
 
     public RecordFactory resolve(RecordLayout layout) {
+        if (!hasPackages) {
+            throw new IllegalStateException("There are no packages configured for scanning! Was this intended?");
+        }
         initializeLayoutToClassMap();
         return new MappedRecordFactory(recordToClass.get(layout.getClass()), typeConverter);
     }
 
     private void initializeLayoutToClassMap() {
-        if (!hasPackages) {
-            throw new IllegalStateException("There are no packages configured for scanning! Was this intended?");
-        }
         if (recordToClass.size() == 0) {
             for (Class clazz : classScanner.scan()) {
                 Record record = (Record) clazz.getAnnotation(Record.class);
@@ -52,5 +53,11 @@ public class MappedRecordFactoryResolver implements RecordFactoryResolver {
             hasPackages = true;
         }
         classScanner.setPackages(packages);
+    }
+
+    public void setValueConverters(List<? extends ValueConverter> valueConverters) {
+        for (ValueConverter converter : valueConverters) {
+            typeConverter.registerConverter(converter);
+        }
     }
 }

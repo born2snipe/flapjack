@@ -15,18 +15,48 @@ package flapjack.annotation.model;
 import flapjack.model.RecordFactory;
 import flapjack.test.User;
 import flapjack.test.UserRecordLayout;
-import flapjack.test2.PhoneRecordLayout;
 import flapjack.test2.Phone;
+import flapjack.test2.PhoneRecordLayout;
+import flapjack.util.ValueConverter;
+import flapjack.annotation.Record;
+import flapjack.annotation.Field;
+import flapjack.layout.SimpleRecordLayout;
+import flapjack.layout.SimpleFieldDefinition;
 import junit.framework.TestCase;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.ArrayList;
 
 
 public class MappedRecordFactoryResolverTest extends TestCase {
     private MappedRecordFactoryResolver resolver;
+
+    protected void setUp() throws Exception {
+        super.setUp();
+        resolver = new MappedRecordFactoryResolver();
+    }
+
+    public void test_resolve_AddAdditionalValueConverters() {
+        resolver.setPackages(Arrays.asList("flapjack.annotation.model"));
+        resolver.setValueConverters(Arrays.asList(new BarValueConverter()));
+
+        FooRecordLayout layout = new FooRecordLayout();
+        layout.addFieldDefinition(new SimpleFieldDefinition("bar", 0, 0));
+
+        Map<String, String> fields = new HashMap<String, String>();
+        fields.put("bar", "foo bar");
+
+        Object obj = resolver.resolve(layout).build(fields, layout);
+
+        assertNotNull(obj);
+        System.out.println("obj = " + obj);
+        assertTrue(obj instanceof Foo);
+
+        Foo foo = (Foo) obj;
+        
+    }
 
     public void test_resolve_NoPackagesRegistered() {
         try {
@@ -36,7 +66,7 @@ public class MappedRecordFactoryResolverTest extends TestCase {
             assertEquals("There are no packages configured for scanning! Was this intended?", err.getMessage());
         }
     }
-    
+
     public void test_resolve_NoPackagesRegistered_EmptyList() {
         try {
             resolver.setPackages(new ArrayList());
@@ -94,8 +124,39 @@ public class MappedRecordFactoryResolverTest extends TestCase {
         assertEquals("456-7890", phone.getNumber());
     }
 
-    protected void setUp() throws Exception {
-        super.setUp();
-        resolver = new MappedRecordFactoryResolver();
+    @Record(FooRecordLayout.class)
+    public static class Foo {
+        @Field("bar")
+        private Bar bar;
+
+        public Bar getBar() {
+            return bar;
+        }
+
+        public void setBar(Bar bar) {
+            this.bar = bar;
+        }
     }
+
+    private static class Bar {
+        public final String value;
+
+        private Bar(String value) {
+            this.value = value;
+        }
+    }
+
+    private static class BarValueConverter implements ValueConverter {
+        public Object convert(String text) {
+            return new Bar(text);
+        }
+
+        public Class[] types() {
+            return new Class[]{Bar.class};
+        }
+    }
+
+    private static class FooRecordLayout extends SimpleRecordLayout {
+    }
+
 }
