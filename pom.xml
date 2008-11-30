@@ -7,11 +7,12 @@
     <parent>
         <groupId>flapjack</groupId>
         <artifactId>flapjack-parent</artifactId>
-        <version>1.0.1-SNAPSHOT</version>
+        <version>1.0.1</version>
     </parent>
 
     <groupId>flapjack</groupId>
     <artifactId>flapjack-aggregate</artifactId>
+    <version>1.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Flapjack Aggregate</name>
     <url>http://code.google.com/p/flapjack/</url>

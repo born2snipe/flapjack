@@ -6,7 +6,7 @@
     <groupId>flapjack</groupId>
     <artifactId>flapjack-parent</artifactId>
     <name>Flapjack Parent</name>
-    <version>1.0.1-SNAPSHOT</version>
+    <version>1.0.1</version>
     <url>http://code.google.com/p/flapjack/</url>
     <packaging>pom</packaging>
 
