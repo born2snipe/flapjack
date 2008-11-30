@@ -51,11 +51,11 @@ public class MappedRecordFactoryResolverTest extends TestCase {
         Object obj = resolver.resolve(layout).build(fields, layout);
 
         assertNotNull(obj);
-        System.out.println("obj = " + obj);
         assertTrue(obj instanceof Foo);
 
         Foo foo = (Foo) obj;
-        
+        assertNotNull(foo.bar);
+        assertEquals("foo bar", foo.bar.value);
     }
 
     public void test_resolve_NoPackagesRegistered() {
