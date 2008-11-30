@@ -11,7 +11,7 @@
 
     <groupId>flapjack</groupId>
     <artifactId>flapjack-aggregate</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Flapjack Aggregate</name>
     <url>http://code.google.com/p/flapjack/</url>
