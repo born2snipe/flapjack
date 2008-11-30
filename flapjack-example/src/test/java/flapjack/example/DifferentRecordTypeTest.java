@@ -19,10 +19,7 @@ import flapjack.layout.RecordLayout;
 import flapjack.layout.SimpleRecordLayout;
 import flapjack.model.RecordFactory;
 import flapjack.model.RecordFactoryResolver;
-import flapjack.parser.DefaultParseResult;
-import flapjack.parser.RecordLayoutResolver;
-import flapjack.parser.RecordParserImpl;
-import flapjack.parser.StringRecordFieldParser;
+import flapjack.parser.*;
 import junit.framework.TestCase;
 
 import java.io.ByteArrayInputStream;
@@ -47,7 +44,7 @@ public class DifferentRecordTypeTest extends TestCase {
          * Actually call the parser with our RecordReader
          */
         LineRecordReader recordReader = new LineRecordReader(new ByteArrayInputStream(records.getBytes()));
-        DefaultParseResult result = (DefaultParseResult) recordParser.parse(recordReader);
+        ParseResult result = recordParser.parse(recordReader);
 
         /**
          * Verify the contents read from the records have not been altered

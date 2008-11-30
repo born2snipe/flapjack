@@ -59,7 +59,7 @@ public class FileTest extends TestCase {
     private void verifyRecordReader(RecordReaderFactory recordReaderFactory) throws IOException {
         fileParser.setRecordReaderFactory(recordReaderFactory);
 
-        DefaultParseResult result = (DefaultParseResult) fileParser.parse(file);
+        ParseResult result = fileParser.parse(file);
 
         Iterator it = result.getRecords().iterator();
         while (it.hasNext()) {

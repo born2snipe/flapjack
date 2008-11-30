@@ -29,7 +29,7 @@ import java.util.List;
 public class RecordParserImplTest extends MockObjectTestCase {
     private RecordParserImpl parser;
     private Mock parseResultFactory;
-    private DefaultParseResult result;
+    private ParseResult result;
     private StubRecordReader recordReader;
     private Mock recordLayoutResolver;
     private SimpleRecordLayout recordLayout;
@@ -51,7 +51,7 @@ public class RecordParserImplTest extends MockObjectTestCase {
 
         recordReader = new StubRecordReader();
 
-        result = new DefaultParseResult();
+        result = new ParseResult();
         recordReader.addRecord(RECORD);
 
         recordLayout = new SimpleRecordLayout();

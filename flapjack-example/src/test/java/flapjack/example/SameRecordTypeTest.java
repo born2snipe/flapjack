@@ -49,7 +49,7 @@ public class SameRecordTypeTest extends TestCase {
          * Actually call the parser with our RecordReader
          */
         LineRecordReader recordReader = new LineRecordReader(new ByteArrayInputStream(records.getBytes()));
-        DefaultParseResult result = (DefaultParseResult) recordParser.parse(recordReader);
+        ParseResult result = recordParser.parse(recordReader);
 
         /**
          * Verify the contents read from the records have not been altered

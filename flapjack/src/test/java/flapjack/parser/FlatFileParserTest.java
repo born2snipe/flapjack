@@ -41,7 +41,7 @@ public class FlatFileParserTest extends MockObjectTestCase {
 
     public void test_parse_() throws IOException {
         File file = new File("test.txt");
-        ParseResult expectedResult = new DefaultParseResult();
+        ParseResult expectedResult = new ParseResult();
 
         recordReaderFactory.expects(once()).method("build").with(eq(file)).will(returnValue(recordReader));
 

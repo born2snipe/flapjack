@@ -46,7 +46,7 @@ public class StopProcessingAfterARecordIsFoundWithAProblemTest extends TestCase 
          */
         LineRecordReader recordReader = new LineRecordReader(new ByteArrayInputStream(records.getBytes()));
         try {
-            DefaultParseResult result = (DefaultParseResult) recordParser.parse(recordReader);
+            recordParser.parse(recordReader);
             fail();
         } catch (BadRecordException err) {
 
@@ -57,13 +57,7 @@ public class StopProcessingAfterARecordIsFoundWithAProblemTest extends TestCase 
      * This class is a different implementation of the ParseResult that will
      *  throw an exception when a BadRecord is found.
      */
-    private static class ExplodingParseResult implements ParseResult {
-        private List records = new ArrayList();
-
-        public void addRecord(Object obj) {
-            records.add(obj);
-        }
-
+    private static class ExplodingParseResult extends ParseResult {
         public void addPartialRecord(BadRecord record) {
             throw new BadRecordException();
         }

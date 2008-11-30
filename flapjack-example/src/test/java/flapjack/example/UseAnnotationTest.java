@@ -19,7 +19,7 @@ import flapjack.annotation.parser.StringMapRecordFieldParser;
 import flapjack.io.LineRecordReader;
 import flapjack.layout.RecordLayout;
 import flapjack.layout.SimpleRecordLayout;
-import flapjack.parser.DefaultParseResult;
+import flapjack.parser.ParseResult;
 import flapjack.parser.RecordLayoutResolver;
 import flapjack.parser.RecordParserImpl;
 import junit.framework.TestCase;
@@ -52,7 +52,7 @@ public class UseAnnotationTest extends TestCase {
          * Actually call the parser with our RecordReader
          */
         LineRecordReader recordReader = new LineRecordReader(new ByteArrayInputStream(records.getBytes()));
-        DefaultParseResult result = (DefaultParseResult) recordParser.parse(recordReader);
+        ParseResult result = recordParser.parse(recordReader);
 
         assertEquals(0, result.getUnparseableRecords().size());
         assertEquals(0, result.getUnresolvedRecords().size());
