@@ -22,12 +22,33 @@ import junit.framework.TestCase;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.ArrayList;
 
 
 public class MappedRecordFactoryResolverTest extends TestCase {
+    private MappedRecordFactoryResolver resolver;
+
+    public void test_resolve_NoPackagesRegistered() {
+        try {
+            resolver.resolve(new UserRecordLayout());
+            fail();
+        } catch (IllegalStateException err) {
+            assertEquals("There are no packages configured for scanning! Was this intended?", err.getMessage());
+        }
+    }
+    
+    public void test_resolve_NoPackagesRegistered_EmptyList() {
+        try {
+            resolver.setPackages(new ArrayList());
+
+            resolver.resolve(new UserRecordLayout());
+            fail();
+        } catch (IllegalStateException err) {
+            assertEquals("There are no packages configured for scanning! Was this intended?", err.getMessage());
+        }
+    }
 
     public void test_resolve() {
-        MappedRecordFactoryResolver resolver = new MappedRecordFactoryResolver();
         resolver.setPackages(Arrays.asList("flapjack.test"));
 
         UserRecordLayout layout = new UserRecordLayout();
@@ -51,7 +72,6 @@ public class MappedRecordFactoryResolverTest extends TestCase {
     }
 
     public void test_resolve_MultipleClasses() {
-        MappedRecordFactoryResolver resolver = new MappedRecordFactoryResolver();
         resolver.setPackages(Arrays.asList("flapjack.test", "flapjack.test2"));
 
         PhoneRecordLayout layout = new PhoneRecordLayout();
@@ -74,4 +94,8 @@ public class MappedRecordFactoryResolverTest extends TestCase {
         assertEquals("456-7890", phone.getNumber());
     }
 
+    protected void setUp() throws Exception {
+        super.setUp();
+        resolver = new MappedRecordFactoryResolver();
+    }
 }

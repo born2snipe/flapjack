@@ -28,6 +28,7 @@ public class MappedRecordFactoryResolver implements RecordFactoryResolver {
     private RecordPackageClassScanner classScanner = new RecordPackageClassScanner();
     private Map<Class, Class> recordToClass = new HashMap<Class, Class>();
     private TypeConverter typeConverter = new TypeConverter();
+    private boolean hasPackages = false;
 
     public RecordFactory resolve(RecordLayout layout) {
         initializeLayoutToClassMap();
@@ -35,6 +36,9 @@ public class MappedRecordFactoryResolver implements RecordFactoryResolver {
     }
 
     private void initializeLayoutToClassMap() {
+        if (!hasPackages) {
+            throw new IllegalStateException("There are no packages configured for scanning! Was this intended?");
+        }
         if (recordToClass.size() == 0) {
             for (Class clazz : classScanner.scan()) {
                 Record record = (Record) clazz.getAnnotation(Record.class);
@@ -44,6 +48,9 @@ public class MappedRecordFactoryResolver implements RecordFactoryResolver {
     }
 
     public void setPackages(List<String> packages) {
+        if (packages.size() > 0) {
+            hasPackages = true;
+        }
         classScanner.setPackages(packages);
     }
 }
