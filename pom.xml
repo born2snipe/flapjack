@@ -22,7 +22,6 @@
         <module>flapjack</module>
         <module>flapjack-annotation</module>
         <module>flapjack-example</module>
-        <module>flapjack-distribution</module>
     </modules>
 
 </project>
