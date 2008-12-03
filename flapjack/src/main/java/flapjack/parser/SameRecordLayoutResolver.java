@@ -13,47 +13,26 @@
 package flapjack.parser;
 
 import flapjack.layout.RecordLayout;
-
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
+import flapjack.util.ClassUtil;
 
 /**
  * This class constructs the same type RecordLayout regardless of what data is given in the resolve method.
  */
 public class SameRecordLayoutResolver implements RecordLayoutResolver {
-    private Constructor constructor;
+    private Class recordLayoutClass;
 
     public SameRecordLayoutResolver(Class recordLayoutClass) {
+        this.recordLayoutClass = recordLayoutClass;
         if (recordLayoutClass == null) {
             throw new IllegalArgumentException("Cannot construct with a 'null' RecordLayout");
         }
-        constructor = findDefaultConstructor(recordLayoutClass);
-        if (constructor == null) {
+        if (ClassUtil.findDefaultConstructor(recordLayoutClass) == null) {
             throw new IllegalArgumentException("Cannot construct without a default constructor");
         }
     }
 
     public RecordLayout resolve(byte[] bytes) {
-        try {
-            constructor.setAccessible(true);
-            return (RecordLayout) constructor.newInstance(new Object[0]);
-        } catch (InstantiationException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        } catch (InvocationTargetException e) {
-            throw new RuntimeException(e);
-        }
+        return (RecordLayout) ClassUtil.newInstance(recordLayoutClass);
     }
 
-    private Constructor findDefaultConstructor(Class clazz) {
-        Constructor[] constructors = clazz.getDeclaredConstructors();
-        for (int i = 0; i < constructors.length; i++) {
-            Constructor constructor = constructors[i];
-            if (constructor.getParameterTypes().length == 0) {
-                return constructor;
-            }
-        }
-        return null;
-    }
 }

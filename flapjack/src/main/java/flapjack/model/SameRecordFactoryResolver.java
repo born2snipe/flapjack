@@ -1,11 +1,11 @@
 /**
  * Copyright 2008 Dan Dudley
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at:
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is
  * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and limitations under the License. 
@@ -13,45 +13,24 @@
 package flapjack.model;
 
 import flapjack.layout.RecordLayout;
+import flapjack.util.ClassUtil;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-
-
+// TODO - Javadoc me!
 public class SameRecordFactoryResolver implements RecordFactoryResolver {
-    private Constructor constructor;
+    private Class recordFactoryClass;
 
     public SameRecordFactoryResolver(Class recordFactoryClass) {
+        this.recordFactoryClass = recordFactoryClass;
         if (recordFactoryClass == null) {
             throw new IllegalArgumentException("Cannot construct with a 'null' RecordFactory");
         }
-        constructor = findDefaultConstructor(recordFactoryClass);
-        if (constructor == null) {
+        if (ClassUtil.findDefaultConstructor(recordFactoryClass) == null) {
             throw new IllegalArgumentException("Cannot construct without a default constructor");
         }
     }
 
     public RecordFactory resolve(RecordLayout layout) {
-        try {
-            constructor.setAccessible(true);
-            return (RecordFactory) constructor.newInstance(new Object[0]);
-        } catch (InstantiationException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        } catch (InvocationTargetException e) {
-            throw new RuntimeException(e);
-        }
+        return (RecordFactory) ClassUtil.newInstance(recordFactoryClass);
     }
 
-    private Constructor findDefaultConstructor(Class clazz) {
-        Constructor[] constructors = clazz.getDeclaredConstructors();
-        for (int i = 0; i < constructors.length; i++) {
-            Constructor constructor = constructors[i];
-            if (constructor.getParameterTypes().length == 0) {
-                return constructor;
-            }
-        }
-        return null;
-    }
 }
