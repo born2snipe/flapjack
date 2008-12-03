@@ -12,8 +12,6 @@
  */
 package flapjack.util;
 
-import flapjack.layout.RecordLayout;
-
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
