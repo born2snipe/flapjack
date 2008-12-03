@@ -15,7 +15,9 @@ package flapjack.model;
 import flapjack.layout.RecordLayout;
 import flapjack.util.ClassUtil;
 
-// TODO - Javadoc me!
+/**
+ * This class constructs the same type RecordFactory regardless of what data is given in the resolve method.
+ */
 public class SameRecordFactoryResolver implements RecordFactoryResolver {
     private Class recordFactoryClass;
 
