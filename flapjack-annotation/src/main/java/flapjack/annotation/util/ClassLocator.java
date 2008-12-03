@@ -15,13 +15,15 @@ package flapjack.annotation.util;
 import java.util.List;
 import java.net.URL;
 
-/**
- * Created by IntelliJ IDEA.
- * User: dan
- * Date: Dec 2, 2008
- * Time: 6:35:26 PM
- * To change this template use File | Settings | File Templates.
- */
+
 public interface ClassLocator {
+
+    /**
+     * Locate all classes found with the given URL and packagename
+     *
+     * @param url - url location of the package
+     * @param packageName - the package name to match on
+     * @return a list of classes found
+     */
     List<Class> locate(URL url, String packageName);
 }

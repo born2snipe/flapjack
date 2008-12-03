@@ -28,6 +28,11 @@ import java.util.List;
 public class RecordPackageClassScanner {
     private List<String> packages = new ArrayList<String>();
 
+    /**
+     * Scans for classes that have the @Record annotation defined on them.
+     *
+     * @return a list of classes marked as records
+     */
     public List<Class> scan() {
         List<Class> classes = new ArrayList<Class>();
         for (String packageName : packages) {

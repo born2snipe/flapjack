@@ -17,6 +17,12 @@ import java.util.List;
 
 
 public class FieldLocator {
+    /**
+     * Locate all Fields on the given class
+     *
+     * @param clazz - the class to look for Fields on
+     * @return a list of Fields found on the given class
+     */
     public List<java.lang.reflect.Field> locate(Class<?> clazz) {
         List<java.lang.reflect.Field> fields = new ArrayList();
         for (java.lang.reflect.Field field : clazz.getDeclaredFields()) {
@@ -26,6 +32,16 @@ public class FieldLocator {
         return fields;
     }
 
+    /**
+     * Attempts to locate a Field on the given class with the matching id.
+     * <p/>
+     * The 'id' will attempt to match on value passed into the @Field annotation. If this value is not provided
+     * it will attempt to find a field defined in the class with the same name.
+     *
+     * @param clazz - the class to look for the field with the given id
+     * @param id    - the id to match the Field on
+     * @return the Field found on the class or will return  null if no matching field was found
+     */
     public java.lang.reflect.Field locateById(Class<?> clazz, String id) {
         for (java.lang.reflect.Field field : locate(clazz)) {
             String annotationValue = field.getAnnotation(Field.class).value();
