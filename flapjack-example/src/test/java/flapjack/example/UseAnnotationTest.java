@@ -17,11 +17,10 @@ import flapjack.annotation.Record;
 import flapjack.annotation.model.MappedRecordFactoryResolver;
 import flapjack.annotation.parser.StringMapRecordFieldParser;
 import flapjack.io.LineRecordReader;
-import flapjack.layout.RecordLayout;
 import flapjack.layout.SimpleRecordLayout;
 import flapjack.parser.ParseResult;
-import flapjack.parser.RecordLayoutResolver;
 import flapjack.parser.RecordParserImpl;
+import flapjack.parser.SameRecordLayoutResolver;
 import junit.framework.TestCase;
 
 import java.io.ByteArrayInputStream;
@@ -44,7 +43,7 @@ public class UseAnnotationTest extends TestCase {
          * Initialize the RecordParser with our RecordLayoutResolver and RecordFactoryResolver
          */
         RecordParserImpl recordParser = new RecordParserImpl();
-        recordParser.setRecordLayoutResolver(new SongRecordLayoutResolver());
+        recordParser.setRecordLayoutResolver(new SameRecordLayoutResolver(SongRecordLayout.class));
         recordParser.setRecordFactoryResolver(recordFactoryResolver);
         recordParser.setRecordFieldParser(new StringMapRecordFieldParser());
 
@@ -76,14 +75,6 @@ public class UseAnnotationTest extends TestCase {
         }
     }
 
-    /**
-     * Our RecordLayoutResolver to resolve what RecordLayout should be used
-     */
-    private static class SongRecordLayoutResolver implements RecordLayoutResolver {
-        public RecordLayout resolve(byte[] bytes) {
-            return new SongRecordLayout();
-        }
-    }
 
     /**
      * Our domain class to be used with the annotations telling what fields should be mapped.

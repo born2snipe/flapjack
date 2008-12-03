@@ -1,11 +1,11 @@
 /**
  * Copyright 2008 Dan Dudley
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at:
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is
  * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and limitations under the License. 
@@ -22,7 +22,6 @@ import flapjack.parser.*;
 import junit.framework.TestCase;
 
 import java.io.ByteArrayInputStream;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -36,7 +35,7 @@ public class StopProcessingAfterARecordIsFoundWithAProblemTest extends TestCase 
          * Initialize the RecordParser with our RecordLayoutResolver and RecordFactoryResolver
          */
         RecordParserImpl recordParser = new RecordParserImpl();
-        recordParser.setRecordLayoutResolver(new BasicRecordLayoutResolver());
+        recordParser.setRecordLayoutResolver(new SameRecordLayoutResolver(UserRecordLayout.class));
         recordParser.setRecordFactoryResolver(new BasicRecordFactoryResolver());
         recordParser.setRecordFieldParser(new StringRecordFieldParser());
         recordParser.setParseResultFactory(new ExplodindParseResultFactory());
@@ -55,7 +54,7 @@ public class StopProcessingAfterARecordIsFoundWithAProblemTest extends TestCase 
 
     /**
      * This class is a different implementation of the ParseResult that will
-     *  throw an exception when a BadRecord is found.
+     * throw an exception when a BadRecord is found.
      */
     private static class ExplodingParseResult extends ParseResult {
         public void addPartialRecord(BadRecord record) {
@@ -88,17 +87,8 @@ public class StopProcessingAfterARecordIsFoundWithAProblemTest extends TestCase 
     }
 
     /**
-     * This class is responsible for determining what RecordLayout should be used based on the current record being processed.
-     */
-    private static class BasicRecordLayoutResolver implements RecordLayoutResolver {
-        public RecordLayout resolve(byte[] bytes) {
-            return new UserRecordLayout();
-        }
-    }
-
-    /**
      * These RecordLayouts represent the different possible record types that should be encounted in out data
-     */                                                             
+     */
     private static class UserRecordLayout extends SimpleRecordLayout {
         private UserRecordLayout() {
             field("First Name", 11);

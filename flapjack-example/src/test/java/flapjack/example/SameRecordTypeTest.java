@@ -1,34 +1,31 @@
 /**
  * Copyright 2008 Dan Dudley
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at:
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is
  * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and limitations under the License. 
  */
 package flapjack.example;
 
-import flapjack.io.LineRecordReaderFactory;
-import flapjack.io.StreamRecordReader;
+import flapjack.example.model.User;
 import flapjack.io.LineRecordReader;
 import flapjack.layout.RecordLayout;
-import flapjack.layout.SimpleFieldDefinition;
 import flapjack.layout.SimpleRecordLayout;
-import flapjack.parser.*;
 import flapjack.model.RecordFactory;
 import flapjack.model.RecordFactoryResolver;
-import flapjack.example.model.User;
+import flapjack.parser.ParseResult;
+import flapjack.parser.RecordParserImpl;
+import flapjack.parser.SameRecordLayoutResolver;
+import flapjack.parser.StringRecordFieldParser;
 import junit.framework.TestCase;
 
-import java.io.File;
 import java.io.ByteArrayInputStream;
 import java.util.List;
-import java.util.Enumeration;
-import java.net.URL;
 
 
 public class SameRecordTypeTest extends TestCase {
@@ -41,7 +38,7 @@ public class SameRecordTypeTest extends TestCase {
          * Initialize the RecordParser with our RecordLayoutResolver and RecordFactoryResolver
          */
         RecordParserImpl recordParser = new RecordParserImpl();
-        recordParser.setRecordLayoutResolver(new BasicRecordLayoutResolver());
+        recordParser.setRecordLayoutResolver(new SameRecordLayoutResolver(UserRecordLayout.class));
         recordParser.setRecordFactoryResolver(new BasicRecordFactoryResolver());
         recordParser.setRecordFieldParser(new StringRecordFieldParser());
 
@@ -59,7 +56,7 @@ public class SameRecordTypeTest extends TestCase {
         assertEquals(0, result.getUnparseableRecords().size());
         assertEquals(0, result.getUnresolvedRecords().size());
         assertEquals(2, result.getRecords().size());
-        
+
         User user1 = (User) result.getRecords().get(0);
         assertEquals("Joe        ", user1.firstName);
         assertEquals("Schmoe     ", user1.lastName);
@@ -69,15 +66,6 @@ public class SameRecordTypeTest extends TestCase {
         assertEquals("Jimmy      ", user2.firstName);
         assertEquals("Smith      ", user2.lastName);
         assertEquals("jsmith     ", user2.userName);
-    }
-
-    /**
-     * This class is responsible for determining what RecordLayout should be used based on the current record being processed.
-     */
-    private static class BasicRecordLayoutResolver implements RecordLayoutResolver {
-        public RecordLayout resolve(byte[] bytes) {
-            return new UserRecordLayout();
-        }
     }
 
     /**
@@ -98,7 +86,7 @@ public class SameRecordTypeTest extends TestCase {
     private static class UserRecordFactory implements RecordFactory {
         public Object build(Object fields, RecordLayout recordLayout) {
             List strings = (List) fields;
-            return new User((String)strings.get(0), (String)strings.get(1), (String)strings.get(2));
+            return new User((String) strings.get(0), (String) strings.get(1), (String) strings.get(2));
         }
     }
 
