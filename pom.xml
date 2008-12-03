@@ -21,6 +21,6 @@
         <module>flapjack</module>
         <module>flapjack-annotation</module>
         <module>flapjack-example</module>
-    </modules>
+  </modules>
 
 </project>
