@@ -93,11 +93,11 @@ public class UseAnnotationTest extends TestCase {
      */
     @Record(SongRecordLayout.class)
     public static class Song {
-        @Field("Artist")
+        @Field
         private String artist;
-        @Field("Title")
+        @Field
         private String title;
-        @Field("Length")
+        @Field
         private String length;
 
         public String getArtist() {

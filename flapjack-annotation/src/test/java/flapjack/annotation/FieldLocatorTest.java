@@ -26,28 +26,75 @@ public class FieldLocatorTest extends TestCase {
     }
 
     public void test_locateById_NotFoundField() {
-        assertNull(locator.locateById(Dummy.class, "field2"));
+        assertNull(locator.locateById(Dummy.class, "doesNotExist"));
     }
 
-    public void test_locateById_FoundField() {
+    public void test_locateById_FoundFieldByIdProvided() {
         java.lang.reflect.Field field = locator.locateById(Dummy.class, "field1");
 
         assertNotNull(field);
-        assertEquals("field1", field.getName());
+        assertEquals("fieldOne", field.getName());
+    }
+
+    public void test_locateById_FoundFieldByFieldNameMatching() {
+        java.lang.reflect.Field field = locator.locateById(Dummy.class, "field2");
+
+        assertNotNull(field);
+        assertEquals("field2", field.getName());
+    }
+    
+    public void test_locateById_FoundFieldByFieldNameMatching_FieldIdDoesNotMeetJavaSpec_WithNumber() {
+        java.lang.reflect.Field field = locator.locateById(Dummy.class, "Field 2");
+
+        assertNotNull(field);
+        assertEquals("field2", field.getName());
+    }
+
+    public void test_locateById_FoundFieldByFieldNameMatching_FieldIdDoesNotMeetJavaSpec() {
+        java.lang.reflect.Field field = locator.locateById(Dummy.class, "Field three");
+
+        assertNotNull(field);
+        assertEquals("fieldThree", field.getName());
+    }
+    
+    public void test_locateById_FoundFieldByFieldNameMatching_FieldIdDoesNotMeetJavaSpec_SingleLetter() {
+        java.lang.reflect.Field field = locator.locateById(Dummy.class, "Field a");
+
+        assertNotNull(field);
+        assertEquals("fieldA", field.getName());
+    }
+
+    public void test_locateById_FoundFieldByFieldNameMatching_FieldIdExactMatch() {
+        java.lang.reflect.Field field = locator.locateById(Dummy.class, "FieldB");
+
+        assertNotNull(field);
+        assertEquals("FieldB", field.getName());
     }
 
     public void test_locate() {
         List<java.lang.reflect.Field> fields = locator.locate(Dummy.class);
 
         assertNotNull(fields);
-        assertEquals(1, fields.size());
-        assertEquals("field1", fields.get(0).getName());
+        assertEquals(5, fields.size());
+        assertEquals("fieldOne", fields.get(0).getName());
+        assertEquals("field2", fields.get(1).getName());
+        assertEquals("fieldThree", fields.get(2).getName());
+        assertEquals("fieldA", fields.get(3).getName());
+        assertEquals("FieldB", fields.get(4).getName());
     }
 
     @Record(SimpleRecordLayout.class)
     private static class Dummy {
         @Field("field1")
-        private String field1;
+        private String fieldOne;
+        @Field
+        private String field2;
+        @Field
+        private String fieldThree;
+        @Field
+        private String fieldA;
+        @Field
+        private String FieldB;
         private String fieldNotInLayout;
     }
 }
