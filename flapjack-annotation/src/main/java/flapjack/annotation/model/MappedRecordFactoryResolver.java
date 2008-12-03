@@ -20,6 +20,7 @@ import flapjack.model.RecordFactoryResolver;
 import flapjack.util.TypeConverter;
 import flapjack.util.ValueConverter;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,10 +30,10 @@ public class MappedRecordFactoryResolver implements RecordFactoryResolver {
     private RecordPackageClassScanner classScanner = new RecordPackageClassScanner();
     private Map<Class, Class> recordToClass = new HashMap<Class, Class>();
     private TypeConverter typeConverter = new TypeConverter();
-    private boolean hasPackages = false;
+    private List<String> packages = new ArrayList<String>();
 
     public RecordFactory resolve(RecordLayout layout) {
-        if (!hasPackages) {
+        if (packages.size() == 0) {
             throw new IllegalStateException("There are no packages configured for scanning! Was this intended?");
         }
         initializeLayoutToClassMap();
@@ -41,7 +42,7 @@ public class MappedRecordFactoryResolver implements RecordFactoryResolver {
 
     private void initializeLayoutToClassMap() {
         if (recordToClass.size() == 0) {
-            for (Class clazz : classScanner.scan()) {
+            for (Class clazz : classScanner.scan(packages)) {
                 Record record = (Record) clazz.getAnnotation(Record.class);
                 recordToClass.put(record.value(), clazz);
             }
@@ -49,10 +50,7 @@ public class MappedRecordFactoryResolver implements RecordFactoryResolver {
     }
 
     public void setPackages(List<String> packages) {
-        if (packages.size() > 0) {
-            hasPackages = true;
-        }
-        classScanner.setPackages(packages);
+        this.packages.addAll(packages);
     }
 
     public void setValueConverters(List<? extends ValueConverter> valueConverters) {

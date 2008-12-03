@@ -12,6 +12,7 @@
  */
 package flapjack.layout;
 
+// TODO - need to come up with a format type (Text or Binary)
 public interface FieldDefinition {
     /**
      * The location of the field in the record

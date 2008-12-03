@@ -26,14 +26,14 @@ import java.util.List;
  * This class scans the given packages for classes that contain the flapjack.annotation.Record annotation.
  */
 public class RecordPackageClassScanner {
-    private List<String> packages = new ArrayList<String>();
 
     /**
      * Scans for classes that have the @Record annotation defined on them.
      *
+     * @param packages - the packages to scan
      * @return a list of classes marked as records
      */
-    public List<Class> scan() {
+    public List<Class> scan(List<String> packages) {
         List<Class> classes = new ArrayList<Class>();
         for (String packageName : packages) {
             for (Class clazz : findClassesInPackage(packageName)) {
@@ -84,7 +84,4 @@ public class RecordPackageClassScanner {
         return packageName.replace('.', '/');
     }
 
-    public void setPackages(List<String> packages) {
-        this.packages.addAll(packages);
-    }
 }

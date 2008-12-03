@@ -32,9 +32,8 @@ public class RecordPackageClassScannerTest extends TestCase {
         Thread.currentThread().setContextClassLoader(new URLClassLoader(new URL[]{url}, loader));
 
         RecordPackageClassScanner scanner = new RecordPackageClassScanner();
-        scanner.setPackages(Arrays.<String>asList("flapjack.annotation.test"));
 
-        List<Class> classes = scanner.scan();
+        List<Class> classes = scanner.scan(Arrays.<String>asList("flapjack.annotation.test"));
 
         assertNotNull(classes);
         assertEquals(1, classes.size());
@@ -43,9 +42,8 @@ public class RecordPackageClassScannerTest extends TestCase {
 
     public void test_scan_SinglePackage() {
         RecordPackageClassScanner scanner = new RecordPackageClassScanner();
-        scanner.setPackages(Arrays.<String>asList("flapjack.test"));
 
-        List<Class> classes = scanner.scan();
+        List<Class> classes = scanner.scan(Arrays.<String>asList("flapjack.test"));
 
         assertNotNull(classes);
         assertTrue(classes.contains(User.class));
@@ -55,9 +53,8 @@ public class RecordPackageClassScannerTest extends TestCase {
 
     public void test_scan_MultiplePackages() {
         RecordPackageClassScanner scanner = new RecordPackageClassScanner();
-        scanner.setPackages(Arrays.<String>asList("flapjack.test", "flapjack.test2"));
 
-        List<Class> classes = scanner.scan();
+        List<Class> classes = scanner.scan(Arrays.<String>asList("flapjack.test", "flapjack.test2"));
 
         assertNotNull(classes);
         assertTrue(classes.contains(User.class));
@@ -68,10 +65,9 @@ public class RecordPackageClassScannerTest extends TestCase {
 
     public void test_scan_PackageGivenDoesNotExist() {
         RecordPackageClassScanner scanner = new RecordPackageClassScanner();
-        scanner.setPackages(Arrays.<String>asList("does.not.exist"));
 
         try {
-            scanner.scan();
+            scanner.scan(Arrays.<String>asList("does.not.exist"));
             fail();
         } catch (IllegalArgumentException err) {
             assertEquals("Could not find package \"does.not.exist\"", err.getMessage());
