@@ -35,8 +35,8 @@ public class MappedRecordFactoryTest extends TestCase {
     }
 
     public void test_build_FieldDoesNotExists() {
-        Map<String, String> fields = new HashMap<String, String>();
-        fields.put("doesNotExist", "1");
+        Map<String, byte[]> fields = new HashMap<String, byte[]>();
+        fields.put("doesNotExist", "1".getBytes());
 
         Object obj = recordFactory.build(fields, layout);
 
@@ -48,8 +48,8 @@ public class MappedRecordFactoryTest extends TestCase {
     }
 
     public void test_build_FieldExists() {
-        Map<String, String> fields = new HashMap<String, String>();
-        fields.put("field1", "1");
+        Map<String, byte[]> fields = new HashMap<String, byte[]>();
+        fields.put("field1", "1".getBytes());
 
         Object obj = recordFactory.build(fields, layout);
 
@@ -61,9 +61,9 @@ public class MappedRecordFactoryTest extends TestCase {
     }
 
     public void test_build_MultipleFieldExists() {
-        Map<String, String> fields = new HashMap<String, String>();
-        fields.put("field1", "1");
-        fields.put("field2", "true");
+        Map<String, byte[]> fields = new HashMap<String, byte[]>();
+        fields.put("field1", "1".getBytes());
+        fields.put("field2", "true".getBytes());
 
         Object obj = recordFactory.build(fields, layout);
 

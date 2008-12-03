@@ -50,6 +50,7 @@ public class TypeConverter {
      * @param text  - the text to be converted
      * @return the result of the coversion attempt
      * @throws IllegalArgumentException thrown when an error is encoutered during convesion
+     * @deprecated
      */
     public Object convert(Class clazz, String text) throws IllegalArgumentException {
         ValueConverter converter = (ValueConverter) stringConverters.get(clazz);
@@ -64,31 +65,14 @@ public class TypeConverter {
     }
 
     /**
-     * Attempts to covert the two given text values appended together into the class type given
+     * Attempts to convert the given bytes to the class type given
      *
-     * @param clazz - the class to covert the text to
-     * @param text  - the text to be converted
-     * @param text2 - the text to be converted
-     * @return the result of the conversion attempt
+     * @param clazz - the class to convert to
+     * @param bytes - the bytes to be converted
+     * @return the result of the coversion attempt
      * @throws IllegalArgumentException thrown when an error is encoutered during convesion
      */
-    public Object convert(Class clazz, String text, String text2) throws IllegalArgumentException {
-        return convert(clazz, new String[]{text, text2});
-    }
-
-    /**
-     * Attempts to covert the text values appended together into the class type given
-     *
-     * @param clazz - the class to covert the text to
-     * @param texts - the text values to be converted
-     * @return the result of the conversion attempt
-     * @throws IllegalArgumentException thrown when an error is encoutered during convesion
-     */
-
-    public Object convert(Class clazz, String[] texts) {
-        StringBuilder builder = new StringBuilder();
-        for (int i = 0; i < texts.length; i++)
-            builder.append(texts[i]);
-        return convert(clazz, builder.toString());
+    public Object convert(Class clazz, byte[] bytes) throws IllegalArgumentException {
+        return convert(clazz, new String(bytes));
     }
 }

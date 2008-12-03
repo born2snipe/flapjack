@@ -15,7 +15,7 @@ package flapjack.example;
 import flapjack.annotation.Field;
 import flapjack.annotation.Record;
 import flapjack.annotation.model.MappedRecordFactoryResolver;
-import flapjack.annotation.parser.StringMapRecordFieldParser;
+import flapjack.annotation.parser.ByteMapRecordFieldParser;
 import flapjack.io.LineRecordReader;
 import flapjack.layout.SimpleRecordLayout;
 import flapjack.parser.ParseResult;
@@ -45,7 +45,7 @@ public class UseAnnotationTest extends TestCase {
         RecordParserImpl recordParser = new RecordParserImpl();
         recordParser.setRecordLayoutResolver(new SameRecordLayoutResolver(SongRecordLayout.class));
         recordParser.setRecordFactoryResolver(recordFactoryResolver);
-        recordParser.setRecordFieldParser(new StringMapRecordFieldParser());
+        recordParser.setRecordFieldParser(new ByteMapRecordFieldParser());
 
         /**
          * Actually call the parser with our RecordReader

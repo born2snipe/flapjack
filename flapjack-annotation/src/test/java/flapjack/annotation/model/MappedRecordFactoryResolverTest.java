@@ -45,8 +45,8 @@ public class MappedRecordFactoryResolverTest extends TestCase {
         FooRecordLayout layout = new FooRecordLayout();
         layout.addFieldDefinition(new SimpleFieldDefinition("bar", 0, 0));
 
-        Map<String, String> fields = new HashMap<String, String>();
-        fields.put("bar", "foo bar");
+        Map<String, byte[]> fields = new HashMap<String, byte[]>();
+        fields.put("bar", "foo bar".getBytes());
 
         Object obj = resolver.resolve(layout).build(fields, layout);
 
@@ -88,9 +88,9 @@ public class MappedRecordFactoryResolverTest extends TestCase {
         assertNotNull(recordFactory);
         assertTrue(recordFactory instanceof MappedRecordFactory);
 
-        Map<String, String> fields = new HashMap<String, String>();
-        fields.put("First Name", "foo");
-        fields.put("Last Name", "bar");
+        Map<String, byte[]> fields = new HashMap<String, byte[]>();
+        fields.put("First Name", "foo".getBytes());
+        fields.put("Last Name", "bar".getBytes());
 
         Object obj = recordFactory.build(fields, layout);
         assertNotNull(obj);
@@ -111,9 +111,9 @@ public class MappedRecordFactoryResolverTest extends TestCase {
         assertNotNull(recordFactory);
         assertTrue(recordFactory instanceof MappedRecordFactory);
 
-        Map<String, String> fields = new HashMap<String, String>();
-        fields.put("Area", "123");
-        fields.put("Number", "456-7890");
+        Map<String, byte[]> fields = new HashMap<String, byte[]>();
+        fields.put("Area", "123".getBytes());
+        fields.put("Number", "456-7890".getBytes());
 
         Object obj = recordFactory.build(fields, layout);
         assertNotNull(obj);

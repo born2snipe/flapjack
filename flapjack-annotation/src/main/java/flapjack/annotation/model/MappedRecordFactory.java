@@ -36,7 +36,7 @@ public class MappedRecordFactory implements RecordFactory {
     }
 
     public Object build(Object obj, RecordLayout recordLayout) {
-        Map<String, String> fields = (Map<String, String>) obj;
+        Map<String, byte[]> fields = (Map<String, byte[]>) obj;
         Object domain = createInstance();
         for (String id : fields.keySet()) {
             setValue(id, fields.get(id), domain);
@@ -44,7 +44,7 @@ public class MappedRecordFactory implements RecordFactory {
         return domain;
     }
 
-    private void setValue(String id, String value, Object domain) {
+    private void setValue(String id, byte[] value, Object domain) {
         Field field = FIELD_LOCATOR.locateById(clazz, id);
         if (field != null) {
             try {
