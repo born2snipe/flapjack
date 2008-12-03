@@ -17,7 +17,7 @@ import flapjack.io.LineRecordReader;
 import flapjack.layout.RecordLayout;
 import flapjack.layout.SimpleRecordLayout;
 import flapjack.model.RecordFactory;
-import flapjack.model.RecordFactoryResolver;
+import flapjack.model.SameRecordFactoryResolver;
 import flapjack.parser.ParseResult;
 import flapjack.parser.RecordParserImpl;
 import flapjack.parser.SameRecordLayoutResolver;
@@ -39,7 +39,7 @@ public class SameRecordTypeTest extends TestCase {
          */
         RecordParserImpl recordParser = new RecordParserImpl();
         recordParser.setRecordLayoutResolver(new SameRecordLayoutResolver(UserRecordLayout.class));
-        recordParser.setRecordFactoryResolver(new BasicRecordFactoryResolver());
+        recordParser.setRecordFactoryResolver(new SameRecordFactoryResolver(UserRecordFactory.class));
         recordParser.setRecordFieldParser(new StringRecordFieldParser());
 
         /**
@@ -90,13 +90,5 @@ public class SameRecordTypeTest extends TestCase {
         }
     }
 
-    /**
-     * This class is responsible for determining what RecordFactory should be used for the current RecordLayout
-     */
-    private static class BasicRecordFactoryResolver implements RecordFactoryResolver {
-        public RecordFactory resolve(RecordLayout layout) {
-            return new UserRecordFactory();
-        }
-    }
 
 }
