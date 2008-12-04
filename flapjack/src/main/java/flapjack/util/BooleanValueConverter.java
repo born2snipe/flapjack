@@ -14,11 +14,11 @@ package flapjack.util;
 
 
 public class BooleanValueConverter implements ValueConverter {
-    public Object convert(String text) {
-        return Boolean.valueOf(text);
-    }
-
     public Class[] types() {
         return new Class[]{boolean.class, Boolean.class};
+    }
+
+    public Object convert(byte[] bytes) {
+        return Boolean.valueOf(new String(bytes));
     }
 }

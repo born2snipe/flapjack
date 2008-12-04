@@ -16,11 +16,11 @@ import java.math.BigDecimal;
 
 
 public class BigDecimalValueConverter implements ValueConverter {
-    public Object convert(String text) {
-        return new BigDecimal(text);
-    }
-
     public Class[] types() {
         return new Class[]{BigDecimal.class};
+    }
+
+    public Object convert(byte[] bytes) {
+        return new BigDecimal(new String(bytes));
     }
 }

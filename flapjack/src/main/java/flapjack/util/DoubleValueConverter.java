@@ -14,11 +14,11 @@ package flapjack.util;
 
 
 public class DoubleValueConverter implements ValueConverter {
-    public Object convert(String text) {
-        return Double.valueOf(text);
-    }
-
     public Class[] types() {
         return new Class[]{double.class, Double.class};
+    }
+
+    public Object convert(byte[] bytes) {
+        return Double.valueOf(new String(bytes));
     }
 }

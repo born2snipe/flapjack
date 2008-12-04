@@ -28,7 +28,12 @@ public class DateValueConverter implements ValueConverter {
         this.patterns = patterns;
     }
 
-    public Object convert(String text) {
+    public Class[] types() {
+        return new Class[]{Date.class};
+    }
+
+    public Object convert(byte[] bytes) {
+        String text = new String(bytes);
         for (int i = 0; i < patterns.length; i++) {
             SimpleDateFormat formatter = new SimpleDateFormat(patterns[i]);
             try {
@@ -38,9 +43,5 @@ public class DateValueConverter implements ValueConverter {
             }
         }
         return null;
-    }
-
-    public Class[] types() {
-        return new Class[]{Date.class};
     }
 }

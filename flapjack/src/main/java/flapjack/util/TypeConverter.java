@@ -44,27 +44,6 @@ public class TypeConverter {
     }
 
     /**
-     * Attempts to convert the given text to the class type given
-     *
-     * @param clazz - the class to convert the text to
-     * @param text  - the text to be converted
-     * @return the result of the coversion attempt
-     * @throws IllegalArgumentException thrown when an error is encoutered during convesion
-     * @deprecated
-     */
-    public Object convert(Class clazz, String text) throws IllegalArgumentException {
-        ValueConverter converter = (ValueConverter) stringConverters.get(clazz);
-        if (converter == null) {
-            throw new IllegalArgumentException("No " + ValueConverter.class.getName() + " registered for types " + clazz.getName());
-        }
-        try {
-            return converter.convert(text);
-        } catch (RuntimeException err) {
-            throw new IllegalArgumentException("Problem converting \"" + text + "\" to " + clazz.getName(), err);
-        }
-    }
-
-    /**
      * Attempts to convert the given bytes to the class type given
      *
      * @param clazz - the class to convert to
@@ -73,6 +52,14 @@ public class TypeConverter {
      * @throws IllegalArgumentException thrown when an error is encoutered during convesion
      */
     public Object convert(Class clazz, byte[] bytes) throws IllegalArgumentException {
-        return convert(clazz, new String(bytes));
+        ValueConverter converter = (ValueConverter) stringConverters.get(clazz);
+        if (converter == null) {
+            throw new IllegalArgumentException("No " + ValueConverter.class.getName() + " registered for types " + clazz.getName());
+        }
+        try {
+            return converter.convert(bytes);
+        } catch (RuntimeException err) {
+            throw new IllegalArgumentException("Problem converting \"" + new String(bytes) + "\" to " + clazz.getName(), err);
+        }
     }
 }

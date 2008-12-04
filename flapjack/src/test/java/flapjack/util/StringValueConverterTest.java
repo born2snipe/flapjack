@@ -34,6 +34,6 @@ public class StringValueConverterTest extends TestCase {
     
     public void test_convert() {
         String value = "value";
-        assertSame(value, converter.convert(value));
+        assertEquals(value, converter.convert(value.getBytes()));
     }
 }

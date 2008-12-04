@@ -14,11 +14,11 @@ package flapjack.util;
 
 
 public class LongValueConverter implements ValueConverter {
-    public Object convert(String text) {
-        return Long.valueOf(text);
-    }
-
     public Class[] types() {
         return new Class[]{long.class, Long.class};
+    }
+
+    public Object convert(byte[] bytes) {
+        return Long.valueOf(new String(bytes));
     }
 }

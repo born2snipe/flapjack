@@ -21,9 +21,9 @@ public class DoubleValueConverterTest extends TestCase {
     private DoubleValueConverter converter;
 
     public void test_convert() {
-        assertEquals(new Double(2), converter.convert("2"));
-        assertEquals(new Double(2), converter.convert("2.0"));
-        assertEquals(new Double(2), converter.convert("02.0"));
+        assertEquals(new Double(2), converter.convert("2".getBytes()));
+        assertEquals(new Double(2), converter.convert("2.0".getBytes()));
+        assertEquals(new Double(2), converter.convert("02.0".getBytes()));
     }
 
     public void test_types() {

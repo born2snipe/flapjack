@@ -25,8 +25,8 @@ public class BigIntegerValueConverterTest extends TestCase {
     }
     
     public void test_convert() {
-        assertEquals(new BigInteger("1"), converter.convert("1"));
-        assertEquals(new BigInteger("1"), converter.convert("01"));
+        assertEquals(new BigInteger("1"), converter.convert("1".getBytes()));
+        assertEquals(new BigInteger("1"), converter.convert("01".getBytes()));
     }
 
     public void test_types() {

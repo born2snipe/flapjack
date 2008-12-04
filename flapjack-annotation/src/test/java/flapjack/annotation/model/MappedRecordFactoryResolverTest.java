@@ -147,8 +147,8 @@ public class MappedRecordFactoryResolverTest extends TestCase {
     }
 
     private static class BarValueConverter implements ValueConverter {
-        public Object convert(String text) {
-            return new Bar(text);
+        public Object convert(byte[] bytes) {
+            return new Bar(new String(bytes));
         }
 
         public Class[] types() {

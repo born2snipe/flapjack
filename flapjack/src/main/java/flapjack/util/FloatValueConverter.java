@@ -14,11 +14,11 @@ package flapjack.util;
 
 
 public class FloatValueConverter implements ValueConverter {
-    public Object convert(String text) {
-        return Float.valueOf(text);
-    }
-
     public Class[] types() {
         return new Class[]{float.class, Float.class};
+    }
+
+    public Object convert(byte[] bytes) {
+        return Float.valueOf(new String(bytes));
     }
 }

@@ -16,11 +16,11 @@ import java.math.BigInteger;
 
 
 public class BigIntegerValueConverter implements ValueConverter {
-    public Object convert(String text) {
-        return new BigInteger(text);
-    }
-
     public Class[] types() {
         return new Class[]{BigInteger.class};
+    }
+
+    public Object convert(byte[] bytes) {
+        return new BigInteger(new String(bytes));
     }
 }

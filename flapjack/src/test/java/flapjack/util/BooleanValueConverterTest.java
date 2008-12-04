@@ -25,12 +25,12 @@ public class BooleanValueConverterTest extends TestCase {
     }
 
     public void test_convert() {
-        assertEquals(new Boolean(true), converter.convert("true"));
-        assertEquals(new Boolean(true), converter.convert("TRUE"));
-        assertEquals(new Boolean(true), converter.convert("True"));
-        assertEquals(new Boolean(false), converter.convert("false"));
-        assertEquals(new Boolean(false), converter.convert("FALSE"));
-        assertEquals(new Boolean(false), converter.convert("False"));
+        assertEquals(new Boolean(true), converter.convert("true".getBytes()));
+        assertEquals(new Boolean(true), converter.convert("TRUE".getBytes()));
+        assertEquals(new Boolean(true), converter.convert("True".getBytes()));
+        assertEquals(new Boolean(false), converter.convert("false".getBytes()));
+        assertEquals(new Boolean(false), converter.convert("FALSE".getBytes()));
+        assertEquals(new Boolean(false), converter.convert("False".getBytes()));
     }
 
     public void test_types() {

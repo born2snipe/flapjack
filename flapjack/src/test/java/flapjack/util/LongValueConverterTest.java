@@ -25,8 +25,8 @@ public class LongValueConverterTest extends TestCase {
     }
 
     public void test_convert() {
-        assertEquals(new Long(1), converter.convert("1"));
-        assertEquals(new Long(1), converter.convert("01"));
+        assertEquals(new Long(1), converter.convert("1".getBytes()));
+        assertEquals(new Long(1), converter.convert("01".getBytes()));
     }
 
     public void test_types() {

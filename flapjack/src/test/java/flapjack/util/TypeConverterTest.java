@@ -29,8 +29,9 @@ public class TypeConverterTest extends MockObjectTestCase {
     }
     
     public void test_typeRegistered() {
-        mockConverter.expects(once()).method("convert").with(eq("text")).will(returnValue(new Integer(1)));
-        assertEquals(new Integer(1), converter.convert(Integer.class, "text".getBytes()));
+        byte[] bytes = "text".getBytes();
+        mockConverter.expects(once()).method("convert").with(eq(bytes)).will(returnValue(new Integer(1)));
+        assertEquals(new Integer(1), converter.convert(Integer.class, bytes));
     }
 
     public void test_typeNotRegistered() {
@@ -43,10 +44,11 @@ public class TypeConverterTest extends MockObjectTestCase {
     }
 
     public void test_ValueConverterThrowsException() {
+        byte[] bytes = "text".getBytes();
         NullPointerException original = new NullPointerException();
-        mockConverter.expects(once()).method("convert").with(eq("text")).will(throwException(original));
+        mockConverter.expects(once()).method("convert").with(eq(bytes)).will(throwException(original));
         try {
-            converter.convert(Long.class, "text".getBytes());
+            converter.convert(Long.class, bytes);
             fail();
         } catch (IllegalArgumentException err) {
             assertEquals("Problem converting \"text\" to java.lang.Long", err.getMessage());
@@ -63,8 +65,8 @@ public class TypeConverterTest extends MockObjectTestCase {
             this.type = type;
         }
 
-        public Object convert(String text) {
-            return mock.convert(text);
+        public Object convert(byte[] bytes) {
+            return mock.convert(bytes);
         }
 
         public Class[] types() {
