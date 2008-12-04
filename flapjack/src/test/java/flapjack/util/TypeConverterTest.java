@@ -1,11 +1,11 @@
 /**
  * Copyright 2008 Dan Dudley
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at:
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is
  * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and limitations under the License. 
@@ -24,22 +24,37 @@ public class TypeConverterTest extends MockObjectTestCase {
         mockConverter = mock(ValueConverter.class);
 
         converter = new TypeConverter();
-        converter.registerConverter(new MockWrappingValueConverter(Integer.class, (ValueConverter) mockConverter.proxy()));
-        converter.registerConverter(new MockWrappingValueConverter(Long.class, (ValueConverter) mockConverter.proxy()));
-    }
-    
-    public void test_typeRegistered() {
-        byte[] bytes = "text".getBytes();
-        mockConverter.expects(once()).method("convert").with(eq(bytes)).will(returnValue(new Integer(1)));
-        assertEquals(new Integer(1), converter.convert(Integer.class, bytes));
+        converter.registerConverter(new MockWrappingValueConverter(Integer.class, (ValueConverter) mockConverter.proxy(), DataType.BINARY));
+        converter.registerConverter(new MockWrappingValueConverter(Long.class, (ValueConverter) mockConverter.proxy(), DataType.TEXT));
     }
 
-    public void test_typeNotRegistered() {
+    public void test_typeRegistered_TEXT() {
+        byte[] bytes = "text".getBytes();
+        mockConverter.expects(once()).method("convert").with(eq(bytes)).will(returnValue(new Long(1)));
+        assertEquals(new Long(1), converter.convert(DataType.TEXT, Long.class, bytes));
+    }
+    
+    public void test_typeRegistered_BINARY() {
+        byte[] bytes = "text".getBytes();
+        mockConverter.expects(once()).method("convert").with(eq(bytes)).will(returnValue(new Integer(1)));
+        assertEquals(new Integer(1), converter.convert(DataType.BINARY, Integer.class, bytes));
+    }
+
+    public void test_NoConverterRegisterdForClass() {
         try {
-            converter.convert(MockWrappingValueConverter.class, "text".getBytes());
+            converter.convert(DataType.TEXT, MockWrappingValueConverter.class, "text".getBytes());
             fail();
         } catch (IllegalArgumentException err) {
-            assertEquals("No flapjack.util.ValueConverter registered for types flapjack.util.TypeConverterTest$MockWrappingValueConverter", err.getMessage());
+            assertEquals("No flapjack.util.ValueConverter registered for types flapjack.util.TypeConverterTest$MockWrappingValueConverter from TEXT", err.getMessage());
+        }
+    }
+
+    public void test_NoConverterRegisterdForDataType() {
+        try {
+            converter.convert(DataType.BINARY, Long.class, "text".getBytes());
+            fail();
+        } catch (IllegalArgumentException err) {
+            assertEquals("No flapjack.util.ValueConverter registered for types java.lang.Long from BINARY", err.getMessage());
         }
     }
 
@@ -48,7 +63,7 @@ public class TypeConverterTest extends MockObjectTestCase {
         NullPointerException original = new NullPointerException();
         mockConverter.expects(once()).method("convert").with(eq(bytes)).will(throwException(original));
         try {
-            converter.convert(Long.class, bytes);
+            converter.convert(DataType.TEXT, Long.class, bytes);
             fail();
         } catch (IllegalArgumentException err) {
             assertEquals("Problem converting \"text\" to java.lang.Long", err.getMessage());
@@ -59,10 +74,12 @@ public class TypeConverterTest extends MockObjectTestCase {
     private static class MockWrappingValueConverter implements ValueConverter {
         private ValueConverter mock;
         private Class type;
+        private DataType dataType;
 
-        private MockWrappingValueConverter(Class type, ValueConverter mock) {
+        private MockWrappingValueConverter(Class type, ValueConverter mock, DataType dataType) {
             this.mock = mock;
             this.type = type;
+            this.dataType = dataType;
         }
 
         public Object convert(byte[] bytes) {
@@ -74,7 +91,7 @@ public class TypeConverterTest extends MockObjectTestCase {
         }
 
         public DataType[] convertFrom() {
-            return null;
+            return new DataType[]{dataType};
         }
     }
 }

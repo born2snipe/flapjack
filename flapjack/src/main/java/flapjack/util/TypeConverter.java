@@ -19,7 +19,8 @@ import java.util.Map;
  * Holds on to a collection of ValueConverters.
  */
 public class TypeConverter {
-    private Map stringConverters = new HashMap();
+    private Map textConverters = new HashMap();
+    private Map binaryConverters = new HashMap();
 
     public TypeConverter() {
         registerConverter(new BooleanValueConverter());
@@ -39,7 +40,14 @@ public class TypeConverter {
      */
     public void registerConverter(ValueConverter valueConverter) {
         for (int i = 0; i < valueConverter.types().length; i++) {
-            stringConverters.put(valueConverter.types()[i], valueConverter);
+            for (int j = 0; j < valueConverter.convertFrom().length; j++) {
+                DataType type = valueConverter.convertFrom()[j];
+                Class clazz = valueConverter.types()[i];
+                if (type == DataType.TEXT)
+                    textConverters.put(clazz, valueConverter);
+                else
+                    binaryConverters.put(clazz, valueConverter);
+            }
         }
     }
 
@@ -50,9 +58,10 @@ public class TypeConverter {
      * @param bytes - the bytes to be converted
      * @return the result of the coversion attempt
      * @throws IllegalArgumentException thrown when an error is encoutered during convesion
+     * @deprecated
      */
     public Object convert(Class clazz, byte[] bytes) throws IllegalArgumentException {
-        ValueConverter converter = (ValueConverter) stringConverters.get(clazz);
+        ValueConverter converter = (ValueConverter) textConverters.get(clazz);
         if (converter == null) {
             throw new IllegalArgumentException("No " + ValueConverter.class.getName() + " registered for types " + clazz.getName());
         }
@@ -61,5 +70,23 @@ public class TypeConverter {
         } catch (RuntimeException err) {
             throw new IllegalArgumentException("Problem converting \"" + new String(bytes) + "\" to " + clazz.getName(), err);
         }
+    }
+
+    public Object convert(DataType from, Class toClazz, byte[] bytes) throws IllegalArgumentException {
+        ValueConverter converter = valueConverterFor(from, toClazz);
+        if (converter == null) {
+            throw new IllegalArgumentException("No " + ValueConverter.class.getName() + " registered for types " + toClazz.getName() + " from " + from);
+        }
+        try {
+            return converter.convert(bytes);
+        } catch (RuntimeException err) {
+            throw new IllegalArgumentException("Problem converting \"" + new String(bytes) + "\" to " + toClazz.getName(), err);
+        }
+    }
+
+    private ValueConverter valueConverterFor(DataType from, Class toClass) {
+        if (from == DataType.TEXT)
+            return (ValueConverter) textConverters.get(toClass);
+        return (ValueConverter) binaryConverters.get(toClass);
     }
 }

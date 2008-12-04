@@ -157,7 +157,7 @@ public class MappedRecordFactoryResolverTest extends TestCase {
         }
 
         public DataType[] convertFrom() {
-            return null;
+            return new DataType[]{DataType.TEXT};
         }
     }
 
