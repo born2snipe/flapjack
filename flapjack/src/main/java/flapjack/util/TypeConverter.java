@@ -31,6 +31,7 @@ public class TypeConverter {
         registerConverter(new BigIntegerValueConverter());
         registerConverter(new BigDecimalValueConverter());
         registerConverter(new StringValueConverter());
+        registerConverter(new IntegerBinaryValueConverter());
     }
 
     /**
