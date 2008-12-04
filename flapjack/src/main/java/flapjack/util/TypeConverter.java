@@ -54,33 +54,21 @@ public class TypeConverter {
     /**
      * Attempts to convert the given bytes to the class type given
      *
+     * @param from  - the DataType of the given byte array
      * @param clazz - the class to convert to
      * @param bytes - the bytes to be converted
      * @return the result of the coversion attempt
      * @throws IllegalArgumentException thrown when an error is encoutered during convesion
-     * @deprecated
      */
-    public Object convert(Class clazz, byte[] bytes) throws IllegalArgumentException {
-        ValueConverter converter = (ValueConverter) textConverters.get(clazz);
+    public Object convert(DataType from, Class clazz, byte[] bytes) throws IllegalArgumentException {
+        ValueConverter converter = valueConverterFor(from, clazz);
         if (converter == null) {
-            throw new IllegalArgumentException("No " + ValueConverter.class.getName() + " registered for types " + clazz.getName());
+            throw new IllegalArgumentException("No " + ValueConverter.class.getName() + " registered for types " + clazz.getName() + " from " + from);
         }
         try {
             return converter.convert(bytes);
         } catch (RuntimeException err) {
             throw new IllegalArgumentException("Problem converting \"" + new String(bytes) + "\" to " + clazz.getName(), err);
-        }
-    }
-
-    public Object convert(DataType from, Class toClazz, byte[] bytes) throws IllegalArgumentException {
-        ValueConverter converter = valueConverterFor(from, toClazz);
-        if (converter == null) {
-            throw new IllegalArgumentException("No " + ValueConverter.class.getName() + " registered for types " + toClazz.getName() + " from " + from);
-        }
-        try {
-            return converter.convert(bytes);
-        } catch (RuntimeException err) {
-            throw new IllegalArgumentException("Problem converting \"" + new String(bytes) + "\" to " + toClazz.getName(), err);
         }
     }
 
