@@ -61,7 +61,7 @@ public class SimpleFieldDefinition implements FieldDefinition {
         return name;
     }
 
-    public DataType format() {
+    public DataType getFormat() {
         return dataType;
     }
 

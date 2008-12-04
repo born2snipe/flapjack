@@ -42,5 +42,5 @@ public interface FieldDefinition {
      *
      * @return
      */
-    DataType format();
+    DataType getFormat();
 }
