@@ -44,7 +44,7 @@ public class MappedRecordFactoryResolverTest extends TestCase {
         resolver.setValueConverters(Arrays.asList(new BarValueConverter()));
 
         FooRecordLayout layout = new FooRecordLayout();
-        layout.addFieldDefinition(new SimpleFieldDefinition("bar", 0, 0));
+        layout.addFieldDefinition(new SimpleFieldDefinition("bar", 0, 0, DataType.TEXT));
 
         Map<String, byte[]> fields = new HashMap<String, byte[]>();
         fields.put("bar", "foo bar".getBytes());

@@ -15,6 +15,7 @@ package flapjack.parser;
 import flapjack.layout.FieldDefinition;
 import flapjack.layout.SimpleFieldDefinition;
 import flapjack.layout.SimpleRecordLayout;
+import flapjack.util.DataType;
 import junit.framework.TestCase;
 
 import java.util.List;
@@ -99,7 +100,7 @@ public class ByteRecordFieldParserTest extends TestCase {
     }
 
     private FieldDefinition createFieldDefinition(int position, int length) {
-        return new SimpleFieldDefinition("Doesn't matter", position, length);
+        return new SimpleFieldDefinition("Doesn't matter", position, length, DataType.BINARY);
     }
 
 }

@@ -17,6 +17,7 @@ import flapjack.layout.SimpleFieldDefinition;
 import flapjack.layout.SimpleRecordLayout;
 import flapjack.model.SimpleRecord;
 import flapjack.parser.*;
+import flapjack.util.DataType;
 import junit.framework.TestCase;
 
 import java.io.File;
@@ -72,7 +73,7 @@ public class FileTest extends TestCase {
     private static class SimpleRecordLayoutResolver implements RecordLayoutResolver {
         public RecordLayout resolve(byte[] bytes) {
             SimpleRecordLayout layout = new SimpleRecordLayout();
-            layout.addFieldDefinition(new SimpleFieldDefinition("data", 0, 10));
+            layout.addFieldDefinition(new SimpleFieldDefinition("data", 0, 10, DataType.TEXT));
             return layout;
         }
     }

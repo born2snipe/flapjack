@@ -18,6 +18,7 @@ import flapjack.layout.SimpleFieldDefinition;
 import flapjack.layout.SimpleRecordLayout;
 import flapjack.model.RecordFactory;
 import flapjack.model.RecordFactoryResolver;
+import flapjack.util.DataType;
 import org.jmock.Mock;
 import org.jmock.MockObjectTestCase;
 
@@ -55,7 +56,7 @@ public class RecordParserImplTest extends MockObjectTestCase {
         recordReader.addRecord(RECORD);
 
         recordLayout = new SimpleRecordLayout();
-        recordLayout.addFieldDefinition(new SimpleFieldDefinition("label", 0, 9));
+        recordLayout.addFieldDefinition(new SimpleFieldDefinition("label", 0, 9, DataType.TEXT));
 
         fields = new ArrayList();
         fields.add(RECORD);
@@ -96,7 +97,7 @@ public class RecordParserImplTest extends MockObjectTestCase {
 
     public void test_parse_RecordDoesNotMatchTheRecordLayoutLength() throws IOException {
         SimpleRecordLayout recordLayout = new SimpleRecordLayout();
-        recordLayout.addFieldDefinition(new SimpleFieldDefinition("label", 0, 12));
+        recordLayout.addFieldDefinition(new SimpleFieldDefinition("label", 0, 12, DataType.TEXT));
 
         parseResultFactory.expects(once()).method("build").will(returnValue(this.result));
 
