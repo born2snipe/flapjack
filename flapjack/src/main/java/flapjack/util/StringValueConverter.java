@@ -21,4 +21,8 @@ public class StringValueConverter implements ValueConverter {
     public Object convert(byte[] bytes) {
         return new String(bytes);
     }
+
+    public DataType[] convertFrom() {
+        return new DataType[]{DataType.TEXT, DataType.BINARY};
+    }
 }

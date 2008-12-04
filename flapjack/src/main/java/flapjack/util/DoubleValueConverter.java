@@ -21,4 +21,8 @@ public class DoubleValueConverter implements ValueConverter {
     public Object convert(byte[] bytes) {
         return Double.valueOf(new String(bytes));
     }
+
+    public DataType[] convertFrom() {
+        return new DataType[]{DataType.TEXT};
+    }
 }

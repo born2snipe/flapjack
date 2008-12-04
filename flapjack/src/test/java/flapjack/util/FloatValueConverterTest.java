@@ -24,6 +24,14 @@ public class FloatValueConverterTest extends TestCase {
         converter = new FloatValueConverter();
     }
 
+    public void test_convertFrom() {
+        DataType[] types = converter.convertFrom();
+
+        assertNotNull(types);
+        assertEquals(1, types.length);
+        assertEquals(DataType.TEXT, types[0]);
+    }
+
     public void test_convert() {
         assertEquals(new Float(1), converter.convert("1".getBytes()));
         assertEquals(new Float(1), converter.convert("1.0".getBytes()));

@@ -23,4 +23,8 @@ public class BigIntegerValueConverter implements ValueConverter {
     public Object convert(byte[] bytes) {
         return new BigInteger(new String(bytes));
     }
+
+    public DataType[] convertFrom() {
+        return new DataType[]{DataType.TEXT};
+    }
 }

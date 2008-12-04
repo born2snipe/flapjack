@@ -26,6 +26,14 @@ public class DateValueConverterTest extends TestCase {
     public void setUp() {
         converter = new DateValueConverter(new String[]{"MM/dd/yyyy", "MM/yyyy"});
     }
+
+    public void test_convertFrom() {
+        DataType[] types = converter.convertFrom();
+
+        assertNotNull(types);
+        assertEquals(1, types.length);
+        assertEquals(DataType.TEXT, types[0]);
+    }
     
     public void test_type() {
         assertTrue(Arrays.equals(new Class[]{Date.class}, converter.types()));

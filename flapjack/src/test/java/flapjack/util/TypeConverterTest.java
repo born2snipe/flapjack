@@ -72,5 +72,9 @@ public class TypeConverterTest extends MockObjectTestCase {
         public Class[] types() {
             return new Class[]{type};
         }
+
+        public DataType[] convertFrom() {
+            return null;
+        }
     }
 }

@@ -23,6 +23,14 @@ public class BigIntegerValueConverterTest extends TestCase {
     public void setUp() {
         converter = new BigIntegerValueConverter();
     }
+
+    public void test_convertFrom() {
+        DataType[] types = converter.convertFrom();
+
+        assertNotNull(types);
+        assertEquals(1, types.length);
+        assertEquals(DataType.TEXT, types[0]);
+    }
     
     public void test_convert() {
         assertEquals(new BigInteger("1"), converter.convert("1".getBytes()));

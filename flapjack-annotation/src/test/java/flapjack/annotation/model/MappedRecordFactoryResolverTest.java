@@ -18,6 +18,7 @@ import flapjack.test.UserRecordLayout;
 import flapjack.test2.Phone;
 import flapjack.test2.PhoneRecordLayout;
 import flapjack.util.ValueConverter;
+import flapjack.util.DataType;
 import flapjack.annotation.Record;
 import flapjack.annotation.Field;
 import flapjack.layout.SimpleRecordLayout;
@@ -153,6 +154,10 @@ public class MappedRecordFactoryResolverTest extends TestCase {
 
         public Class[] types() {
             return new Class[]{Bar.class};
+        }
+
+        public DataType[] convertFrom() {
+            return null;
         }
     }
 
