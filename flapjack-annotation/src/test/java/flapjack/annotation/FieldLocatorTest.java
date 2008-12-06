@@ -71,18 +71,6 @@ public class FieldLocatorTest extends TestCase {
         assertEquals("FieldB", field.getName());
     }
 
-    public void test_locate() {
-        List<java.lang.reflect.Field> fields = locator.locate(Dummy.class);
-
-        assertNotNull(fields);
-        assertEquals(5, fields.size());
-        assertEquals("fieldOne", fields.get(0).getName());
-        assertEquals("field2", fields.get(1).getName());
-        assertEquals("fieldThree", fields.get(2).getName());
-        assertEquals("fieldA", fields.get(3).getName());
-        assertEquals("FieldB", fields.get(4).getName());
-    }
-
     @Record(SimpleRecordLayout.class)
     private static class Dummy {
         @Field("field1")

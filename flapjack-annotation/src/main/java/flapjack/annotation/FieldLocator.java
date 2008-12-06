@@ -17,13 +17,8 @@ import java.util.List;
 
 
 public class FieldLocator {
-    /**
-     * Locate all Fields on the given class
-     *
-     * @param clazz - the class to look for Fields on
-     * @return a list of Fields found on the given class
-     */
-    public List<java.lang.reflect.Field> locate(Class<?> clazz) {
+
+    private List<java.lang.reflect.Field> locate(Class<?> clazz) {
         List<java.lang.reflect.Field> fields = new ArrayList();
         for (java.lang.reflect.Field field : clazz.getDeclaredFields()) {
             if (field.getAnnotation(Field.class) != null)
