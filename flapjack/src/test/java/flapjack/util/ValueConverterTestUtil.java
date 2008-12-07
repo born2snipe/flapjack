@@ -18,7 +18,7 @@ import java.io.IOException;
 
 
 public class ValueConverterTestUtil {
-    public static byte[] bytes(final int i) {
+    public static byte[] binary(final int i) {
         return write(new WriteData() {
             public void write(DataOutputStream output) throws IOException {
                 output.writeInt(i);
@@ -26,7 +26,7 @@ public class ValueConverterTestUtil {
         });
     }
 
-    public static byte[] bytes(final long i) {
+    public static byte[] binary(final long i) {
         return write(new WriteData() {
             public void write(DataOutputStream output) throws IOException {
                 output.writeLong(i);
@@ -34,7 +34,7 @@ public class ValueConverterTestUtil {
         });
     }
 
-    public static byte[] bytes(final float i) {
+    public static byte[] binary(final float i) {
         return write(new WriteData() {
             public void write(DataOutputStream output) throws IOException {
                 output.writeFloat(i);
@@ -42,7 +42,7 @@ public class ValueConverterTestUtil {
         });
     }
 
-    public static byte[] bytes(final double i) {
+    public static byte[] binary(final double i) {
         return write(new WriteData() {
             public void write(DataOutputStream output) throws IOException {
                 output.writeDouble(i);
@@ -50,7 +50,7 @@ public class ValueConverterTestUtil {
         });
     }
 
-    public static byte[] bytes(final boolean i) {
+    public static byte[] binary(final boolean i) {
         return write(new WriteData() {
             public void write(DataOutputStream output) throws IOException {
                 output.writeBoolean(i);
@@ -58,10 +58,58 @@ public class ValueConverterTestUtil {
         });
     }
 
-    public static byte[] bytes(final short i) {
+    public static byte[] binary(final short i) {
         return write(new WriteData() {
             public void write(DataOutputStream output) throws IOException {
                 output.writeShort(i);
+            }
+        });
+    }
+    
+    public static byte[] text(final int i) {
+        return write(new WriteData() {
+            public void write(DataOutputStream output) throws IOException {
+                output.write(String.valueOf(i).getBytes());
+            }
+        });
+    }
+
+    public static byte[] text(final long i) {
+        return write(new WriteData() {
+            public void write(DataOutputStream output) throws IOException {
+                output.write(String.valueOf(i).getBytes());
+            }
+        });
+    }
+
+    public static byte[] text(final float i) {
+        return write(new WriteData() {
+            public void write(DataOutputStream output) throws IOException {
+                output.write(String.valueOf(i).getBytes());
+            }
+        });
+    }
+
+    public static byte[] text(final double i) {
+        return write(new WriteData() {
+            public void write(DataOutputStream output) throws IOException {
+                output.write(String.valueOf(i).getBytes());
+            }
+        });
+    }
+
+    public static byte[] text(final boolean i) {
+        return write(new WriteData() {
+            public void write(DataOutputStream output) throws IOException {
+                output.write(String.valueOf(i).getBytes());
+            }
+        });
+    }
+
+    public static byte[] text(final short i) {
+        return write(new WriteData() {
+            public void write(DataOutputStream output) throws IOException {
+                output.write(String.valueOf(i).getBytes());
             }
         });
     }

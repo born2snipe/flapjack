@@ -14,10 +14,7 @@ package flapjack.layout;
 
 import flapjack.util.DataType;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 /**
  * Basic implementation of the RecordLayout
@@ -28,6 +25,7 @@ public class SimpleRecordLayout implements RecordLayout {
 
     public void addFieldDefinition(FieldDefinition fieldDef) {
         fieldDefinitions.add(fieldDef);
+        Collections.sort(fieldDefinitions, new FieldDefinitionComparator());
     }
 
     protected void field(String name, int length, DataType dataType) {
@@ -47,5 +45,14 @@ public class SimpleRecordLayout implements RecordLayout {
             len += fieldDef.getLength();
         }
         return len;
+    }
+
+    private static class FieldDefinitionComparator implements Comparator {
+
+        public int compare(Object o, Object o1) {
+            FieldDefinition fieldDef1 = (FieldDefinition) o;
+            FieldDefinition fieldDef2 = (FieldDefinition) o1;
+            return new Integer(fieldDef1.getPosition()).compareTo(new Integer(fieldDef2.getPosition()));
+        }
     }
 }

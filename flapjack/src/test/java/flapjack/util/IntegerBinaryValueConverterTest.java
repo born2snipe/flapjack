@@ -23,7 +23,7 @@ public class IntegerBinaryValueConverterTest extends TestCase {
     }
 
     public void test_convert() {
-        assertEquals(new Integer(1), converter.convert(ValueConverterTestUtil.bytes(1)));
+        assertEquals(new Integer(1), converter.convert(ValueConverterTestUtil.binary(1)));
     }
 
     public void test_convert_NotEnoughBytes() {
