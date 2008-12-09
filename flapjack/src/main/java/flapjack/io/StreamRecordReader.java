@@ -22,7 +22,7 @@ public class StreamRecordReader implements RecordReader {
     private InputStream input;
 
     public StreamRecordReader(InputStream inputStream) {
-        this.input = inputStream;
+        this.input = new BufferedInputStream(inputStream);
     }
 
     public byte[] readRecord() throws IOException {
