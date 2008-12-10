@@ -8,7 +8,7 @@
  *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is
  * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and limitations under the License. 
+ * See the License for the specific language governing permissions and limitations under the License.
  */
 package flapjack.io;
 
@@ -26,9 +26,7 @@ public class NioRecordReader implements RecordReader {
     private ByteBuffer byteBuffer;
     private ScatteringByteChannel channel;
     private FileUtil fileUtil = new FileUtilImpl();
-    private byte[] buffer;
     private int numberOfBytesRead;
-    private int offset;
     private byte[] recordData;
     private long fileLength;
     private long totalNumberOfBytesRead;
@@ -40,63 +38,59 @@ public class NioRecordReader implements RecordReader {
     public byte[] readRecord() throws IOException {
         validateRecordLength();
         initialize();
-        ByteArrayBuilder builder = new ByteArrayBuilder();
 
-        if (numberOfBytesRead == -1) {
-            return null;
-        } else if (numberOfBytesRead < recordLength && fileLength == numberOfBytesRead) {
-            builder.append(buffer, offset, numberOfBytesRead);
-            numberOfBytesRead = -1;
+        if (byteBuffer.remaining() < recordLength) {
+            byte[] temp = new byte[byteBuffer.remaining()];
+            byteBuffer.get(temp);
+            if (fileLength == totalNumberOfBytesRead) {
+                if (temp.length == 0) {
+                    return null;
+                }
+                return temp;
+            }
+            int diff = recordLength - temp.length;
+            ByteArrayBuilder builder = new ByteArrayBuilder();
+            builder.append(temp);
+            while (diff > 0) {
+                fillByteBuffer();
+                temp = new byte[Math.min(diff, byteBuffer.remaining())];
+                byteBuffer.get(temp);
+                diff -= temp.length;
+                builder.append(temp);
+            }
             return builder.toByteArray();
         } else {
-            int diff = numberOfBytesRead - offset;
-            boolean enoughDataRemaining = Math.min(diff, recordLength) >= recordLength;
-            if (enoughDataRemaining) {
-                builder.append(buffer, offset, recordLength);
-                offset += recordLength;
-            } else if (fileLength == totalNumberOfBytesRead) {
-                return null;
-            } else {
-                builder.append(buffer, offset, diff);
-                int remaining = recordLength - diff;
-                while (remaining > 0) {
-                    readBytes();
-                    int length = Math.min(numberOfBytesRead, remaining);
-                    builder.append(buffer, offset, length);
-                    remaining -= numberOfBytesRead;
-                    offset += length;
-                }
-            }
+            byteBuffer.get(recordData);
         }
-        return builder.toByteArray();
+
+
+        return recordData;
     }
 
 
-    private void readBytes() throws IOException {
+    private void fillByteBuffer() throws IOException {
         byteBuffer.clear();
         numberOfBytesRead = channel.read(byteBuffer);
         byteBuffer.flip();
-        offset = 0;
-        totalNumberOfBytesRead += numberOfBytesRead;
+        totalNumberOfBytesRead += numberOfBytesRead < 0 ? 0 : numberOfBytesRead;
     }
 
     private void initialize() throws IOException {
         if (byteBuffer == null) {
-            buffer = initializeBuffer();
-            byteBuffer = ByteBuffer.wrap(buffer);
+            byteBuffer = ByteBuffer.allocateDirect(initializeBufferSize());
         }
         if (channel == null) {
             fileLength = fileUtil.length(file);
             channel = fileUtil.channel(file);
-            readBytes();
+            fillByteBuffer();
         }
         if (recordData == null) {
             recordData = new byte[recordLength];
         }
     }
 
-    protected byte[] initializeBuffer() {
-        return new byte[1024 * 64];
+    protected int initializeBufferSize() {
+        return 1024 * 128;
     }
 
     public void close() {

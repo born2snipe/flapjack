@@ -145,7 +145,7 @@ public class NioRecordReaderTest extends MockObjectTestCase {
         assertNull(reader.readRecord());
     }
 
-    public void test_readRecord_BufferSizeLargeEnoughForMultipleRecords_MustMakeMultipleReads() throws IOException {
+    public void test_readRecord_BufferSizeLargeEnoughForMultipleRecords_MustMakeMultipleFills() throws IOException {
         reader.bufferSize = 10;
 
         fileUtil.expects(once()).method("channel").with(eq(FILE)).will(returnValue(new ByteArrayChannel("12345678901234567890".getBytes())));
@@ -165,8 +165,8 @@ public class NioRecordReaderTest extends MockObjectTestCase {
             super(file);
         }
 
-        protected byte[] initializeBuffer() {
-            return new byte[bufferSize];
+        protected int initializeBufferSize() {
+            return bufferSize;
         }
     }
 
