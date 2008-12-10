@@ -26,13 +26,14 @@ public class NioRecordReader implements RecordReader {
     private ByteBuffer byteBuffer;
     private ScatteringByteChannel channel;
     private FileUtil fileUtil = new FileUtilImpl();
-    private int numberOfBytesRead;
     private byte[] recordData;
     private long fileLength;
     private long totalNumberOfBytesRead;
+    private boolean useDirectBuffer = false;
 
-    public NioRecordReader(File file) {
+    public NioRecordReader(File file, boolean useDirectBuffer) {
         this.file = file;
+        this.useDirectBuffer = useDirectBuffer;
     }
 
     public byte[] readRecord() throws IOException {
@@ -70,14 +71,18 @@ public class NioRecordReader implements RecordReader {
 
     private void fillByteBuffer() throws IOException {
         byteBuffer.clear();
-        numberOfBytesRead = channel.read(byteBuffer);
+        int numberOfBytesRead = channel.read(byteBuffer);
         byteBuffer.flip();
         totalNumberOfBytesRead += numberOfBytesRead < 0 ? 0 : numberOfBytesRead;
     }
 
     private void initialize() throws IOException {
         if (byteBuffer == null) {
-            byteBuffer = ByteBuffer.allocateDirect(initializeBufferSize());
+            if (useDirectBuffer) {
+                byteBuffer = ByteBuffer.allocateDirect(initializeBufferSize());
+            } else {
+                byteBuffer = ByteBuffer.allocate(initializeBufferSize());
+            }
         }
         if (channel == null) {
             fileLength = fileUtil.length(file);
@@ -90,7 +95,7 @@ public class NioRecordReader implements RecordReader {
     }
 
     protected int initializeBufferSize() {
-        return 1024 * 128;
+        return 1024 * 16;
     }
 
     public void close() {
@@ -111,7 +116,8 @@ public class NioRecordReader implements RecordReader {
         return recordLength;
     }
 
-    public void setFileUtil(FileUtil fileUtil) {
+    protected void setFileUtil(FileUtil fileUtil) {
         this.fileUtil = fileUtil;
     }
+
 }

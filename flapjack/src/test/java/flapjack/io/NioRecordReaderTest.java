@@ -162,7 +162,7 @@ public class NioRecordReaderTest extends MockObjectTestCase {
         private int bufferSize = 1024;
 
         public ShuntNioRecordReader(File file) {
-            super(file);
+            super(file, false);
         }
 
         protected int initializeBufferSize() {
