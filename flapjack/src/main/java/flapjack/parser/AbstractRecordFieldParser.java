@@ -20,44 +20,44 @@ import java.util.Iterator;
 
 public abstract class AbstractRecordFieldParser implements RecordFieldParser {
 
+    /**
+     * Create your collection object for holding on to your fields
+     *
+     * @return collection obj
+     */
     protected abstract Object createObject();
 
+    /**
+     * Process the logical field
+     *
+     * @param field      - logical field
+     * @param definition - the field definition used for parsing the field
+     * @param obj        - the collection object
+     */
     protected abstract void processField(byte[] field, FieldDefinition definition, Object obj);
 
-    public Object parse(byte[] bytes, RecordLayout recordLayout) throws ParseException {
+    public final Object parse(byte[] bytes, RecordLayout recordLayout) throws ParseException {
         final Object obj = createObject();
 
         if (bytes.length == 0) {
             return obj;
         }
 
-        splitRecord(bytes, recordLayout, new FieldHandler() {
-            public void handle(byte[] field, FieldDefinition definition) {
-                processField(field, definition, obj);
-            }
-        });
-
-        return obj;
-    }
-
-    protected void splitRecord(byte[] bytes, RecordLayout layout, FieldHandler handler) throws ParseException {
         int offset = 0;
         FieldDefinition fieldDef = null;
-        Iterator it = layout.getFieldDefinitions().iterator();
+        Iterator it = recordLayout.getFieldDefinitions().iterator();
         try {
             while (it.hasNext()) {
                 fieldDef = (FieldDefinition) it.next();
                 byte temp[] = new byte[fieldDef.getLength()];
                 System.arraycopy(bytes, offset, temp, 0, temp.length);
-                handler.handle(temp, fieldDef);
+                processField(temp, fieldDef, obj);
                 offset += temp.length;
             }
         } catch (Exception err) {
-            throw new ParseException(err, layout, fieldDef);
+            throw new ParseException(err, recordLayout, fieldDef);
         }
-    }
 
-    protected interface FieldHandler {
-        public void handle(byte[] field, FieldDefinition definition);
+        return obj;
     }
 }
