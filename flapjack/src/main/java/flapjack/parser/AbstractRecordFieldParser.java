@@ -20,6 +20,26 @@ import java.util.Iterator;
 
 public abstract class AbstractRecordFieldParser implements RecordFieldParser {
 
+    protected abstract Object createObject();
+
+    protected abstract void processField(byte[] field, FieldDefinition definition, Object obj);
+
+    public Object parse(byte[] bytes, RecordLayout recordLayout) throws ParseException {
+        final Object obj = createObject();
+
+        if (bytes.length == 0) {
+            return obj;
+        }
+
+        splitRecord(bytes, recordLayout, new FieldHandler() {
+            public void handle(byte[] field, FieldDefinition definition) {
+                processField(field, definition, obj);
+            }
+        });
+
+        return obj;
+    }
+
     protected void splitRecord(byte[] bytes, RecordLayout layout, FieldHandler handler) throws ParseException {
         int offset = 0;
         FieldDefinition fieldDef = null;

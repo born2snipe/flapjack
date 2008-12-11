@@ -13,7 +13,6 @@
 package flapjack.parser;
 
 import flapjack.layout.FieldDefinition;
-import flapjack.layout.RecordLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,20 +21,14 @@ import java.util.List;
  * Parses the current record in to a List of byte arrays
  */
 public class ByteRecordFieldParser extends AbstractRecordFieldParser {
-    public Object parse(byte[] bytes, RecordLayout recordLayout) throws ParseException {
-        final List fields = new ArrayList();
 
-        if (bytes.length == 0) {
-            return fields;
-        }
-
-        splitRecord(bytes, recordLayout, new FieldHandler() {
-            public void handle(byte[] field, FieldDefinition definition) {
-                fields.add(field);
-            }
-        });
-
-        return fields;
+    protected Object createObject() {
+        return new ArrayList();
     }
+
+    protected void processField(byte[] field, FieldDefinition definition, Object obj) {
+        ((List) obj).add(field);
+    }
+
 
 }

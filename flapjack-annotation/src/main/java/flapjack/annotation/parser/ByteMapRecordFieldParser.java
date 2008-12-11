@@ -13,9 +13,7 @@
 package flapjack.annotation.parser;
 
 import flapjack.layout.FieldDefinition;
-import flapjack.layout.RecordLayout;
 import flapjack.parser.AbstractRecordFieldParser;
-import flapjack.parser.ParseException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,14 +22,12 @@ import java.util.Map;
 public class ByteMapRecordFieldParser extends AbstractRecordFieldParser {
     private MappedFieldIdGenerator fieldIdGenerator = new FieldNameGenerator();
 
-    public Object parse(byte[] bytes, RecordLayout recordLayout) throws ParseException {
-        final Map<Object, byte[]> fields = new HashMap<Object, byte[]>();
-        splitRecord(bytes, recordLayout, new FieldHandler() {
-            public void handle(byte[] field, FieldDefinition definition) {
-                fields.put(fieldIdGenerator.generate(definition), field);
-            }
-        });
-        return fields;
+    protected Object createObject() {
+        return new HashMap();
+    }
+
+    protected void processField(byte[] field, FieldDefinition definition, Object obj) {
+        ((Map) obj).put(fieldIdGenerator.generate(definition), field);
     }
 
     public void setFieldIdGenerator(MappedFieldIdGenerator fieldIdGenerator) {
