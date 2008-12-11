@@ -15,8 +15,6 @@ package flapjack.annotation;
 import flapjack.layout.SimpleRecordLayout;
 import junit.framework.TestCase;
 
-import java.util.List;
-
 
 public class FieldLocatorTest extends TestCase {
     private FieldLocator locator;
@@ -42,7 +40,7 @@ public class FieldLocatorTest extends TestCase {
         assertNotNull(field);
         assertEquals("field2", field.getName());
     }
-    
+
     public void test_locateById_FoundFieldByFieldNameMatching_FieldIdDoesNotMeetJavaSpec_WithNumber() {
         java.lang.reflect.Field field = locator.locateById(Dummy.class, "Field 2");
 
@@ -56,7 +54,7 @@ public class FieldLocatorTest extends TestCase {
         assertNotNull(field);
         assertEquals("fieldThree", field.getName());
     }
-    
+
     public void test_locateById_FoundFieldByFieldNameMatching_FieldIdDoesNotMeetJavaSpec_SingleLetter() {
         java.lang.reflect.Field field = locator.locateById(Dummy.class, "Field a");
 

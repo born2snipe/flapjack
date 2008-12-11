@@ -18,6 +18,13 @@ import java.lang.reflect.InvocationTargetException;
 
 
 public class ClassUtil {
+
+    /**
+     * Attempts to locate the default constructor of the given class
+     *
+     * @param clazz - the class to search
+     * @return the default constructor or null if not found
+     */
     public static Constructor findDefaultConstructor(Class clazz) {
         Constructor[] constructors = clazz.getDeclaredConstructors();
         for (int i = 0; i < constructors.length; i++) {
@@ -29,6 +36,12 @@ public class ClassUtil {
         return null;
     }
 
+    /**
+     * Attempts to create a new instance of the given class using the default constructor
+     *
+     * @param clazz - the class to create a new instance of
+     * @return a new instance of the given class
+     */
     public static Object newInstance(Class clazz) {
         try {
             Constructor constructor = findDefaultConstructor(clazz);
@@ -46,17 +59,26 @@ public class ClassUtil {
         }
     }
 
-    public static Field findField(Class clazz, String beanPath) {
+    public static Object findField(Object obj, String beanPath) {
         try {
             if (beanPath.indexOf('.') > -1) {
                 String name = beanPath.substring(0, beanPath.indexOf('.'));
                 String path = beanPath.substring(beanPath.indexOf('.') + 1);
-                return findField(clazz.getDeclaredField(name).getType(), path);
+                Field field = obj.getClass().getDeclaredField(name);
+                field.setAccessible(true);
+                return findField(field.get(obj), path);
+            } else if (obj == null) {
+                return null;
             } else {
-                return clazz.getDeclaredField(beanPath);
+                Field field = obj.getClass().getDeclaredField(beanPath);
+                field.setAccessible(true);
+                return field.get(obj);
             }
         } catch (NoSuchFieldException e) {
             return null;
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
         }
     }
+
 }

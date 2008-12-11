@@ -16,31 +16,29 @@ import flapjack.layout.SimpleFieldDefinition;
 import flapjack.layout.SimpleRecordLayout;
 import junit.framework.TestCase;
 
-import java.lang.reflect.Field;
-
 
 public class ClassUtilTest extends TestCase {
 
-    public void test_findFiled_FieldNotFound_NestElement() {
+    public void test_findField_FieldNotFound_NestElement() {
         assertNull(ClassUtil.findField(NestClass.class, "fieldDef.doesNotExist"));
     }
 
-    public void test_findFiled_FieldFound_NestElement() {
-        Field field = ClassUtil.findField(NestClass.class, "fieldDef.position");
+    public void test_findField_FieldFound_NestElement() {
+        Object obj = ClassUtil.findField(new NestClass(), "fieldDef.position");
 
-        assertNotNull(field);
-        assertEquals("position", field.getName());
+        assertNotNull(obj);
+        assertEquals(new Integer(0), obj);
     }
 
     public void test_findField_FieldFound() {
-        Field field = ClassUtil.findField(SimpleFieldDefinition.class, "position");
+        Object obj = ClassUtil.findField(new SimpleFieldDefinition(), "position");
 
-        assertNotNull(field);
-        assertEquals("position", field.getName());
+        assertNotNull(obj);
+        assertEquals(new Integer(0), obj);
     }
 
     public void test_findField_FieldNotFound() {
-        assertNull(ClassUtil.findField(String.class, "doesNotExist"));
+        assertNull(ClassUtil.findField(new String(), "doesNotExist"));
     }
 
     public void test_findDefaultContructor() {
@@ -70,6 +68,6 @@ public class ClassUtilTest extends TestCase {
     }
 
     private static class NestClass {
-        private SimpleFieldDefinition fieldDef;
+        private SimpleFieldDefinition fieldDef = new SimpleFieldDefinition();
     }
 }

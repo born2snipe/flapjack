@@ -12,16 +12,17 @@
  */
 package flapjack.annotation;
 
+import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class FieldLocator {
 
-    private List<java.lang.reflect.Field> locate(Class<?> clazz) {
-        List<java.lang.reflect.Field> fields = new ArrayList();
+    private List<java.lang.reflect.Field> locateAnnotated(Class<?> clazz, Class<? extends Annotation> annotationClass) {
+        List<java.lang.reflect.Field> fields = new ArrayList<java.lang.reflect.Field>();
         for (java.lang.reflect.Field field : clazz.getDeclaredFields()) {
-            if (field.getAnnotation(Field.class) != null)
+            if (field.getAnnotation(annotationClass) != null)
                 fields.add(field);
         }
         return fields;
@@ -38,7 +39,7 @@ public class FieldLocator {
      * @return the Field found on the class or will return  null if no matching field was found
      */
     public java.lang.reflect.Field locateById(Class<?> clazz, String id) {
-        for (java.lang.reflect.Field field : locate(clazz)) {
+        for (java.lang.reflect.Field field : locateAnnotated(clazz, Field.class)) {
             String annotationValue = field.getAnnotation(Field.class).value();
             if (!isEmpty(annotationValue) && id.equals(annotationValue)) {
                 return field;
