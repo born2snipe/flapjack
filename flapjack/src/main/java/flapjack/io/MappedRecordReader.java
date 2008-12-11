@@ -1,18 +1,17 @@
 /**
  * Copyright 2008 Dan Dudley
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at:
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is
  * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and limitations under the License. 
  */
 package flapjack.io;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -47,6 +46,8 @@ public class MappedRecordReader implements RecordReader {
     private long offset = 0L;
     private long mappedRegionSize = TEN_MEGABYTES;
     private FileUtil fileUtil = new FileUtilImpl();
+    private long fileLength;
+    private byte[] recordData;
 
     public MappedRecordReader(File file) {
         this.file = file;
@@ -54,36 +55,34 @@ public class MappedRecordReader implements RecordReader {
 
     public byte[] readRecord() throws IOException {
         validateRecordLength();
-        initializeChannel();
-        byte[] buffer = new byte[recordLength];
-        long fileLength = fileUtil.length(file);
+        initialize();
 
-        if (mappedRegion == null) {
-            mapNextRegion(fileLength);
-        }
 
         if (mappedRegion.remaining() == 0) {
             return null;
-        } else if (mappedRegion.remaining() < buffer.length) {
-            buffer = new byte[mappedRegion.remaining()];
+        } else if (mappedRegion.remaining() < recordData.length) {
+            recordData = new byte[mappedRegion.remaining()];
         }
-        readBytes(buffer);
 
-        if (buffer.length != recordLength) {
+        readBytes(recordData);
+
+        if (recordData.length != recordLength) {
             if (offset == fileLength) {
-                return buffer;
+                return recordData;
             }
 
-            ByteArrayOutputStream output = new ByteArrayOutputStream();
-            output.write(buffer);
-            byte[] temp = new byte[recordLength - buffer.length];
+            ByteArrayBuilder builder = new ByteArrayBuilder();
+            builder.append(recordData);
+
+            byte[] temp = new byte[recordLength - recordData.length];
             mapNextRegion(fileLength);
             readBytes(temp);
-            output.write(temp);
-            return output.toByteArray();
+
+            builder.append(temp);
+            return builder.toByteArray();
         }
 
-        return buffer;
+        return recordData;
     }
 
     private void mapNextRegion(long fileLength) {
@@ -96,9 +95,17 @@ public class MappedRecordReader implements RecordReader {
         offset += buffer.length;
     }
 
-    private void initializeChannel() throws FileNotFoundException {
+    private void initialize() throws FileNotFoundException {
         if (channel == null) {
             channel = fileUtil.channel(file);
+            fileLength = fileUtil.length(file);
+        }
+
+        if (mappedRegion == null) {
+            mapNextRegion(fileLength);
+        }
+        if (recordData == null) {
+            recordData = new byte[recordLength];
         }
     }
 

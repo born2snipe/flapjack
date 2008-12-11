@@ -21,7 +21,6 @@ public class ByteArrayBuilder {
     private List arrays = new ArrayList();
 
     public ByteArrayBuilder append(byte[] bytes) {
-//        System.out.println("append -- "+new String(bytes));
         arrays.add(bytes);
         return this;
     }
@@ -46,7 +45,6 @@ public class ByteArrayBuilder {
             System.arraycopy(b, 0, temp, offset, b.length);
             offset += b.length;
         }
-//        System.out.println("whole thing -- "+new String(temp));
         return temp;
     }
 
