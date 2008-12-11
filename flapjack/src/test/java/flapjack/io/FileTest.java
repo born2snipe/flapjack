@@ -35,8 +35,8 @@ public class FileTest extends TestCase {
     protected void setUp() throws Exception {
         super.setUp();
         recordParser = new RecordParserImpl();
-        recordParser.setRecordLayoutResolver(new SimpleRecordLayoutResolver());
-        recordParser.setRecordFieldParser(new StringRecordFieldParser());
+        recordParser.setRecordLayoutResolver(new SameRecordLayoutResolver(TestRecordLayout.class));
+        recordParser.setRecordFieldParser(new ByteRecordFieldParser());
         fileParser = new FlatFileParser();
         fileParser.setRecordParser(recordParser);
 
@@ -69,16 +69,15 @@ public class FileTest extends TestCase {
         Iterator it = result.getRecords().iterator();
         while (it.hasNext()) {
             SimpleRecord record = (SimpleRecord) it.next();
-            assertEquals("1234567890", record.getField(0));
+            assertEquals("1234567890", new String((byte[]) record.getField(0)));
         }
         assertEquals(231000, result.getRecords().size());
     }
 
-    private static class SimpleRecordLayoutResolver implements RecordLayoutResolver {
-        public RecordLayout resolve(byte[] bytes) {
-            SimpleRecordLayout layout = new SimpleRecordLayout();
-            layout.addFieldDefinition(new SimpleFieldDefinition("data", 0, 10, DataType.TEXT));
-            return layout;
+
+    private static class TestRecordLayout extends SimpleRecordLayout {
+        private TestRecordLayout() {
+            addFieldDefinition(new SimpleFieldDefinition("data", 0, 10, DataType.TEXT));
         }
     }
 }
