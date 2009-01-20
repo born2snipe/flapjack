@@ -20,7 +20,6 @@ import flapjack.layout.SimpleRecordLayout;
 import flapjack.model.RecordFactory;
 import flapjack.model.RecordFactoryResolver;
 import flapjack.parser.*;
-import flapjack.util.DataType;
 import junit.framework.TestCase;
 
 import java.io.ByteArrayInputStream;
@@ -110,21 +109,21 @@ public class InlineRecordTest extends TestCase {
      */
     private static class UserRecordLayout extends SimpleRecordLayout {
         private UserRecordLayout() {
-            field("Record Type", 2, DataType.TEXT);
-            field("Record Length", 3, DataType.TEXT);
-            field("First Name", 10, DataType.TEXT);
-            field("Last Name", 10, DataType.TEXT);
-            field("Username", 10, DataType.TEXT);
+            field("Record Type", 2);
+            field("Record Length", 3);
+            field("First Name", 10);
+            field("Last Name", 10);
+            field("Username", 10);
         }
     }
 
     private static class AddressRecordLayout extends SimpleRecordLayout {
         private AddressRecordLayout() {
-            field("Record Type", 2, DataType.TEXT);
-            field("Record Length",3, DataType.TEXT);
-            field("Address Line", 20, DataType.TEXT);
-            field("City", 15, DataType.TEXT);
-            field("State", 2, DataType.TEXT);
+            field("Record Type", 2);
+            field("Record Length",3);
+            field("Address Line", 20);
+            field("City", 15);
+            field("State", 2);
         }
     }
 

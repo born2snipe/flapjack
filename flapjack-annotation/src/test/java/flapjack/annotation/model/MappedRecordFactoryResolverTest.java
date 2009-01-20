@@ -12,17 +12,16 @@
  */
 package flapjack.annotation.model;
 
+import flapjack.annotation.Field;
+import flapjack.annotation.Record;
+import flapjack.layout.SimpleFieldDefinition;
+import flapjack.layout.SimpleRecordLayout;
 import flapjack.model.RecordFactory;
 import flapjack.test.User;
 import flapjack.test.UserRecordLayout;
 import flapjack.test2.Phone;
 import flapjack.test2.PhoneRecordLayout;
 import flapjack.util.ValueConverter;
-import flapjack.util.DataType;
-import flapjack.annotation.Record;
-import flapjack.annotation.Field;
-import flapjack.layout.SimpleRecordLayout;
-import flapjack.layout.SimpleFieldDefinition;
 import junit.framework.TestCase;
 
 import java.util.ArrayList;
@@ -44,7 +43,7 @@ public class MappedRecordFactoryResolverTest extends TestCase {
         resolver.setValueConverters(Arrays.asList(new BarValueConverter()));
 
         FooRecordLayout layout = new FooRecordLayout();
-        layout.addFieldDefinition(new SimpleFieldDefinition("bar", 0, 0, DataType.TEXT));
+        layout.addFieldDefinition(new SimpleFieldDefinition("bar", 0, 0));
 
         Map<String, byte[]> fields = new HashMap<String, byte[]>();
         fields.put("bar", "foo bar".getBytes());
@@ -154,10 +153,6 @@ public class MappedRecordFactoryResolverTest extends TestCase {
 
         public Class[] types() {
             return new Class[]{Bar.class};
-        }
-
-        public DataType[] convertFrom() {
-            return new DataType[]{DataType.TEXT};
         }
     }
 

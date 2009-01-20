@@ -21,8 +21,4 @@ public class LongValueConverter implements ValueConverter {
     public Object convert(byte[] bytes) {
         return Long.valueOf(new String(bytes));
     }
-
-    public DataType[] convertFrom() {
-        return new DataType[]{DataType.TEXT};
-    }
 }

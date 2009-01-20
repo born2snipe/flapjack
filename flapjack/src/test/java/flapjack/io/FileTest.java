@@ -12,12 +12,10 @@
  */
 package flapjack.io;
 
-import flapjack.layout.RecordLayout;
 import flapjack.layout.SimpleFieldDefinition;
 import flapjack.layout.SimpleRecordLayout;
 import flapjack.model.SimpleRecord;
 import flapjack.parser.*;
-import flapjack.util.DataType;
 import junit.framework.TestCase;
 
 import java.io.File;
@@ -77,7 +75,7 @@ public class FileTest extends TestCase {
 
     private static class TestRecordLayout extends SimpleRecordLayout {
         private TestRecordLayout() {
-            addFieldDefinition(new SimpleFieldDefinition("data", 0, 10, DataType.TEXT));
+            addFieldDefinition(new SimpleFieldDefinition("data", 0, 10));
         }
     }
 }

@@ -21,8 +21,4 @@ public class FloatValueConverter implements ValueConverter {
     public Object convert(byte[] bytes) {
         return Float.valueOf(new String(bytes));
     }
-
-    public DataType[] convertFrom() {
-        return new DataType[]{DataType.TEXT};
-    }
 }

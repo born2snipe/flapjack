@@ -12,8 +12,6 @@
  */
 package flapjack.layout;
 
-import flapjack.util.DataType;
-
 import java.util.*;
 
 /**
@@ -28,8 +26,8 @@ public class SimpleRecordLayout implements RecordLayout {
         Collections.sort(fieldDefinitions, new FieldDefinitionComparator());
     }
 
-    protected void field(String name, int length, DataType dataType) {
-        addFieldDefinition(new SimpleFieldDefinition(name, offset, length, dataType));
+    protected void field(String name, int length) {
+        addFieldDefinition(new SimpleFieldDefinition(name, offset, length));
         offset += length;
     }
 

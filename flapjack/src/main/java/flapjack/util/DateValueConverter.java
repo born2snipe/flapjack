@@ -44,8 +44,4 @@ public class DateValueConverter implements ValueConverter {
         }
         return null;
     }
-
-    public DataType[] convertFrom() {
-        return new DataType[]{DataType.TEXT};
-    }
 }

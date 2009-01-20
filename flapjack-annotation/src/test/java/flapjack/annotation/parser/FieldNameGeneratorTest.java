@@ -14,7 +14,6 @@ package flapjack.annotation.parser;
 
 import junit.framework.TestCase;
 import flapjack.layout.SimpleFieldDefinition;
-import flapjack.util.DataType;
 
 
 public class FieldNameGeneratorTest extends TestCase {
@@ -22,7 +21,7 @@ public class FieldNameGeneratorTest extends TestCase {
     public void test_generate_WithFieldDefinition() {
         FieldNameGenerator generator = new FieldNameGenerator();
 
-        SimpleFieldDefinition fieldDef = new SimpleFieldDefinition("field1", 0, 1, DataType.TEXT);
+        SimpleFieldDefinition fieldDef = new SimpleFieldDefinition("field1", 0, 1);
 
         assertEquals("field1", generator.generate(fieldDef));
     }

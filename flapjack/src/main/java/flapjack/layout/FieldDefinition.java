@@ -12,7 +12,6 @@
  */
 package flapjack.layout;
 
-import flapjack.util.DataType;
 
 public interface FieldDefinition {
     /**
@@ -37,10 +36,4 @@ public interface FieldDefinition {
      */
     String getName();
 
-    /**
-     * The format type of the field
-     *
-     * @return
-     */
-    DataType getFormat();
 }

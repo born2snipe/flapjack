@@ -19,14 +19,6 @@ import java.util.Arrays;
 
 public class DoubleValueConverterTest extends TestCase {
     private DoubleValueConverter converter;
-
-    public void test_convertFrom() {
-        DataType[] types = converter.convertFrom();
-
-        assertNotNull(types);
-        assertEquals(1, types.length);
-        assertEquals(DataType.TEXT, types[0]);
-    }
     
     public void test_convert() {
         assertEquals(new Double(2), converter.convert("2".getBytes()));

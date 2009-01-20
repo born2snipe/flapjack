@@ -24,14 +24,6 @@ public class BigDecimalValueConverterTest extends TestCase {
         converter = new BigDecimalValueConverter();
     }
 
-    public void test_convertFrom() {
-        DataType[] types = converter.convertFrom();
-
-        assertNotNull(types);
-        assertEquals(1, types.length);
-        assertEquals(DataType.TEXT, types[0]);
-    }
-
     public void test_convert() {
         assertEquals(new BigDecimal("1"), converter.convert("1".getBytes()));
         assertEquals(new BigDecimal("1.0"), converter.convert("1.0".getBytes()));

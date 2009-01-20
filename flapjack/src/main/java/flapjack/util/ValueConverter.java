@@ -32,10 +32,4 @@ public interface ValueConverter {
      */
     Class[] types();
 
-    /**
-     * The data type of the original byte array
-     *
-     * @return the data type of the byte array
-     */
-    DataType[] convertFrom();
 }

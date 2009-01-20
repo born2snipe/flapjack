@@ -19,7 +19,6 @@ import flapjack.layout.SimpleRecordLayout;
 import flapjack.model.RecordFactory;
 import flapjack.model.RecordFactoryResolver;
 import flapjack.parser.*;
-import flapjack.util.DataType;
 import junit.framework.TestCase;
 
 import java.io.ByteArrayInputStream;
@@ -92,10 +91,10 @@ public class StopProcessingAfterARecordIsFoundWithAProblemTest extends TestCase 
      */
     private static class UserRecordLayout extends SimpleRecordLayout {
         private UserRecordLayout() {
-            field("First Name", 11, DataType.TEXT);
-            field("Last Name", 11, DataType.TEXT);
-            field("Username", 11, DataType.TEXT);
-            field("Terminator", 1, DataType.TEXT);
+            field("First Name", 11);
+            field("Last Name", 11);
+            field("Username", 11);
+            field("Terminator", 1);
         }
     }
 

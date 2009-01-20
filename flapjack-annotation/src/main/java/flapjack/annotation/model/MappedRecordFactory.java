@@ -16,7 +16,6 @@ import flapjack.annotation.FieldLocator;
 import flapjack.layout.RecordLayout;
 import flapjack.model.RecordFactory;
 import flapjack.util.TypeConverter;
-import flapjack.util.DataType;
 
 import java.beans.IntrospectionException;
 import java.beans.PropertyDescriptor;
@@ -51,7 +50,7 @@ public class MappedRecordFactory implements RecordFactory {
             try {
                 PropertyDescriptor descriptor = new PropertyDescriptor(field.getName(), clazz);
                 Method method = descriptor.getWriteMethod();
-                method.invoke(domain, typeConverter.convert(DataType.TEXT, descriptor.getPropertyType(), value));
+                method.invoke(domain, typeConverter.convert(descriptor.getPropertyType(), value));
             } catch (IntrospectionException e) {
                 throw new RuntimeException("Problem occured trying to find setter for field [name=" + field.getName() + "]", e);
             } catch (IllegalAccessException e) {

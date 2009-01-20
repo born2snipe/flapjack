@@ -14,7 +14,6 @@ package flapjack.parser;
 
 import flapjack.layout.SimpleFieldDefinition;
 import flapjack.layout.SimpleRecordLayout;
-import flapjack.util.DataType;
 import junit.framework.TestCase;
 
 import java.util.List;
@@ -28,8 +27,8 @@ public class StringRecordFieldParserTest extends TestCase {
         super.setUp();
         parser = new StringRecordFieldParser();
         recordLayout = new SimpleRecordLayout();
-        recordLayout.addFieldDefinition(new SimpleFieldDefinition("", 0, 1, DataType.TEXT));
-        recordLayout.addFieldDefinition(new SimpleFieldDefinition("", 1, 4, DataType.TEXT));
+        recordLayout.addFieldDefinition(new SimpleFieldDefinition("", 0, 1));
+        recordLayout.addFieldDefinition(new SimpleFieldDefinition("", 1, 4));
     }
 
     public void test_parse_ThrowsException() {

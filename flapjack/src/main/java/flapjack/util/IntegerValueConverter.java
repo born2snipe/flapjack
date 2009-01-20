@@ -18,10 +18,6 @@ public class IntegerValueConverter implements ValueConverter {
         return new Class[]{Integer.class, int.class};
     }
 
-    public DataType[] convertFrom() {
-        return new DataType[]{DataType.TEXT};
-    }
-
     public Object convert(byte[] bytes) {
         if (bytes == null)
             return new Integer(0);

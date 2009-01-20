@@ -26,8 +26,4 @@ public class IntegerBinaryValueConverter implements ValueConverter {
     public Class[] types() {
         return new Class[]{int.class, Integer.class};
     }
-
-    public DataType[] convertFrom() {
-        return new DataType[]{DataType.BINARY};
-    }
 }

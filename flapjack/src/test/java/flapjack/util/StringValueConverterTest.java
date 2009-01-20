@@ -24,15 +24,6 @@ public class StringValueConverterTest extends TestCase {
         converter = new StringValueConverter();
     }
 
-    public void test_convertFrom() {
-        DataType types[] = converter.convertFrom();
-
-        assertNotNull(types);
-        assertEquals(2, types.length);
-        assertEquals(DataType.TEXT, types[0]);
-        assertEquals(DataType.BINARY, types[1]);
-    }
-
     public void test_types() {
         Class[] classes = converter.types();
 

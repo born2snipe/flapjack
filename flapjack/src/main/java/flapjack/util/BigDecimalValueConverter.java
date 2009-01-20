@@ -20,10 +20,6 @@ public class BigDecimalValueConverter implements ValueConverter {
         return new Class[]{BigDecimal.class};
     }
 
-    public DataType[] convertFrom() {
-        return new DataType[]{DataType.TEXT};
-    }
-
     public Object convert(byte[] bytes) {
         return new BigDecimal(new String(bytes));
     }

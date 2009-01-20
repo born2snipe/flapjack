@@ -16,7 +16,6 @@ import junit.framework.TestCase;
 import flapjack.parser.ParseException;
 import flapjack.layout.SimpleRecordLayout;
 import flapjack.layout.SimpleFieldDefinition;
-import flapjack.util.DataType;
 
 import java.util.Map;
 import java.util.Arrays;
@@ -27,8 +26,8 @@ public class ByteMapRecordFieldParserTest extends TestCase {
 
     public void test_MultipleFields() throws ParseException {
         SimpleRecordLayout layout = new SimpleRecordLayout();
-        layout.addFieldDefinition(new SimpleFieldDefinition("last name", 0, 10, DataType.TEXT));
-        layout.addFieldDefinition(new SimpleFieldDefinition("first name", 11, 10, DataType.TEXT));
+        layout.addFieldDefinition(new SimpleFieldDefinition("last name", 0, 10));
+        layout.addFieldDefinition(new SimpleFieldDefinition("first name", 11, 10));
 
         Object obj = fieldParser.parse("Smith     Joe       ".getBytes(), layout);
 

@@ -21,7 +21,6 @@ import flapjack.layout.SimpleRecordLayout;
 import flapjack.parser.ParseResult;
 import flapjack.parser.RecordParserImpl;
 import flapjack.parser.SameRecordLayoutResolver;
-import flapjack.util.DataType;
 import junit.framework.TestCase;
 
 import java.io.ByteArrayInputStream;
@@ -70,9 +69,9 @@ public class UseAnnotationTest extends TestCase {
      */
     private static class SongRecordLayout extends SimpleRecordLayout {
         private SongRecordLayout() {
-            field("Artist", 10, DataType.TEXT);
-            field("Title", 10, DataType.TEXT);
-            field("Length", 5, DataType.TEXT);
+            field("Artist", 10);
+            field("Title", 10);
+            field("Length", 5);
         }
     }
 

@@ -12,8 +12,6 @@
  */
 package flapjack.layout;
 
-import flapjack.util.DataType;
-
 /**
  * Basic implementation of a FieldDefinition
  */
@@ -21,24 +19,18 @@ public class SimpleFieldDefinition implements FieldDefinition {
     private int position;
     private int length;
     private String name;
-    private DataType dataType;
 
     public SimpleFieldDefinition() {
     }
 
-    public SimpleFieldDefinition(String name, int position, int length, DataType dataType) {
+    public SimpleFieldDefinition(String name, int position, int length) {
         setPosition(position);
         setLength(length);
         setName(name);
-        setDataType(dataType);
     }
 
     public int getPosition() {
         return position;
-    }
-
-    public void setDataType(DataType dataType) {
-        this.dataType = dataType;
     }
 
     public int getLength() {
@@ -59,10 +51,6 @@ public class SimpleFieldDefinition implements FieldDefinition {
 
     public String getName() {
         return name;
-    }
-
-    public DataType getFormat() {
-        return dataType;
     }
 
     public String toString() {

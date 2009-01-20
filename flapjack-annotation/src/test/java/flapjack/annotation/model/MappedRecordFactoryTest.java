@@ -17,7 +17,6 @@ import flapjack.annotation.Record;
 import flapjack.layout.SimpleFieldDefinition;
 import flapjack.layout.SimpleRecordLayout;
 import flapjack.util.TypeConverter;
-import flapjack.util.DataType;
 import junit.framework.TestCase;
 
 import java.util.HashMap;
@@ -32,7 +31,7 @@ public class MappedRecordFactoryTest extends TestCase {
         super.setUp();
         recordFactory = new MappedRecordFactory(Dummy.class, new TypeConverter());
         layout = new SimpleRecordLayout();
-        layout.addFieldDefinition(new SimpleFieldDefinition("field1", 0, 1, DataType.TEXT));
+        layout.addFieldDefinition(new SimpleFieldDefinition("field1", 0, 1));
     }
 
     public void test_build_FieldDoesNotExists() {
