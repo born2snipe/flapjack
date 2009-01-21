@@ -120,10 +120,6 @@
                     </excludes>
                     <useDefaultExcludes>true</useDefaultExcludes>
                     <useDefaultMapping>true</useDefaultMapping>
-                    <properties>
-                        <year>2008</year>
-                        <name>Dan Dudley</name>
-                    </properties>
                     <encoding>UTF-8</encoding>
                 </configuration>
                 <executions>

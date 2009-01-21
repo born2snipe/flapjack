@@ -1,5 +1,5 @@
 /**
- * Copyright 2008 Dan Dudley
+ * Copyright 2008-2009 the original author or authors.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at:
@@ -26,7 +26,7 @@ public class ShortTextValueConverterTest extends TestCase {
     }
 
     public void test_convert() {
-        assertEquals(new Short((short) 2), converter.convert("2".getBytes()));
+        assertEquals(new Short((short) 2), converter.convert(ValueConverterTestUtil.text(2)));
         assertEquals(new Short((short) 0), converter.convert("".getBytes()));
         assertEquals(new Short((short) 0), converter.convert(null));
     }
