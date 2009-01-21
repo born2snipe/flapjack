@@ -15,6 +15,7 @@ package flapjack.annotation.model;
 import flapjack.annotation.FieldLocator;
 import flapjack.layout.RecordLayout;
 import flapjack.model.RecordFactory;
+import flapjack.util.ClassUtil;
 import flapjack.util.TypeConverter;
 
 import java.beans.IntrospectionException;
@@ -62,12 +63,6 @@ public class MappedRecordFactory implements RecordFactory {
     }
 
     private Object createInstance() {
-        try {
-            return clazz.newInstance();
-        } catch (InstantiationException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
+        return ClassUtil.newInstance(clazz);
     }
 }
