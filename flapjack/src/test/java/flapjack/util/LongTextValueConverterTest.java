@@ -17,26 +17,23 @@ import junit.framework.TestCase;
 import java.util.Arrays;
 
 
-public class DoubleValueConverterTest extends TestCase {
-    private DoubleValueConverter converter;
-    
+public class LongTextValueConverterTest extends TestCase {
+    private LongTextValueConverter converter;
+
+    public void setUp() {
+        converter = new LongTextValueConverter();
+    }
+
     public void test_convert() {
-        assertEquals(new Double(2), converter.convert("2".getBytes()));
-        assertEquals(new Double(2), converter.convert("2.0".getBytes()));
-        assertEquals(new Double(2), converter.convert("02.0".getBytes()));
+        assertEquals(new Long(1), converter.convert("1".getBytes()));
+        assertEquals(new Long(1), converter.convert("01".getBytes()));
     }
 
     public void test_types() {
-
         Class[] classes = converter.types();
 
         assertNotNull(classes);
         assertEquals(2, classes.length);
-        assertTrue(Arrays.equals(new Class[]{double.class, Double.class}, classes));
-    }
-
-    protected void setUp() throws Exception {
-        super.setUp();
-        converter = new DoubleValueConverter();
+        assertTrue(Arrays.equals(new Class[]{long.class, Long.class}, classes));
     }
 }

@@ -22,13 +22,13 @@ public class TypeConverter {
     private Map textConverters = new HashMap();
 
     public TypeConverter() {
-        registerConverter(new BooleanValueConverter());
-        registerConverter(new IntegerValueConverter());
-        registerConverter(new LongValueConverter());
-        registerConverter(new DoubleValueConverter());
-        registerConverter(new FloatValueConverter());
-        registerConverter(new BigIntegerValueConverter());
-        registerConverter(new BigDecimalValueConverter());
+        registerConverter(new BooleanTextValueConverter());
+        registerConverter(new IntegerTextValueConverter());
+        registerConverter(new LongTextValueConverter());
+        registerConverter(new DoubleTextValueConverter());
+        registerConverter(new FloatTextValueConverter());
+        registerConverter(new BigIntegerTextValueConverter());
+        registerConverter(new BigDecimalTextValueConverter());
         registerConverter(new StringValueConverter());
 //        registerConverter(new IntegerBinaryValueConverter());
     }

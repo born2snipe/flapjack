@@ -13,7 +13,7 @@
 package flapjack.util;
 
 
-public class DoubleValueConverter implements ValueConverter {
+public class DoubleTextValueConverter implements ValueConverter {
     public Class[] types() {
         return new Class[]{double.class, Double.class};
     }

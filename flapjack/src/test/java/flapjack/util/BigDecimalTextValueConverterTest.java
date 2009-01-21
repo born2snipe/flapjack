@@ -14,19 +14,20 @@ package flapjack.util;
 
 import junit.framework.TestCase;
 
-import java.math.BigInteger;
+import java.math.BigDecimal;
 
 
-public class BigIntegerValueConverterTest extends TestCase {
-    private BigIntegerValueConverter converter;
+public class BigDecimalTextValueConverterTest extends TestCase {
+    private BigDecimalTextValueConverter converter;
 
     public void setUp() {
-        converter = new BigIntegerValueConverter();
+        converter = new BigDecimalTextValueConverter();
     }
 
     public void test_convert() {
-        assertEquals(new BigInteger("1"), converter.convert("1".getBytes()));
-        assertEquals(new BigInteger("1"), converter.convert("01".getBytes()));
+        assertEquals(new BigDecimal("1"), converter.convert("1".getBytes()));
+        assertEquals(new BigDecimal("1.0"), converter.convert("1.0".getBytes()));
+        assertEquals(new BigDecimal("1.0"), converter.convert("01.0".getBytes()));
     }
 
     public void test_types() {
@@ -34,6 +35,6 @@ public class BigIntegerValueConverterTest extends TestCase {
 
         assertNotNull(classes);
         assertEquals(1, classes.length);
-        assertEquals(BigInteger.class, classes[0]);
+        assertEquals(BigDecimal.class, classes[0]);
     }
 }

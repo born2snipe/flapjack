@@ -17,24 +17,26 @@ import junit.framework.TestCase;
 import java.util.Arrays;
 
 
-public class FloatValueConverterTest extends TestCase {
-    private FloatValueConverter converter;
-
-    public void setUp() {
-        converter = new FloatValueConverter();
-    }
-
+public class DoubleTextValueConverterTest extends TestCase {
+    private DoubleTextValueConverter converter;
+    
     public void test_convert() {
-        assertEquals(new Float(1), converter.convert("1".getBytes()));
-        assertEquals(new Float(1), converter.convert("1.0".getBytes()));
-        assertEquals(new Float(1), converter.convert("01".getBytes()));
+        assertEquals(new Double(2), converter.convert("2".getBytes()));
+        assertEquals(new Double(2), converter.convert("2.0".getBytes()));
+        assertEquals(new Double(2), converter.convert("02.0".getBytes()));
     }
 
     public void test_types() {
+
         Class[] classes = converter.types();
 
         assertNotNull(classes);
         assertEquals(2, classes.length);
-        assertTrue(Arrays.equals(new Class[]{float.class, Float.class}, classes));
+        assertTrue(Arrays.equals(new Class[]{double.class, Double.class}, classes));
+    }
+
+    protected void setUp() throws Exception {
+        super.setUp();
+        converter = new DoubleTextValueConverter();
     }
 }

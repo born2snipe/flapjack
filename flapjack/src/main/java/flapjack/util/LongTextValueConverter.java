@@ -12,15 +12,13 @@
  */
 package flapjack.util;
 
-import java.math.BigInteger;
 
-
-public class BigIntegerValueConverter implements ValueConverter {
+public class LongTextValueConverter implements ValueConverter {
     public Class[] types() {
-        return new Class[]{BigInteger.class};
+        return new Class[]{long.class, Long.class};
     }
 
     public Object convert(byte[] bytes) {
-        return new BigInteger(new String(bytes));
+        return Long.valueOf(new String(bytes));
     }
 }

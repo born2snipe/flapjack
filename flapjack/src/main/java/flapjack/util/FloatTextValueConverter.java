@@ -13,7 +13,7 @@
 package flapjack.util;
 
 
-public class FloatValueConverter implements ValueConverter {
+public class FloatTextValueConverter implements ValueConverter {
     public Class[] types() {
         return new Class[]{float.class, Float.class};
     }

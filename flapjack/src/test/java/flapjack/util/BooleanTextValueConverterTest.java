@@ -17,11 +17,11 @@ import junit.framework.TestCase;
 import java.util.Arrays;
 
 
-public class BooleanValueConverterTest extends TestCase {
-    private BooleanValueConverter converter;
+public class BooleanTextValueConverterTest extends TestCase {
+    private BooleanTextValueConverter converter;
 
     public void setUp() {
-        converter = new BooleanValueConverter();
+        converter = new BooleanTextValueConverter();
     }
 
 

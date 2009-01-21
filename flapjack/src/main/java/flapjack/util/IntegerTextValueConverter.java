@@ -12,15 +12,19 @@
  */
 package flapjack.util;
 
-import java.math.BigDecimal;
 
-
-public class BigDecimalValueConverter implements ValueConverter {
+public class IntegerTextValueConverter implements ValueConverter {
     public Class[] types() {
-        return new Class[]{BigDecimal.class};
+        return new Class[]{Integer.class, int.class};
     }
 
     public Object convert(byte[] bytes) {
-        return new BigDecimal(new String(bytes));
+        if (bytes == null)
+            return new Integer(0);
+        String text = new String(bytes);
+        if (text.trim().length() == 0) {
+            return new Integer(0);
+        }
+        return new Integer(Integer.parseInt(text));
     }
 }

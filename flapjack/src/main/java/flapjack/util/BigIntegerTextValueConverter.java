@@ -12,13 +12,15 @@
  */
 package flapjack.util;
 
+import java.math.BigInteger;
 
-public class BooleanValueConverter implements ValueConverter {
+
+public class BigIntegerTextValueConverter implements ValueConverter {
     public Class[] types() {
-        return new Class[]{boolean.class, Boolean.class};
+        return new Class[]{BigInteger.class};
     }
 
     public Object convert(byte[] bytes) {
-        return Boolean.valueOf(new String(bytes));
+        return new BigInteger(new String(bytes));
     }
 }

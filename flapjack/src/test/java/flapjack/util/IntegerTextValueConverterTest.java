@@ -17,11 +17,11 @@ import junit.framework.TestCase;
 import java.util.Arrays;
 
 
-public class IntegerValueConverterTest extends TestCase {
-    private IntegerValueConverter converter;
+public class IntegerTextValueConverterTest extends TestCase {
+    private IntegerTextValueConverter converter;
 
     public void setUp() {
-        converter = new IntegerValueConverter();
+        converter = new IntegerTextValueConverter();
     }
     
     public void test_type() {
