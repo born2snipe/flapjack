@@ -19,7 +19,7 @@ import java.util.Map;
  * Holds on to a collection of ValueConverters.
  */
 public class TypeConverter {
-    private Map textConverters = new HashMap();
+    private Map converters = new HashMap();
 
     public TypeConverter() {
         registerConverter(new BooleanTextValueConverter());
@@ -39,9 +39,12 @@ public class TypeConverter {
      * @param valueConverter - the ValueConverter to be registered
      */
     public void registerConverter(ValueConverter valueConverter) {
-        for (int i = 0; i < valueConverter.types().length; i++) {
-            Class clazz = valueConverter.types()[i];
-            textConverters.put(clazz, valueConverter);
+        Class[] types = valueConverter.types();
+        if (types == null || types.length == 0) {
+            throw new IllegalArgumentException(valueConverter.getClass().getName() + " does NOT have the class types it supports");
+        }
+        for (int i = 0; i < types.length; i++) {
+            converters.put(types[i], valueConverter);
         }
     }
 
@@ -54,7 +57,7 @@ public class TypeConverter {
      * @throws IllegalArgumentException thrown when an error is encoutered during convesion
      */
     public Object convert(Class clazz, byte[] bytes) throws IllegalArgumentException {
-        ValueConverter converter = (ValueConverter) textConverters.get(clazz);
+        ValueConverter converter = (ValueConverter) converters.get(clazz);
         if (converter == null) {
             throw new IllegalArgumentException("No " + ValueConverter.class.getName() + " registered for types " + clazz.getName());
         }

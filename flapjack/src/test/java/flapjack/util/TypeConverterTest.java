@@ -28,6 +28,24 @@ public class TypeConverterTest extends MockObjectTestCase {
         converter.registerConverter(new MockWrappingValueConverter(Long.class, (ValueConverter) mockConverter.proxy()));
     }
 
+    public void test_registerConverter_NullTypesOnValueConverter() {
+        try {
+            converter.registerConverter(new MockWrappingValueConverter((Class[]) null, null));
+            fail();
+        } catch (IllegalArgumentException err) {
+            assertEquals("flapjack.util.TypeConverterTest$MockWrappingValueConverter does NOT have the class types it supports", err.getMessage());
+        }
+    }
+
+    public void test_registerConverter_EmptyArrayOfTypesOnValueConverter() {
+        try {
+            converter.registerConverter(new MockWrappingValueConverter(new Class[0], null));
+            fail();
+        } catch (IllegalArgumentException err) {
+            assertEquals("flapjack.util.TypeConverterTest$MockWrappingValueConverter does NOT have the class types it supports", err.getMessage());
+        }
+    }
+
     public void test_typeRegistered_TEXT() {
         byte[] bytes = "text".getBytes();
         mockConverter.expects(once()).method("convert").with(eq(bytes)).will(returnValue(new Long(1)));
@@ -64,11 +82,15 @@ public class TypeConverterTest extends MockObjectTestCase {
 
     private static class MockWrappingValueConverter implements ValueConverter {
         private ValueConverter mock;
-        private Class type;
+        private Class[] types;
 
         private MockWrappingValueConverter(Class type, ValueConverter mock) {
+            this(new Class[]{type}, mock);
+        }
+
+        private MockWrappingValueConverter(Class types[], ValueConverter mock) {
             this.mock = mock;
-            this.type = type;
+            this.types = types;
         }
 
         public Object convert(byte[] bytes) {
@@ -76,7 +98,7 @@ public class TypeConverterTest extends MockObjectTestCase {
         }
 
         public Class[] types() {
-            return new Class[]{type};
+            return types;
         }
     }
 }
