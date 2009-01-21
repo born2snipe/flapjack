@@ -1,11 +1,11 @@
 /**
  * Copyright 2008-2009 the original author or authors.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at:
- *
+ * 
  * http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software distributed under the License is
  * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and limitations under the License. 
@@ -14,24 +14,35 @@ package flapjack.util;
 
 import junit.framework.TestCase;
 
+import java.util.Arrays;
 
-public class IntegerBinaryValueConverterTest extends TestCase {
-    private IntegerBinaryValueConverter converter;
+
+public class CharBinaryValueConverterTest extends TestCase {
+    private CharBinaryValueConverter converter;
 
     public void setUp() {
-        converter = new IntegerBinaryValueConverter();
+        converter = new CharBinaryValueConverter();
     }
 
     public void test_convert() {
-        assertEquals(new Integer(1), converter.convert(ValueConverterTestUtil.binary(1)));
+        assertEquals(new Character('1'), converter.convert(ValueConverterTestUtil.binary('1')));
     }
 
-    public void test_convert_NotEnoughBytes() {
+    public void test_convert_NotEnoughData() {
         try {
-            converter.convert(new byte[3]);
+            converter.convert(new byte[1]);
             fail();
         } catch (IllegalArgumentException err) {
-            assertEquals("There are not enough bytes expected 4 got 3 bytes", err.getMessage());
+            assertEquals("There are not enough bytes expected 2 got 1 bytes", err.getMessage());
+        }
+    }
+
+    public void test_convert_NullByteArray() {
+        try {
+            converter.convert(null);
+            fail();
+        } catch (IllegalArgumentException err) {
+            assertEquals("Byte array given was null", err.getMessage());
         }
     }
 
@@ -39,10 +50,6 @@ public class IntegerBinaryValueConverterTest extends TestCase {
         Class[] classes = converter.types();
 
         assertNotNull(classes);
-        assertEquals(2, classes.length);
-        assertEquals(int.class, classes[0]);
-        assertEquals(Integer.class, classes[1]);
+        assertTrue(Arrays.equals(new Class[]{char.class, Character.class}, classes));
     }
-
-
 }
