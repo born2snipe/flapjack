@@ -1,20 +1,23 @@
 /**
  * Copyright 2008-2009 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at:
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is
  * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and limitations under the License. 
  */
 package flapjack.util;
 
+import java.beans.IntrospectionException;
+import java.beans.PropertyDescriptor;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 
 public class ClassUtil {
@@ -81,4 +84,17 @@ public class ClassUtil {
         }
     }
 
+    public static void setValue(Object parent, String fieldName, Object value) {
+        try {
+            PropertyDescriptor descriptor = new PropertyDescriptor(fieldName, parent.getClass());
+            Method method = descriptor.getWriteMethod();
+            method.invoke(parent, new Object[]{value});
+        } catch (IntrospectionException e) {
+            throw new IllegalArgumentException("Problem occured trying to find setter for field [name=" + fieldName + " on " + parent.getClass().getName() + "]", e);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        } catch (InvocationTargetException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
