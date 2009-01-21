@@ -34,6 +34,20 @@ public class MappedRecordFactoryTest extends TestCase {
         layout.addFieldDefinition(new SimpleFieldDefinition("field1", 0, 1));
     }
 
+    public void test_build_ModelObjectDoesNotHaveSetter() {
+        recordFactory = new MappedRecordFactory(DummyNoSetter.class, new TypeConverter());
+
+        HashMap fields = new HashMap();
+        fields.put("field1", "0".getBytes());
+
+        try {
+            recordFactory.build(fields, layout);
+            fail();
+        } catch (IllegalArgumentException err) {
+            assertEquals("Problem occured trying to find setter for field [name=field1 on flapjack.annotation.model.MappedRecordFactoryTest$DummyNoSetter]", err.getMessage());
+        }
+    }
+
     public void test_build_FieldDoesNotExists() {
         Map<String, byte[]> fields = new HashMap<String, byte[]>();
         fields.put("doesNotExist", "1".getBytes());
@@ -98,5 +112,11 @@ public class MappedRecordFactoryTest extends TestCase {
         public void setField2(boolean field2) {
             this.field2 = field2;
         }
+    }
+
+    @Record(SimpleRecordLayout.class)
+    public static class DummyNoSetter {
+        @Field
+        private int field1;
     }
 }

@@ -53,7 +53,7 @@ public class MappedRecordFactory implements RecordFactory {
                 Method method = descriptor.getWriteMethod();
                 method.invoke(domain, typeConverter.convert(descriptor.getPropertyType(), value));
             } catch (IntrospectionException e) {
-                throw new RuntimeException("Problem occured trying to find setter for field [name=" + field.getName() + "]", e);
+                throw new IllegalArgumentException("Problem occured trying to find setter for field [name=" + field.getName() + " on "+domain.getClass().getName()+"]", e);
             } catch (IllegalAccessException e) {
                 throw new RuntimeException(e);
             } catch (InvocationTargetException e) {
