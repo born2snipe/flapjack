@@ -27,13 +27,12 @@ public class ClassUtilTest extends TestCase {
         assertEquals("newValue", domain.value);
     }
 
-    public void test_setValue_InValidBean() {
-        try {
-            ClassUtil.setValue(new NoSetterDomain(), "value", "newValue");
-            fail();
-        } catch (IllegalArgumentException err) {
-            assertEquals("Problem occured trying to find setter for field [name=value on flapjack.util.ClassUtilTest$NoSetterDomain]", err.getMessage());
-        }
+    public void test_setValue_NoSetter() {
+        NoSetterDomain domain = new NoSetterDomain();
+
+        ClassUtil.setValue(domain, "value", "newValue");
+
+        assertEquals("newValue", domain.value);
     }
 
     public void test_findField_FieldNotFound_NestElement() {
@@ -89,7 +88,6 @@ public class ClassUtilTest extends TestCase {
     }
 
     public static class Domain extends NoSetterDomain {
-
         public void setValue(String value) {
             this.value = value;
         }

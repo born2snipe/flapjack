@@ -86,15 +86,30 @@ public class ClassUtil {
 
     public static void setValue(Object parent, String fieldName, Object value) {
         try {
-            PropertyDescriptor descriptor = new PropertyDescriptor(fieldName, parent.getClass());
-            Method method = descriptor.getWriteMethod();
-            method.invoke(parent, new Object[]{value});
-        } catch (IntrospectionException e) {
-            throw new IllegalArgumentException("Problem occured trying to find setter for field [name=" + fieldName + " on " + parent.getClass().getName() + "]", e);
+            Method method = findSetter(parent, fieldName);
+            if (method != null) {
+                method.setAccessible(true);
+                method.invoke(parent, new Object[]{value});
+            } else {
+                Field field = parent.getClass().getDeclaredField(fieldName);
+                field.setAccessible(true);
+                field.set(parent, value);
+            }
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
         } catch (InvocationTargetException e) {
             throw new RuntimeException(e);
+        } catch (NoSuchFieldException e) {
+            throw new RuntimeException(e);            
+        }
+    }
+
+    private static Method findSetter(Object parent, String fieldName) {
+        try {
+            PropertyDescriptor descriptor = new PropertyDescriptor(fieldName, parent.getClass());
+            return descriptor.getWriteMethod();
+        } catch (IntrospectionException e) {
+            return null;
         }
     }
 }
