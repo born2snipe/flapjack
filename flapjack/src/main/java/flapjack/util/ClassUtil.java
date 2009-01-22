@@ -62,7 +62,7 @@ public class ClassUtil {
         }
     }
 
-    public static Object findField(Object obj, String beanPath) {
+    public static Field findField(Object obj, String beanPath) {
         try {
             if (beanPath.indexOf('.') > -1) {
                 String name = beanPath.substring(0, beanPath.indexOf('.'));
@@ -73,9 +73,7 @@ public class ClassUtil {
             } else if (obj == null) {
                 return null;
             } else {
-                Field field = obj.getClass().getDeclaredField(beanPath);
-                field.setAccessible(true);
-                return field.get(obj);
+                return obj.getClass().getDeclaredField(beanPath);
             }
         } catch (NoSuchFieldException e) {
             return null;
@@ -84,7 +82,7 @@ public class ClassUtil {
         }
     }
 
-    public static void setValue(Object parent, String fieldName, Object value) {
+    public static void setField(Object parent, String fieldName, Object value) {
         try {
             Method method = findSetter(parent, fieldName);
             if (method != null) {
@@ -100,7 +98,7 @@ public class ClassUtil {
         } catch (InvocationTargetException e) {
             throw new RuntimeException(e);
         } catch (NoSuchFieldException e) {
-            throw new RuntimeException(e);            
+            throw new IllegalArgumentException("Field '" + fieldName + "' was not found on " + parent.getClass().getName());
         }
     }
 
@@ -110,6 +108,26 @@ public class ClassUtil {
             return descriptor.getWriteMethod();
         } catch (IntrospectionException e) {
             return null;
+        }
+    }
+
+    public static void setBean(Object obj, String beanPath, Object value) throws IllegalStateException {
+        try {
+            if (beanPath.indexOf('.') > -1) {
+                String name = beanPath.substring(0, beanPath.indexOf('.'));
+                String path = beanPath.substring(beanPath.indexOf('.') + 1);
+                Field field = findField(obj, name);
+                field.setAccessible(true);
+                Object child = field.get(obj);
+                if (child == null) {
+                    throw new IllegalStateException("Choked on a null field '" + name + "' on " + obj.getClass().getName());
+                }
+                setBean(child, path, value);
+            } else {
+                setField(obj, beanPath, value);
+            }
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
         }
     }
 }

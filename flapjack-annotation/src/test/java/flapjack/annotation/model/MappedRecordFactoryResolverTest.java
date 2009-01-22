@@ -86,7 +86,7 @@ public class MappedRecordFactoryResolverTest extends TestCase {
         RecordFactory recordFactory = resolver.resolve(layout);
 
         assertNotNull(recordFactory);
-        assertTrue(recordFactory instanceof MappedRecordFactory);
+        assertTrue(recordFactory instanceof AnnotatedMappedRecordFactory);
 
         Map<String, byte[]> fields = new HashMap<String, byte[]>();
         fields.put("First Name", "foo".getBytes());
@@ -109,7 +109,7 @@ public class MappedRecordFactoryResolverTest extends TestCase {
         RecordFactory recordFactory = resolver.resolve(layout);
 
         assertNotNull(recordFactory);
-        assertTrue(recordFactory instanceof MappedRecordFactory);
+        assertTrue(recordFactory instanceof AnnotatedMappedRecordFactory);
 
         Map<String, byte[]> fields = new HashMap<String, byte[]>();
         fields.put("Area", "123".getBytes());

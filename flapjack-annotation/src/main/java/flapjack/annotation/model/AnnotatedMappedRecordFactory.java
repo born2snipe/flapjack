@@ -22,12 +22,12 @@ import java.lang.reflect.Field;
 import java.util.Map;
 
 
-public class MappedRecordFactory implements RecordFactory {
+public class AnnotatedMappedRecordFactory implements RecordFactory {
     private static final FieldLocator FIELD_LOCATOR = new FieldLocator();
     private Class clazz;
     private TypeConverter typeConverter;
 
-    public MappedRecordFactory(Class clazz, TypeConverter typeConverter) {
+    public AnnotatedMappedRecordFactory(Class clazz, TypeConverter typeConverter) {
         this.clazz = clazz;
         this.typeConverter = typeConverter;
     }
@@ -44,11 +44,12 @@ public class MappedRecordFactory implements RecordFactory {
     private void setValue(String id, byte[] value, Object domain) {
         Field field = FIELD_LOCATOR.locateById(clazz, id);
         if (field != null) {
-            ClassUtil.setValue(domain, field.getName(), typeConverter.convert(field.getType(), value));
+            ClassUtil.setField(domain, field.getName(), typeConverter.convert(field.getType(), value));
         }
     }
 
     private Object createInstance() {
+        // TODO - this should be extracted to it's own factory to not rely on default constructors, and to not force someone to extend this class to support thier class that doesn't have a default constuctor
         return ClassUtil.newInstance(clazz);
     }
 }

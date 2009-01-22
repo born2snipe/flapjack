@@ -23,13 +23,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class MappedRecordFactoryTest extends TestCase {
-    private MappedRecordFactory recordFactory;
+public class AnnotatedMappedRecordFactoryTest extends TestCase {
+    private AnnotatedMappedRecordFactory recordFactory;
     private SimpleRecordLayout layout;
 
     protected void setUp() throws Exception {
         super.setUp();
-        recordFactory = new MappedRecordFactory(Dummy.class, new TypeConverter());
+        recordFactory = new AnnotatedMappedRecordFactory(Dummy.class, new TypeConverter());
         layout = new SimpleRecordLayout();
         layout.addFieldDefinition(new SimpleFieldDefinition("field1", 0, 1));
     }

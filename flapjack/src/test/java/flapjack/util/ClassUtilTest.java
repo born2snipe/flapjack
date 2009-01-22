@@ -16,21 +16,51 @@ import flapjack.layout.SimpleFieldDefinition;
 import flapjack.layout.SimpleRecordLayout;
 import junit.framework.TestCase;
 
+import java.lang.reflect.Field;
+
 
 public class ClassUtilTest extends TestCase {
 
-    public void test_setValue_ValidBean() {
+    public void test_setBean_NestedElement_EncounterANullElement() {
+        NestClass domain = new NestClass();
+        domain.fieldDef = null;
+
+        try {
+            ClassUtil.setBean(domain, "fieldDef.position", new Integer(10));
+            fail();
+        } catch (IllegalStateException err) {
+            assertEquals("Choked on a null field 'fieldDef' on "+NestClass.class.getName(), err.getMessage());
+        }
+    }
+    
+    public void test_setBean_NestedElement() {
+        NestClass domain = new NestClass();
+
+        ClassUtil.setBean(domain, "fieldDef.position", new Integer(10));
+
+        assertEquals(10, domain.fieldDef.getPosition());
+    }
+    
+    public void test_setBean() {
         Domain domain = new Domain();
 
-        ClassUtil.setValue(domain, "value", "newValue");
+        ClassUtil.setBean(domain, "value", "newValue");
+
+        assertEquals("newValue", domain.value);
+    }
+    
+    public void test_setField_ValidBean() {
+        Domain domain = new Domain();
+
+        ClassUtil.setField(domain, "value", "newValue");
 
         assertEquals("newValue", domain.value);
     }
 
-    public void test_setValue_NoSetter() {
+    public void test_setField_NoSetter() {
         NoSetterDomain domain = new NoSetterDomain();
 
-        ClassUtil.setValue(domain, "value", "newValue");
+        ClassUtil.setField(domain, "value", "newValue");
 
         assertEquals("newValue", domain.value);
     }
@@ -40,17 +70,17 @@ public class ClassUtilTest extends TestCase {
     }
 
     public void test_findField_FieldFound_NestElement() {
-        Object obj = ClassUtil.findField(new NestClass(), "fieldDef.position");
+        Field field = ClassUtil.findField(new NestClass(), "fieldDef.position");
 
-        assertNotNull(obj);
-        assertEquals(new Integer(0), obj);
+        assertNotNull(field);
+        assertEquals("position", field.getName());
     }
 
     public void test_findField_FieldFound() {
-        Object obj = ClassUtil.findField(new SimpleFieldDefinition(), "position");
+        Field field = ClassUtil.findField(new SimpleFieldDefinition(), "position");
 
-        assertNotNull(obj);
-        assertEquals(new Integer(0), obj);
+        assertNotNull(field);
+        assertEquals("position", field.getName());
     }
 
     public void test_findField_FieldNotFound() {

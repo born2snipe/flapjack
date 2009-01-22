@@ -37,7 +37,7 @@ public class MappedRecordFactoryResolver implements RecordFactoryResolver {
             throw new IllegalStateException("There are no packages configured for scanning! Was this intended?");
         }
         initializeLayoutToClassMap();
-        return new MappedRecordFactory(recordToClass.get(layout.getClass()), typeConverter);
+        return new AnnotatedMappedRecordFactory(recordToClass.get(layout.getClass()), typeConverter);
     }
 
     private void initializeLayoutToClassMap() {
