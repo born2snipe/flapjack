@@ -30,12 +30,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class MappedRecordFactoryResolverTest extends TestCase {
-    private MappedRecordFactoryResolver resolver;
+public class AnnotatedMappedRecordFactoryResolverTest extends TestCase {
+    private AnnotatedMappedRecordFactoryResolver resolver;
 
     protected void setUp() throws Exception {
         super.setUp();
-        resolver = new MappedRecordFactoryResolver();
+        resolver = new AnnotatedMappedRecordFactoryResolver();
     }
 
     public void test_resolve_AddAdditionalValueConverters() {

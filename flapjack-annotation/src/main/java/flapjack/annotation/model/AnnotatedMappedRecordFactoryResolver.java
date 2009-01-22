@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 
-public class MappedRecordFactoryResolver implements RecordFactoryResolver {
+public class AnnotatedMappedRecordFactoryResolver implements RecordFactoryResolver {
     private RecordPackageClassScanner classScanner = new RecordPackageClassScanner();
     private Map<Class, Class> recordToClass = new HashMap<Class, Class>();
     private TypeConverter typeConverter = new TypeConverter();

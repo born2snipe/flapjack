@@ -14,7 +14,7 @@ package flapjack.example;
 
 import flapjack.annotation.Field;
 import flapjack.annotation.Record;
-import flapjack.annotation.model.MappedRecordFactoryResolver;
+import flapjack.annotation.model.AnnotatedMappedRecordFactoryResolver;
 import flapjack.annotation.parser.ByteMapRecordFieldParser;
 import flapjack.io.LineRecordReader;
 import flapjack.layout.SimpleRecordLayout;
@@ -36,7 +36,7 @@ public class UseAnnotationTest extends TestCase {
          * Initialize the MappedRecordFactoryResolver with what packages need to be scanned for the domain classes
          * that contain the annotations.
          */
-        MappedRecordFactoryResolver recordFactoryResolver = new MappedRecordFactoryResolver();
+        AnnotatedMappedRecordFactoryResolver recordFactoryResolver = new AnnotatedMappedRecordFactoryResolver();
         recordFactoryResolver.setPackages(Arrays.asList("flapjack.example"));
 
         /**
