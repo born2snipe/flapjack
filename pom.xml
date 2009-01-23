@@ -21,6 +21,7 @@
         <module>flapjack</module>
         <module>flapjack-annotation</module>
         <module>flapjack-example</module>
+    <module>flapjack-cobol</module>
   </modules>
 
 </project>
