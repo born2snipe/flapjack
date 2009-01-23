@@ -25,6 +25,12 @@
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>jmock</groupId>
+            <artifactId>jmock</artifactId>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
     <reporting>
@@ -54,7 +60,7 @@
     </reporting>
 
     <build>
-        
+
         <plugins>
 
             <plugin>

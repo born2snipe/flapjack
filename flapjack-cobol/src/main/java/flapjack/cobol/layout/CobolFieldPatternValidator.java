@@ -19,11 +19,12 @@ import java.util.Iterator;
 
 
 public class CobolFieldPatternValidator {
-    private static final String ALPHANUMERIC_PATTERN = "(?i)[X]+|[X]\\([1-9]+\\)";
-    private static final String NUMERIC_PATTERN = "(?i)9+|9\\([1-9]+\\)|9+v9+|9\\([1-9]+\\)v9+|9\\([1-9]+\\)v9\\([1-9]+\\)";
+    public static final String ALPHANUMERIC_PATTERN = "(?i)[X]+|[X]\\([1-9]+\\)";
+    public static final String INTEGER_PATTERN = "(?i)9+|9\\([1-9]+\\)";
+    public static final String DECIMAL_PATTERN = "(?i)9+v9+|9\\([1-9]+\\)v9+|9\\([1-9]+\\)v9\\([1-9]+\\)";
 
     public boolean validate(String pattern) {
-        List patterns = Arrays.asList(new String[]{ALPHANUMERIC_PATTERN, NUMERIC_PATTERN});
+        List patterns = Arrays.asList(new String[]{ALPHANUMERIC_PATTERN, INTEGER_PATTERN, DECIMAL_PATTERN});
         Iterator it = patterns.iterator();
         while (it.hasNext()) {
             if (Pattern.matches((String) it.next(), pattern)) {
