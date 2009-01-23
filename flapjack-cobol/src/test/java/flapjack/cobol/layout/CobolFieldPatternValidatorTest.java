@@ -38,6 +38,7 @@ public class CobolFieldPatternValidatorTest extends TestCase {
         assertTrue(validator.validate("9(2)v99"));
         assertTrue(validator.validate("9(2)v9(2)"));
         assertTrue(validator.validate("9(22)v9(22)"));
+        assertTrue(validator.validate("9(2)V9"));
 
         assertFalse(validator.validate("X(0)"));
         assertFalse(validator.validate("x(0)"));
