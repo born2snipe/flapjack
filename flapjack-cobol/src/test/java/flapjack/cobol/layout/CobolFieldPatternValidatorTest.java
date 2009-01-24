@@ -26,26 +26,35 @@ public class CobolFieldPatternValidatorTest extends TestCase {
         assertTrue(validator.validate("xx"));
         assertTrue(validator.validate("x(2)"));
         assertTrue(validator.validate("x(22)"));
+        assertTrue(validator.validate("X(004)"));
+        assertTrue(validator.validate("X(030)"));
+        assertTrue(validator.validate("X(307)"));
 
         assertTrue(validator.validate("9"));
         assertTrue(validator.validate("99"));
         assertTrue(validator.validate("9(2)"));
+        assertTrue(validator.validate("9(20)"));
+        assertTrue(validator.validate("9(002)"));
         assertTrue(validator.validate("9(22)"));
+        assertTrue(validator.validate("9(202)"));
         assertTrue(validator.validate("9v9"));
         assertTrue(validator.validate("9v99"));
         assertTrue(validator.validate("99v9"));
         assertTrue(validator.validate("9(2)v9"));
+        assertTrue(validator.validate("9(20)v9"));
         assertTrue(validator.validate("9(22)v9"));
+        assertTrue(validator.validate("9(202)v9"));
         assertTrue(validator.validate("9(2)v99"));
         assertTrue(validator.validate("9(2)v9(2)"));
+        assertTrue(validator.validate("9(20)v9(20)"));
+        assertTrue(validator.validate("9v9(002)"));
+        assertTrue(validator.validate("9v9(202)"));
+        assertTrue(validator.validate("9v9(20)"));
         assertTrue(validator.validate("9(22)v9(22)"));
+        assertTrue(validator.validate("9(002)v9(002)"));
+        assertTrue(validator.validate("9(202)v9(202)"));
         assertTrue(validator.validate("9(2)V9"));
-
-        assertFalse(validator.validate("X(0)"));
-        assertFalse(validator.validate("x(0)"));
-        assertFalse(validator.validate("9(0)"));
-        assertFalse(validator.validate("9(0)v9"));
-        assertFalse(validator.validate("9(0)v9(0)"));
+        assertTrue(validator.validate("9(002)V9"));
     }
 
 }

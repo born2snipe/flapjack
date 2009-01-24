@@ -13,9 +13,5 @@
 package flapjack.cobol.layout;
 
 public interface FieldDefinitionFactory {
-    CobolFieldDefinition alphaNumeric(String name, int position, String pattern);
-
-    CobolFieldDefinition decimal(String name, int position, String pattern);
-
-    CobolFieldDefinition integer(String name, int position, String pattern);
+    CobolFieldDefinition build(CobolFieldInfo fieldInfo);
 }

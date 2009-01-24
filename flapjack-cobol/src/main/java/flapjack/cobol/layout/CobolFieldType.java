@@ -13,7 +13,7 @@
 package flapjack.cobol.layout;
 
 
-class CobolFieldType {
+public class CobolFieldType {
     public static final CobolFieldType INTEGER = new CobolFieldType();
     public static final CobolFieldType DECIMAL = new CobolFieldType();
     public static final CobolFieldType ALPHA_NUMERIC = new CobolFieldType();

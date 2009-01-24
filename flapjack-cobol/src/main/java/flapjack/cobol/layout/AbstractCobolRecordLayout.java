@@ -23,23 +23,21 @@ public abstract class AbstractCobolRecordLayout extends SimpleRecordLayout {
 
     protected AbstractCobolRecordLayout() {
         setFieldDefFactory(new CobolFieldDefinitionFactory());
-        defineFields();
     }
 
     protected void cobolField(String name, String pattern) {
-        if (!patternValidator.validate(pattern)) {
-            throw new IllegalArgumentException("'" + pattern + "' is not a valid COBOL field definition pattern");
+        cobolField(new CobolFieldInfo(name, pattern));
+    }
+
+    protected void cobolField(CobolFieldInfo fieldInfo) {
+        if (!patternValidator.validate(fieldInfo.getPattern())) {
+            throw new IllegalArgumentException("'" + fieldInfo.getPattern() + "' is not a valid COBOL field definition pattern");
         }
 
-        CobolFieldType fieldType = fieldTypeResolver.resolve(pattern);
-        CobolFieldDefinition fieldDef = null;
-        if (fieldType == CobolFieldType.DECIMAL) {
-            fieldDef = fieldDefFactory.decimal(name, offset, pattern);
-        } else if (fieldType == CobolFieldType.INTEGER) {
-            fieldDef = fieldDefFactory.integer(name, offset, pattern);
-        } else if (fieldType == CobolFieldType.ALPHA_NUMERIC) {
-            fieldDef = fieldDefFactory.alphaNumeric(name, offset, pattern);
-        }
+        fieldInfo.setType(fieldTypeResolver.resolve(fieldInfo.getPattern()));
+        fieldInfo.setPosition(offset);
+
+        CobolFieldDefinition fieldDef = fieldDefFactory.build(fieldInfo);
         addFieldDefinition(fieldDef);
         offset += fieldDef.getLength();
     }
