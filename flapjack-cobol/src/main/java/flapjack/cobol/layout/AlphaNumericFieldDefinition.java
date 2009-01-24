@@ -17,7 +17,6 @@ import flapjack.layout.SimpleFieldDefinition;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
 public class AlphaNumericFieldDefinition extends SimpleFieldDefinition implements CobolFieldDefinition {
     private static final Pattern PATTERN = Pattern.compile("X\\(([0-9]+)\\)", Pattern.CASE_INSENSITIVE);
     private String pattern;

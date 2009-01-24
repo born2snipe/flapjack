@@ -19,8 +19,10 @@ public abstract class AbstractCobolRecordLayout extends SimpleRecordLayout {
     private int offset = 0;
     private CobolFieldPatternValidator patternValidator = new CobolFieldPatternValidator();
     private CobolFieldTypeResolver fieldTypeResolver = new CobolFieldTypeResolver();
+    private FieldDefinitionFactory fieldDefFactory;
 
     protected AbstractCobolRecordLayout() {
+        setFieldDefFactory(new CobolFieldDefinitionFactory());
         defineFields();
     }
 
@@ -32,11 +34,11 @@ public abstract class AbstractCobolRecordLayout extends SimpleRecordLayout {
         CobolFieldType fieldType = fieldTypeResolver.resolve(pattern);
         CobolFieldDefinition fieldDef = null;
         if (fieldType == CobolFieldType.DECIMAL) {
-            fieldDef = new DecimalFieldDefinition(name, offset, pattern);
+            fieldDef = fieldDefFactory.decimal(name, offset, pattern);
         } else if (fieldType == CobolFieldType.INTEGER) {
-            fieldDef = new IntegerFieldDefinition(name, offset, pattern);
+            fieldDef = fieldDefFactory.integer(name, offset, pattern);
         } else if (fieldType == CobolFieldType.ALPHA_NUMERIC) {
-            fieldDef = new AlphaNumericFieldDefinition(name, offset, pattern);
+            fieldDef = fieldDefFactory.alphaNumeric(name, offset, pattern);
         }
         addFieldDefinition(fieldDef);
         offset += fieldDef.getLength();
@@ -44,4 +46,7 @@ public abstract class AbstractCobolRecordLayout extends SimpleRecordLayout {
 
     protected abstract void defineFields();
 
+    public void setFieldDefFactory(FieldDefinitionFactory fieldDefFactory) {
+        this.fieldDefFactory = fieldDefFactory;
+    }
 }
