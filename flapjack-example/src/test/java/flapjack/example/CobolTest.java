@@ -1,11 +1,11 @@
 /**
  * Copyright 2008-2009 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at:
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is
  * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and limitations under the License. 
@@ -16,8 +16,8 @@ import flapjack.annotation.Field;
 import flapjack.annotation.Record;
 import flapjack.annotation.model.AnnotatedMappedRecordFactoryResolver;
 import flapjack.annotation.parser.ByteMapRecordFieldParser;
+import flapjack.cobol.layout.AbstractCobolRecordLayout;
 import flapjack.io.LineRecordReader;
-import flapjack.layout.SimpleRecordLayout;
 import flapjack.parser.ParseResult;
 import flapjack.parser.RecordParserImpl;
 import flapjack.parser.SameRecordLayoutResolver;
@@ -28,9 +28,9 @@ import java.io.IOException;
 import java.util.Arrays;
 
 
-public class UseAnnotationTest extends TestCase {
+public class CobolTest extends TestCase {
     public void test() throws IOException {
-        String records = "Coldplay  Clocks    03:45";
+        String record = "123456789JOE A SCHMOE                  01500";
 
         /**
          * Initialize the MappedRecordFactoryResolver with what packages need to be scanned for the domain classes
@@ -43,76 +43,61 @@ public class UseAnnotationTest extends TestCase {
          * Initialize the RecordParser with our RecordLayoutResolver and RecordFactoryResolver
          */
         RecordParserImpl recordParser = new RecordParserImpl();
-        recordParser.setRecordLayoutResolver(new SameRecordLayoutResolver(SongRecordLayout.class));
+        recordParser.setRecordLayoutResolver(new SameRecordLayoutResolver(LoanRecordLayout.class));
         recordParser.setRecordFactoryResolver(recordFactoryResolver);
         recordParser.setRecordFieldParser(new ByteMapRecordFieldParser());
 
         /**
          * Actually call the parser with our RecordReader
          */
-        LineRecordReader recordReader = new LineRecordReader(new ByteArrayInputStream(records.getBytes()));
+        LineRecordReader recordReader = new LineRecordReader(new ByteArrayInputStream(record.getBytes()));
         ParseResult result = recordParser.parse(recordReader);
 
         assertEquals(0, result.getUnparseableRecords().size());
         assertEquals(0, result.getUnresolvedRecords().size());
         assertEquals(0, result.getPartialRecords().size());
-        assertEquals(1, result.getRecords().size());                                              
+        assertEquals(1, result.getRecords().size());
 
-        Song song = (Song) result.getRecords().get(0);
-        assertEquals("Coldplay  ", song.getArtist());
-        assertEquals("Clocks    ", song.getTitle());
-        assertEquals("03:45", song.getLength());
+        Loan loan = (Loan) result.getRecords().get(0);
+        assertEquals("123456789", loan.getSsn());
+        assertEquals("JOE A SCHMOE                  ", loan.getName());
+        assertEquals(1500, loan.getAmount());
     }
 
     /**
-     * Our RecordLayout definition for our record type
+     * A COBOL style record layout
      */
-    private static class SongRecordLayout extends SimpleRecordLayout {
-        private SongRecordLayout() {
-            field("Artist", 10);
-            field("Title", 10);
-            field("Length of Song", 5);
+    private static class LoanRecordLayout extends AbstractCobolRecordLayout {
+        private LoanRecordLayout() {
+            defineFields();
+        }
+
+        protected void defineFields() {
+            cobolField("SSN", "9(9)");
+            cobolField("NAME", "X(30)");
+            cobolField("AMOUNT", "9(5)");
         }
     }
 
-
-    /**
-     * Our domain class to be used with the annotations telling what fields should be mapped.
-     * <p/>
-     * The names you give the the @Field annotation are very IMPORTANT they should match the descriptions
-     * you have defined in your RecordLayout you have defined in the @Record annotation.
-     */
-    @Record(SongRecordLayout.class)
-    public static class Song {
+    @Record(LoanRecordLayout.class)
+    private static class Loan {
         @Field
-        private String artist;
+        private String ssn;
         @Field
-        private String title;
-        @Field("Length of Song")
-        private String length;
+        private String name;
+        @Field
+        private int amount;
 
-        public String getArtist() {
-            return artist;
+        public String getSsn() {
+            return ssn;
         }
 
-        public void setArtist(String artist) {
-            this.artist = artist;
+        public String getName() {
+            return name;
         }
 
-        public String getTitle() {
-            return title;
-        }
-
-        public void setTitle(String title) {
-            this.title = title;
-        }
-
-        public String getLength() {
-            return length;
-        }
-
-        public void setLength(String length) {
-            this.length = length;
+        public int getAmount() {
+            return amount;
         }
     }
 }
