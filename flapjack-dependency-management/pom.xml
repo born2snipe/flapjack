@@ -11,7 +11,7 @@
 
     <groupId>flapjack</groupId>
     <artifactId>flapjack-dependency-management</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.3-SNAPSHOT</version>
     <name>Flapjack Module (Dependency Management)</name>
     <url>http://code.google.com/p/flapjack/</url>
     <packaging>pom</packaging>
