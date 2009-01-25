@@ -70,7 +70,7 @@
                 <artifactId>maven-license-plugin</artifactId>
                 <configuration>
                     <basedir>${basedir}</basedir>
-                    <header>${basedir}/src/etc/header.txt</header>
+                    <header>${basedir}/../header.txt</header>
                     <quiet>false</quiet>
                     <failIfMissing>true</failIfMissing>
                     <aggregate>false</aggregate>
