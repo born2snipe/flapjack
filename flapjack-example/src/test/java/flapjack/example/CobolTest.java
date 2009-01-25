@@ -68,10 +68,6 @@ public class CobolTest extends TestCase {
      * A COBOL style record layout
      */
     private static class LoanRecordLayout extends AbstractCobolRecordLayout {
-        private LoanRecordLayout() {
-            defineFields();
-        }
-
         protected void defineFields() {
             cobolField("SSN", "9(9)");
             cobolField("NAME", "X(30)");

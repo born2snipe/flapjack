@@ -22,7 +22,14 @@ public abstract class AbstractCobolRecordLayout extends SimpleRecordLayout {
     private FieldDefinitionFactory fieldDefFactory;
 
     protected AbstractCobolRecordLayout() {
+        this(true);
+    }
+
+    protected AbstractCobolRecordLayout(boolean initializeFields) {
         setFieldDefFactory(new CobolFieldDefinitionFactory());
+        if (initializeFields) {
+            defineFields();
+        }
     }
 
     protected void cobolField(String name, String pattern) {
