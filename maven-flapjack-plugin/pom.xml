@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<project>
+    <parent>
+        <groupId>flapjack</groupId>
+        <artifactId>flapjack-parent</artifactId>
+        <version>1.0.1</version>
+    </parent>
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>flapjack</groupId>
+    <artifactId>maven-flapjack-plugin</artifactId>
+    <packaging>maven-plugin</packaging>
+    <name>maven-flapjack-plugin Maven Mojo</name>
+    <version>1.0-SNAPSHOT</version>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-plugin-api</artifactId>
+            <version>2.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>flapjack</groupId>
+            <artifactId>flapjack-annotation</artifactId>
+            <version>1.0.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>3.8.1</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <version>1.7</version>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+
+</project>

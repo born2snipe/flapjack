@@ -22,6 +22,7 @@
         <module>flapjack-annotation</module>
         <module>flapjack-example</module>
         <module>flapjack-cobol</module>
-    </modules>
+    <module>maven-flapjack-plugin</module>
+  </modules>
 
 </project>
