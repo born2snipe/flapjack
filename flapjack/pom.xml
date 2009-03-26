@@ -46,6 +46,19 @@
         <plugins>
 
             <plugin>
+                <artifactId>maven-repository-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>bundle-create</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>bundle-create</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>

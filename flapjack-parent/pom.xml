@@ -23,7 +23,28 @@
         <developerConnection>scm:git:git://github.com/born2snipe/flapjack.git</developerConnection>
     </scm>
 
+    <distributionManagement>
+        <repository>
+            <id>flapjack-release</id>
+            <name>Local Maven repository of releases</name>
+            <url>dav:https://flapjack.googlecode.com/svn/mvn-repo/released</url>
+        </repository>
+        <snapshotRepository>
+            <id>flapjack-snapshot</id>
+            <name>Local Maven repository of snapshots</name>
+            <url>dav:https://flapjack.googlecode.com/svn/mvn-repo/snapshot</url>
+            <uniqueVersion>false</uniqueVersion>
+        </snapshotRepository>
+    </distributionManagement>
+
     <build>
+        <extensions>
+            <extension>
+                <groupId>org.apache.maven.wagon</groupId>
+                <artifactId>wagon-webdav</artifactId>
+            </extension>
+        </extensions>
+
         <plugins>
 
             <plugin>

@@ -10,10 +10,8 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>flapjack</groupId>
     <artifactId>flapjack-annotation</artifactId>
     <name>Flapjack Annotation</name>
-    <url>http://code.google.com/p/flapjack/</url>
 
     <licenses>
         <license>
@@ -42,6 +40,19 @@
     <build>
 
         <plugins>
+
+            <plugin>
+                <artifactId>maven-repository-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>bundle-create</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>bundle-create</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

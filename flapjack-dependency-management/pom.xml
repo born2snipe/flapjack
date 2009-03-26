@@ -13,6 +13,7 @@
     <artifactId>flapjack-dependency-management</artifactId>
     <version>1.0.3-SNAPSHOT</version>
     <name>Flapjack Module (Dependency Management)</name>
+    <description>Flat Record Parser Library</description>
     <url>http://code.google.com/p/flapjack/</url>
     <packaging>pom</packaging>
 

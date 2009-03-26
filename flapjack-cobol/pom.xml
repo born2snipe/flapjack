@@ -39,6 +39,19 @@
         <plugins>
 
             <plugin>
+                <artifactId>maven-repository-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>bundle-create</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>bundle-create</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
                 <groupId>com.google.code.maven-license-plugin</groupId>
                 <artifactId>maven-license-plugin</artifactId>
                 <configuration>
