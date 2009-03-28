@@ -67,6 +67,22 @@ public class BeanMappedRecordFactoryTest extends TestCase {
         }
     }
 
+    public void test_build_FieldNotFoundOnObject() {
+        HashMap fieldMappings = new HashMap();
+        fieldMappings.put("field1", "doesNotExist");
+        factory.setFieldMappings(fieldMappings);
+
+        Map fields = new HashMap();
+        fields.put("field1", "value".getBytes());
+
+        try {
+            factory.build(fields, layout);
+            fail();
+        } catch (IllegalArgumentException err) {
+            assertEquals("Could not map field1 -> doesNotExist on " + Dummy.class.getName() + ", \"doesNotExist\" could NOT be found", err.getMessage());
+        }
+    }
+
     public void test_build_FieldOnParent() {
         Map fields = new HashMap();
         fields.put("field1", "value".getBytes());

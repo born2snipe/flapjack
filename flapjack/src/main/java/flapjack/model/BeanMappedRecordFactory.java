@@ -25,6 +25,7 @@ import java.util.Map;
 
 public class BeanMappedRecordFactory implements RecordFactory {
     private static final String NO_FIELD_MAPPING = "Could not locate field mapping for field=\"{0}\"";
+    private static final String NO_FIELD_ON_OBJECT = "Could not map {0} -> {1} on {2}, \"{1}\" could NOT be found";
 
     private Class clazz;
     private TypeConverter typeConverter;
@@ -49,6 +50,9 @@ public class BeanMappedRecordFactory implements RecordFactory {
                 }
             } else {
                 Field field = ClassUtil.findField(domain, beanPath);
+                if (field == null) {
+                    throw new IllegalArgumentException(MessageFormat.format(NO_FIELD_ON_OBJECT, new String[]{key, beanPath, clazz.getName()}));
+                }
                 ClassUtil.setBean(domain, beanPath, typeConverter.convert(field.getType(), (byte[]) fields.get("field1")));
             }
         }
