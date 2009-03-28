@@ -12,6 +12,7 @@
  */
 package flapjack.model;
 
+import flapjack.util.ValueConverter;
 import junit.framework.TestCase;
 
 import java.util.HashMap;
@@ -61,6 +62,26 @@ public class BeanPathObjectMapperTest extends TestCase {
         assertEquals("Jim", person.firstName);
     }
 
+    public void test_mapOnTo_SingleField_UseCustomValueConverter() {
+        ObjectMapping objMapping = new ObjectMapping(Person.class);
+        objMapping.add("field1", "firstName", new ValueConverter() {
+            public Object convert(byte[] bytes) {
+                return "customValue";
+            }
+
+            public Class[] types() {
+                return new Class[0];
+            }
+        });
+        mappingStore.add(objMapping);
+
+        fields.put("field1", "Jim".getBytes());
+
+        mapper.mapOnTo(fields, person);
+
+        assertEquals("customValue", person.firstName);
+    }
+
     public void test_mapOnTo_FieldDoesNotExistOnDomain() {
         ObjectMapping objMapping = new ObjectMapping(Person.class);
         objMapping.add("field1", "address");
@@ -94,7 +115,7 @@ public class BeanPathObjectMapperTest extends TestCase {
             mapper.mapOnTo(fields, person);
             fail();
         } catch (IllegalArgumentException err) {
-            assertEquals("Could not locate object mapping for clazz=" + Person.class.getName(), err.getMessage());
+            assertEquals("Could not locate object mapping for class=" + Person.class.getName(), err.getMessage());
         }
     }
 

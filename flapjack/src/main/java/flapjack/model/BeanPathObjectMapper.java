@@ -23,7 +23,7 @@ import java.util.Map;
 public class BeanPathObjectMapper {
     private static final String NO_FIELD_MAPPING = "Could not locate field mapping for field=\"{0}\"";
     private static final String NO_FIELD_ON_OBJECT = "Could not map {0} -> {1} on {2}, \"{1}\" could NOT be found";
-    private static final String NO_OBJECT_MAPPING = "Could not locate object mapping for clazz={0}";
+    private static final String NO_OBJECT_MAPPING = "Could not locate object mapping for class={0}";
 
     private TypeConverter typeConverter = new TypeConverter();
     private boolean ignoreUnmappedFields;
@@ -50,7 +50,14 @@ public class BeanPathObjectMapper {
                 if (field == null) {
                     throw new IllegalArgumentException(MessageFormat.format(NO_FIELD_ON_OBJECT, new String[]{key, beanPath, domainClass.getName()}));
                 }
-                ClassUtil.setBean(domain, beanPath, typeConverter.convert(field.getType(), (byte[]) fields.get(key)));
+                Object value = null;
+                byte[] data = (byte[]) fields.get(key);
+                if (fieldMapping.getValueConverter() != null) {
+                    value = fieldMapping.getValueConverter().convert(data);
+                } else {
+                    value = typeConverter.convert(field.getType(), data);
+                }
+                ClassUtil.setBean(domain, beanPath, value);
             }
         }
     }
