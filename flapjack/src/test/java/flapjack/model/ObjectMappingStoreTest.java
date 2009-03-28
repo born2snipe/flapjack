@@ -15,12 +15,12 @@ package flapjack.model;
 import junit.framework.TestCase;
 
 
-public class ObjectMapStoreTest extends TestCase {
-    private ObjectMapStore store;
+public class ObjectMappingStoreTest extends TestCase {
+    private ObjectMappingStore store;
 
     protected void setUp() throws Exception {
         super.setUp();
-        store = new ObjectMapStore();
+        store = new ObjectMappingStore();
     }
 
     public void test_add_MappingAlreadyExists() {
