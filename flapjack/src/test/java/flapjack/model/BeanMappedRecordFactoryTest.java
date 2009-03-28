@@ -37,6 +37,28 @@ public class BeanMappedRecordFactoryTest extends TestCase {
         layout.addFieldDefinition(new SimpleFieldDefinition("field1", 0, 1));
     }
 
+    public void test_build_MultipleFields() {
+        HashMap fieldMappings = new HashMap();
+        fieldMappings.put("field1", "nested.name");
+        fieldMappings.put("field2", "name");
+
+        factory = new BeanMappedRecordFactory(NestedDummy.class, new TypeConverter());
+        factory.setFieldMappings(fieldMappings);
+
+        Map fields = new HashMap();
+        fields.put("field1", "child".getBytes());
+        fields.put("field2", "parent".getBytes());
+
+        Object obj = factory.build(fields, layout);
+
+        assertNotNull(obj);
+        assertTrue(obj instanceof NestedDummy);
+
+        NestedDummy dummy = (NestedDummy) obj;
+        assertEquals("parent", dummy.name);
+        assertEquals("child", dummy.nested.name);
+    }
+
     public void test_build_FieldMappingNotFoundForField_IgnoreUnmappedFields() {
         factory.setFieldMappings(new HashMap());
         factory.setIgnoreUnmappedFields(true);
@@ -119,6 +141,7 @@ public class BeanMappedRecordFactoryTest extends TestCase {
     }
 
     private static class NestedDummy {
+        private String name;
         private Dummy nested = new Dummy();
     }
 }

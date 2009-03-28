@@ -53,7 +53,7 @@ public class BeanMappedRecordFactory implements RecordFactory {
                 if (field == null) {
                     throw new IllegalArgumentException(MessageFormat.format(NO_FIELD_ON_OBJECT, new String[]{key, beanPath, clazz.getName()}));
                 }
-                ClassUtil.setBean(domain, beanPath, typeConverter.convert(field.getType(), (byte[]) fields.get("field1")));
+                ClassUtil.setBean(domain, beanPath, typeConverter.convert(field.getType(), (byte[]) fields.get(key)));
             }
         }
         return domain;
