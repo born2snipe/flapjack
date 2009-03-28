@@ -10,10 +10,11 @@
  * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and limitations under the License. 
  */
-package flapjack.annotation.parser;
+package flapjack.parser;
 
 import junit.framework.TestCase;
 import flapjack.parser.ParseException;
+import flapjack.parser.ByteMapRecordFieldParser;
 import flapjack.layout.SimpleRecordLayout;
 import flapjack.layout.SimpleFieldDefinition;
 
@@ -34,9 +35,9 @@ public class ByteMapRecordFieldParserTest extends TestCase {
         assertNotNull(obj);
         assertTrue(obj instanceof Map);
 
-        Map<String, byte[]> record = (Map<String, byte[]>) obj;
-        assertTrue(Arrays.equals("Smith     ".getBytes(), record.get("last name")));
-        assertTrue(Arrays.equals("Joe       ".getBytes(), record.get("first name")));
+        Map record = (Map) obj;
+        assertTrue(Arrays.equals("Smith     ".getBytes(), (byte[]) record.get("last name")));
+        assertTrue(Arrays.equals("Joe       ".getBytes(), (byte[]) record.get("first name")));
     }
 
     protected void setUp() throws Exception {

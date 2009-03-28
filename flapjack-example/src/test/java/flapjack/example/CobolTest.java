@@ -15,7 +15,7 @@ package flapjack.example;
 import flapjack.annotation.Field;
 import flapjack.annotation.Record;
 import flapjack.annotation.model.AnnotatedMappedRecordFactoryResolver;
-import flapjack.annotation.parser.ByteMapRecordFieldParser;
+import flapjack.parser.ByteMapRecordFieldParser;
 import flapjack.cobol.layout.AbstractCobolRecordLayout;
 import flapjack.io.LineRecordReader;
 import flapjack.parser.ParseResult;

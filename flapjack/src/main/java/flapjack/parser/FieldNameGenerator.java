@@ -10,16 +10,15 @@
  * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and limitations under the License. 
  */
-package flapjack.annotation.parser;
+package flapjack.parser;
 
 import flapjack.layout.FieldDefinition;
 
-public interface MappedFieldIdGenerator {
-    /**
-     * Generates the id that should be used to identify the given FieldDefinition
-     *
-     * @param fieldDef - the FieldDefinition to generate an id for
-     * @return the String id that represents this field definition
-     */
-    String generate(FieldDefinition fieldDef);
+/**
+ * Uses the FieldDefintion.getName() as the Id
+ */
+public class FieldNameGenerator implements MappedFieldIdGenerator {
+    public String generate(FieldDefinition fieldDef) {
+        return fieldDef.getName();
+    }
 }

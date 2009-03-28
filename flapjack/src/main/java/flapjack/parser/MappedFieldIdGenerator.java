@@ -10,19 +10,16 @@
  * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and limitations under the License. 
  */
-package flapjack.annotation.parser;
+package flapjack.parser;
 
-import junit.framework.TestCase;
-import flapjack.layout.SimpleFieldDefinition;
+import flapjack.layout.FieldDefinition;
 
-
-public class FieldNameGeneratorTest extends TestCase {
-
-    public void test_generate_WithFieldDefinition() {
-        FieldNameGenerator generator = new FieldNameGenerator();
-
-        SimpleFieldDefinition fieldDef = new SimpleFieldDefinition("field1", 0, 1);
-
-        assertEquals("field1", generator.generate(fieldDef));
-    }
+public interface MappedFieldIdGenerator {
+    /**
+     * Generates the id that should be used to identify the given FieldDefinition
+     *
+     * @param fieldDef - the FieldDefinition to generate an id for
+     * @return the String id that represents this field definition
+     */
+    String generate(FieldDefinition fieldDef);
 }
