@@ -13,7 +13,7 @@
 package flapjack.util;
 
 
-public class IntegerTextValueConverter implements ValueConverter {
+public class IntegerTextValueConverter implements TypedValueConverter {
     public Class[] types() {
         return new Class[]{Integer.class, int.class};
     }

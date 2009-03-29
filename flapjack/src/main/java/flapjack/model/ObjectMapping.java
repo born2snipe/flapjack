@@ -12,8 +12,6 @@
  */
 package flapjack.model;
 
-import flapjack.util.ValueConverter;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -42,15 +40,15 @@ public class ObjectMapping {
     /**
      * Add a field mapping
      *
-     * @param recordFieldName - the name/id that will be given to a record field
-     * @param domainFieldName - the field name on the domain object
-     * @param valueConverter  - a custom ValueConverter should be used when mapping this field
+     * @param recordFieldName     - the name/id that will be given to a record field
+     * @param domainFieldName     - the field name on the domain object
+     * @param valueConverterClass - the ValueConverter class to be used converting the field data
      */
-    public void add(String recordFieldName, String domainFieldName, ValueConverter valueConverter) {
+    public void add(String recordFieldName, String domainFieldName, Class valueConverterClass) {
         /**
          * This will eliminate the potential of having multiple instances of the ValueConverters in memory
          */
-        FieldMapping fieldMapping = new FieldMapping(recordFieldName, domainFieldName, valueConverter);
+        FieldMapping fieldMapping = new FieldMapping(recordFieldName, domainFieldName, valueConverterClass);
         recordFieldToDomainFieldMappings.put(recordFieldName.toLowerCase(), fieldMapping);
         domainFieldToRecordFieldMappings.put(domainFieldName, fieldMapping);
     }

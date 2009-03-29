@@ -14,6 +14,7 @@ package flapjack.model;
 
 import flapjack.util.ClassUtil;
 import flapjack.util.TypeConverter;
+import flapjack.util.ValueConverter;
 
 import java.lang.reflect.Field;
 import java.text.MessageFormat;
@@ -29,6 +30,7 @@ public class BeanPathObjectMapper implements ObjectMapper {
     private TypeConverter typeConverter = new TypeConverter();
     private boolean ignoreUnmappedFields;
     private ObjectMappingStore objectMappingStore;
+    private static final String NO_VALUE_CONVERTER = "Could not find a {0} in the TypeConverter";
 
     public void mapOnTo(Object parsedFields, Object domain) throws IllegalArgumentException {
         Map fields = (Map) parsedFields;
@@ -53,8 +55,13 @@ public class BeanPathObjectMapper implements ObjectMapper {
                 }
                 Object value = null;
                 byte[] data = (byte[]) fields.get(key);
-                if (fieldMapping.getValueConverter() != null) {
-                    value = fieldMapping.getValueConverter().convert(data);
+                Class converterClass = fieldMapping.getValueConverterClass();
+                if (converterClass != null) {
+                    ValueConverter valueConverter = typeConverter.find(converterClass);
+                    if (valueConverter == null) {
+                        throw new IllegalArgumentException(MessageFormat.format(NO_VALUE_CONVERTER, new String[]{converterClass.getName()}));
+                    }
+                    value = valueConverter.convert(data);
                 } else {
                     value = typeConverter.convert(field.getType(), data);
                 }
@@ -69,5 +76,9 @@ public class BeanPathObjectMapper implements ObjectMapper {
 
     public void setObjectMappingStore(ObjectMappingStore objectMappingStore) {
         this.objectMappingStore = objectMappingStore;
+    }
+
+    public void setTypeConverter(TypeConverter typeConverter) {
+        this.typeConverter = typeConverter;
     }
 }

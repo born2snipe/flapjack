@@ -12,22 +12,19 @@
  */
 package flapjack.model;
 
-import flapjack.util.ValueConverter;
-
-
 public class FieldMapping {
     private String domainFieldName;
     private String recordFieldName;
-    private ValueConverter valueConverter;
+    private Class valueConverter;
 
     public FieldMapping(String recordFieldName, String domainFieldName) {
         this(recordFieldName, domainFieldName, null);
     }
 
-    public FieldMapping(String recordFieldName, String domainFieldName, ValueConverter valueConverter) {
+    public FieldMapping(String recordFieldName, String domainFieldName, Class valueConverterClass) {
         this.recordFieldName = recordFieldName;
         this.domainFieldName = domainFieldName;
-        this.valueConverter = valueConverter;
+        this.valueConverter = valueConverterClass;
     }
 
     public String getDomainFieldName() {
@@ -38,7 +35,7 @@ public class FieldMapping {
         return recordFieldName;
     }
 
-    public ValueConverter getValueConverter() {
+    public Class getValueConverterClass() {
         return valueConverter;
     }
 }

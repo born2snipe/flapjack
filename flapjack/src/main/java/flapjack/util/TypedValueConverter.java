@@ -13,12 +13,11 @@
 package flapjack.util;
 
 
-public class FloatTextValueConverter implements TypedValueConverter {
-    public Class[] types() {
-        return new Class[]{float.class, Float.class};
-    }
-
-    public Object convert(byte[] bytes) {
-        return Float.valueOf(new String(bytes));
-    }
+public interface TypedValueConverter extends ValueConverter {
+    /**
+     * This is used to determine what class type should the text be converted to
+     *
+     * @return the resulting coversion class types
+     */
+    Class[] types();
 }

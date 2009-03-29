@@ -15,7 +15,7 @@ package flapjack.util;
 import java.math.BigDecimal;
 
 
-public class BigDecimalTextValueConverter implements ValueConverter {
+public class BigDecimalTextValueConverter implements TypedValueConverter {
     public Class[] types() {
         return new Class[]{BigDecimal.class};
     }

@@ -25,12 +25,11 @@ public class ObjectMappingTest extends TestCase {
     }
 
     public void test_add_WithValueConverter() {
-        IntegerTextValueConverter valueConverter = new IntegerTextValueConverter();
-        mapping.add("field", "domainField", valueConverter);
+        mapping.add("field", "domainField", IntegerTextValueConverter.class);
 
         FieldMapping fieldMapping = mapping.findRecordField("field");
 
-        assertEquals(valueConverter, fieldMapping.getValueConverter());
+        assertEquals(IntegerTextValueConverter.class, fieldMapping.getValueConverterClass());
     }
 
     public void test_findField_noFieldMappings() {

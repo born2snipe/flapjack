@@ -1,11 +1,11 @@
 /**
  * Copyright 2008-2009 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at:
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is
  * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and limitations under the License. 
@@ -26,6 +26,11 @@ public class TypeConverterTest extends MockObjectTestCase {
         converter = new TypeConverter();
         converter.registerConverter(new MockWrappingValueConverter(Integer.class, (ValueConverter) mockConverter.proxy()));
         converter.registerConverter(new MockWrappingValueConverter(Long.class, (ValueConverter) mockConverter.proxy()));
+    }
+
+    public void test_find() {
+        assertTrue(converter.find(BooleanTextValueConverter.class) instanceof BooleanTextValueConverter);
+        assertNull(converter.find(ValueConverter.class));
     }
 
     public void test_registerConverter_NullTypesOnValueConverter() {
@@ -80,7 +85,12 @@ public class TypeConverterTest extends MockObjectTestCase {
         }
     }
 
-    private static class MockWrappingValueConverter implements ValueConverter {
+    public void test_register() {
+        converter.registerConverter(new SimpleValueConverter());
+        assertNotNull(converter.find(SimpleValueConverter.class));
+    }
+
+    private static class MockWrappingValueConverter implements TypedValueConverter {
         private ValueConverter mock;
         private Class[] types;
 
@@ -99,6 +109,12 @@ public class TypeConverterTest extends MockObjectTestCase {
 
         public Class[] types() {
             return types;
+        }
+    }
+
+    private static class SimpleValueConverter implements ValueConverter {
+        public Object convert(byte[] bytes) {
+            return null;
         }
     }
 }

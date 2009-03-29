@@ -15,7 +15,7 @@ package flapjack.util;
 import java.math.BigInteger;
 
 
-public class BigIntegerTextValueConverter implements ValueConverter {
+public class BigIntegerTextValueConverter implements TypedValueConverter {
     public Class[] types() {
         return new Class[]{BigInteger.class};
     }

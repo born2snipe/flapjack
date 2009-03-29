@@ -13,7 +13,7 @@
 package flapjack.util;
 
 
-public class BooleanTextValueConverter implements ValueConverter {
+public class BooleanTextValueConverter implements TypedValueConverter {
     public Class[] types() {
         return new Class[]{boolean.class, Boolean.class};
     }

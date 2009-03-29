@@ -25,11 +25,4 @@ public interface ValueConverter {
      */
     Object convert(byte[] bytes);
 
-    /**
-     * This is used to determine what class type should the text be converted to
-     *
-     * @return the resulting coversion class types
-     */
-    Class[] types();
-
 }

@@ -12,6 +12,7 @@
  */
 package flapjack.model;
 
+import flapjack.util.TypeConverter;
 import flapjack.util.ValueConverter;
 import junit.framework.TestCase;
 
@@ -63,16 +64,13 @@ public class BeanPathObjectMapperTest extends TestCase {
     }
 
     public void test_mapOnTo_SingleField_UseCustomValueConverter() {
-        ObjectMapping objMapping = new ObjectMapping(Person.class);
-        objMapping.add("field1", "firstName", new ValueConverter() {
-            public Object convert(byte[] bytes) {
-                return "customValue";
-            }
+        TypeConverter typeConverter = new TypeConverter();
+        typeConverter.registerConverter(new CustomConverter());
 
-            public Class[] types() {
-                return new Class[0];
-            }
-        });
+        mapper.setTypeConverter(typeConverter);
+
+        ObjectMapping objMapping = new ObjectMapping(Person.class);
+        objMapping.add("field1", "firstName", CustomConverter.class);
         mappingStore.add(objMapping);
 
         fields.put("field1", "Jim".getBytes());
@@ -80,6 +78,21 @@ public class BeanPathObjectMapperTest extends TestCase {
         mapper.mapOnTo(fields, person);
 
         assertEquals("customValue", person.firstName);
+    }
+
+    public void test_mapOnTo_SingleField_UseCustomValueConverter_NotRegisteredInTypeConverter() {
+        ObjectMapping objMapping = new ObjectMapping(Person.class);
+        objMapping.add("field1", "firstName", CustomConverter.class);
+        mappingStore.add(objMapping);
+
+        fields.put("field1", "Jim".getBytes());
+
+        try {
+            mapper.mapOnTo(fields, person);
+            fail();
+        } catch (IllegalArgumentException err) {
+            assertEquals("Could not find a flapjack.model.BeanPathObjectMapperTest$CustomConverter in the TypeConverter", err.getMessage());
+        }
     }
 
     public void test_mapOnTo_FieldDoesNotExistOnDomain() {
@@ -131,5 +144,11 @@ public class BeanPathObjectMapperTest extends TestCase {
     private static class Person {
         private String firstName;
         private String lastName;
+    }
+
+    private static class CustomConverter implements ValueConverter {
+        public Object convert(byte[] bytes) {
+            return "customValue";
+        }
     }
 }

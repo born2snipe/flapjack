@@ -40,7 +40,7 @@ public class AnnotatedObjectMappingStoreTest extends TestCase {
         ObjectMapping addressMapping = objMappingStore.find(Address.class);
         assertNotNull(addressMapping);
         FieldMapping line1Mapping = addressMapping.findRecordField("line1");
-        assertTrue(line1Mapping.getValueConverter().getClass().equals(CustomValueConverter.class));
+        assertTrue(line1Mapping.getValueConverterClass().equals(CustomValueConverter.class));
     }
 
     @Record(SimpleRecordLayout.class)
