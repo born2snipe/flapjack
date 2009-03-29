@@ -40,7 +40,7 @@ public class BeanPathObjectMapper implements ObjectMapper {
         Iterator it = fields.keySet().iterator();
         while (it.hasNext()) {
             String key = (String) it.next();
-            FieldMapping fieldMapping = objectMapping.find(key);
+            FieldMapping fieldMapping = objectMapping.findRecordField(key);
             if (fieldMapping == null) {
                 if (!ignoreUnmappedFields) {
                     throw new IllegalArgumentException(MessageFormat.format(NO_FIELD_MAPPING, new String[]{key}));

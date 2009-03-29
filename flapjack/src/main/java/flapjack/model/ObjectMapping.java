@@ -17,7 +17,9 @@ import flapjack.util.ValueConverter;
 import java.util.HashMap;
 import java.util.Map;
 
-// TODO - javadocs
+/**
+ * This class contains all the FieldMappings for a given domain class
+ */
 public class ObjectMapping {
     private Map recordFieldToDomainFieldMappings = new HashMap();
     private Map domainFieldToRecordFieldMappings = new HashMap();
@@ -27,11 +29,23 @@ public class ObjectMapping {
         this.clazz = domainClass;
     }
 
+    /**
+     * Add a field mapping
+     *
+     * @param recordFieldName - the name/id that will be given to a record field
+     * @param domainFieldName - the field name on the domain object
+     */
     public void add(String recordFieldName, String domainFieldName) {
         add(recordFieldName, domainFieldName, null);
     }
 
-    // TODO - this should really only take a ValueConverter class and NOT an instance
+    /**
+     * Add a field mapping
+     *
+     * @param recordFieldName - the name/id that will be given to a record field
+     * @param domainFieldName - the field name on the domain object
+     * @param valueConverter  - a custom ValueConverter should be used when mapping this field
+     */
     public void add(String recordFieldName, String domainFieldName, ValueConverter valueConverter) {
         /**
          * This will eliminate the potential of having multiple instances of the ValueConverters in memory
@@ -41,18 +55,40 @@ public class ObjectMapping {
         domainFieldToRecordFieldMappings.put(domainFieldName, fieldMapping);
     }
 
-    public FieldMapping find(String recordFieldName) {
+    /**
+     * Find a field mapping by the record field name
+     *
+     * @param recordFieldName - the name/id that will be given to a record field
+     * @return the FieldMapping for the given field
+     */
+    public FieldMapping findRecordField(String recordFieldName) {
         return (FieldMapping) recordFieldToDomainFieldMappings.get(recordFieldName.toLowerCase());
     }
 
+    /**
+     * The class that is being mapped
+     *
+     * @return the class being mapped
+     */
     public Class getMappedClass() {
         return clazz;
     }
 
+    /**
+     * The number of fields for the given mapping
+     *
+     * @return the field count
+     */
     public int getFieldCount() {
         return recordFieldToDomainFieldMappings.size();
     }
 
+    /**
+     * Find a field mapping by the domain field name
+     *
+     * @param domainFieldName - the field name on the domain object
+     * @return the FieldMapping for the given field
+     */
     public FieldMapping findDomainField(String domainFieldName) {
         return (FieldMapping) domainFieldToRecordFieldMappings.get(domainFieldName);
     }

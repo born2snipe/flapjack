@@ -28,19 +28,19 @@ public class ObjectMappingTest extends TestCase {
         IntegerTextValueConverter valueConverter = new IntegerTextValueConverter();
         mapping.add("field", "domainField", valueConverter);
 
-        FieldMapping fieldMapping = mapping.find("field");
+        FieldMapping fieldMapping = mapping.findRecordField("field");
 
         assertEquals(valueConverter, fieldMapping.getValueConverter());
     }
 
     public void test_findField_noFieldMappings() {
-        assertNull(mapping.find("doesNotExist"));
+        assertNull(mapping.findRecordField("doesNotExist"));
     }
 
     public void test_findField_WithMapping() {
         mapping.add("field", "domainField");
 
-        FieldMapping fieldMapping = mapping.find("field");
+        FieldMapping fieldMapping = mapping.findRecordField("field");
 
         assertNotNull(fieldMapping);
         assertEquals("field", fieldMapping.getRecordFieldName());
@@ -51,12 +51,12 @@ public class ObjectMappingTest extends TestCase {
 
     public void test_findField_Uppercase() {
         mapping.add("field", "domainField");
-        assertNotNull(mapping.find("FIELD"));
+        assertNotNull(mapping.findRecordField("FIELD"));
     }
 
     public void test_findField_Mixedcase() {
         mapping.add("field", "domainField");
-        assertNotNull(mapping.find("Field"));
+        assertNotNull(mapping.findRecordField("Field"));
     }
 
 }

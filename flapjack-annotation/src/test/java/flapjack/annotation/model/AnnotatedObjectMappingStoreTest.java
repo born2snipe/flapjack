@@ -36,10 +36,10 @@ public class AnnotatedObjectMappingStoreTest extends TestCase {
         assertEquals(2, objMapping.getFieldCount());
         assertNotNull(objMapping.findDomainField("firstName"));
         assertNotNull(objMapping.findDomainField("lastName"));
-        assertNotNull(objMapping.find("last name"));
+        assertNotNull(objMapping.findRecordField("last name"));
         ObjectMapping addressMapping = objMappingStore.find(Address.class);
         assertNotNull(addressMapping);
-        FieldMapping line1Mapping = addressMapping.find("line1");
+        FieldMapping line1Mapping = addressMapping.findRecordField("line1");
         assertTrue(line1Mapping.getValueConverter().getClass().equals(CustomValueConverter.class));
     }
 

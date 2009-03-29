@@ -70,7 +70,7 @@ public class RecordPackageClassScannerTest extends TestCase {
             scanner.scan(Arrays.<String>asList("does.not.exist"));
             fail();
         } catch (IllegalArgumentException err) {
-            assertEquals("Could not find package \"does.not.exist\"", err.getMessage());
+            assertEquals("Could not findRecordField package \"does.not.exist\"", err.getMessage());
         }
     }
 }

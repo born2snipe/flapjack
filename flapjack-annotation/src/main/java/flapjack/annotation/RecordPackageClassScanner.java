@@ -59,7 +59,7 @@ public class RecordPackageClassScanner {
             }
             if (classes.size() == 0) {
                 if (loader.getResource(convertPackageToPath(packageName)) == null) {
-                    throw new IllegalArgumentException("Could not find package \"" + packageName + "\"");
+                    throw new IllegalArgumentException("Could not findRecordField package \"" + packageName + "\"");
                 }
             }
         } catch (IOException e) {
