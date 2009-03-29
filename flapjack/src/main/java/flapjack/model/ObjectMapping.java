@@ -17,7 +17,7 @@ import flapjack.util.ValueConverter;
 import java.util.HashMap;
 import java.util.Map;
 
-
+// TODO - javadocs
 public class ObjectMapping {
     private Map recordFieldToDomainFieldMappings = new HashMap();
     private Map domainFieldToRecordFieldMappings = new HashMap();
@@ -31,7 +31,11 @@ public class ObjectMapping {
         add(recordFieldName, domainFieldName, null);
     }
 
+    // TODO - this should really only take a ValueConverter class and NOT an instance
     public void add(String recordFieldName, String domainFieldName, ValueConverter valueConverter) {
+        /**
+         * This will eliminate the potential of having multiple instances of the ValueConverters in memory
+         */
         FieldMapping fieldMapping = new FieldMapping(recordFieldName, domainFieldName, valueConverter);
         recordFieldToDomainFieldMappings.put(recordFieldName, fieldMapping);
         domainFieldToRecordFieldMappings.put(domainFieldName, fieldMapping);

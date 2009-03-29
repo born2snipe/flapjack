@@ -28,6 +28,7 @@ public class FieldLocator {
         return fields;
     }
 
+    // TODO - javadoc
     public List<String> gatherFieldIds(Class<?> clazz) {
         List<String> fieldNames = new ArrayList<String>();
         for (java.lang.reflect.Field field : locateAnnotated(clazz, Field.class)) {
