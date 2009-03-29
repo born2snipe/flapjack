@@ -13,7 +13,6 @@
 package flapjack.example;
 
 import flapjack.example.model.User;
-import flapjack.example.model.Address;
 import flapjack.io.LineRecordReader;
 import flapjack.layout.RecordLayout;
 import flapjack.layout.SimpleRecordLayout;
@@ -25,7 +24,6 @@ import flapjack.parser.*;
 import junit.framework.TestCase;
 
 import java.io.ByteArrayInputStream;
-import java.util.List;
 
 
 public class StopProcessingAfterARecordIsFoundWithAProblemTest extends TestCase {
@@ -117,7 +115,7 @@ public class StopProcessingAfterARecordIsFoundWithAProblemTest extends TestCase 
      * This class is responsible for creating the POJO that represents the given record.
      */
     private static class UserRecordFactory implements RecordFactory {
-        public Object build(Object fields, RecordLayout recordLayout) {
+        public Object build() {
             return new User();
         }
     }

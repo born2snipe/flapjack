@@ -16,7 +16,6 @@ import flapjack.annotation.Field;
 import flapjack.annotation.Record;
 import flapjack.annotation.model.AnnotatedObjectMappingStore;
 import flapjack.io.LineRecordReader;
-import flapjack.layout.RecordLayout;
 import flapjack.layout.SimpleRecordLayout;
 import flapjack.model.RecordFactory;
 import flapjack.model.SameRecordFactoryResolver;
@@ -119,7 +118,7 @@ public class UseAnnotationTest extends TestCase {
     }
 
     private static class SongFactory implements RecordFactory {
-        public Object build(Object fields, RecordLayout recordLayout) {
+        public Object build() {
             return new Song();
         }
     }

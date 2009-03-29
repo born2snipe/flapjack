@@ -28,7 +28,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
 
 
 public class InlineRecordTest extends TestCase {
@@ -166,13 +165,13 @@ public class InlineRecordTest extends TestCase {
      * This class is responsible for creating the POJO that represents the given record.
      */
     private static class UserRecordFactory implements RecordFactory {
-        public Object build(Object fields, RecordLayout recordLayout) {
+        public Object build() {
            return new User();
         }
     }
 
     private static class AddressRecordFactory implements RecordFactory {
-        public Object build(Object fields, RecordLayout recordLayout) {
+        public Object build() {
             return new Address();
         }
     }

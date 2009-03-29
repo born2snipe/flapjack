@@ -177,7 +177,7 @@ public class RecordParserImplTest extends MockObjectTestCase {
 
         recordFactoryResolver.expects(once()).method("resolve").with(eq(recordLayout)).will(returnValue(recordFactory.proxy()));
 
-        recordFactory.expects(once()).method("build").with(eq(fields), eq(recordLayout)).will(returnValue("record"));
+        recordFactory.expects(once()).method("build").will(returnValue("record"));
 
         objectMapper.expects(once()).method("mapOnTo").with(eq(fields), eq("record"));
 
@@ -205,8 +205,8 @@ public class RecordParserImplTest extends MockObjectTestCase {
         recordFactoryResolver.expects(once()).method("resolve").with(eq(recordLayout)).will(returnValue(recordFactory.proxy()));
         recordFactoryResolver.expects(once()).method("resolve").with(eq(recordLayout)).will(returnValue(recordFactory.proxy()));
 
-        recordFactory.expects(once()).method("build").with(eq(fields), eq(recordLayout)).will(returnValue("record-2"));
-        recordFactory.expects(once()).method("build").with(eq(fields), eq(recordLayout)).will(returnValue("record-1"));
+        recordFactory.expects(once()).method("build").will(returnValue("record-2"));
+        recordFactory.expects(once()).method("build").will(returnValue("record-1"));
 
         objectMapper.expects(once()).method("mapOnTo").with(eq(fields), eq("record-2"));
         objectMapper.expects(once()).method("mapOnTo").with(eq(fields), eq("record-1"));

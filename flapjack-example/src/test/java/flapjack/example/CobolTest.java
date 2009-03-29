@@ -17,7 +17,6 @@ import flapjack.annotation.Record;
 import flapjack.annotation.model.AnnotatedObjectMappingStore;
 import flapjack.cobol.layout.AbstractCobolRecordLayout;
 import flapjack.io.LineRecordReader;
-import flapjack.layout.RecordLayout;
 import flapjack.model.RecordFactory;
 import flapjack.model.SameRecordFactoryResolver;
 import flapjack.parser.ParseResult;
@@ -100,7 +99,7 @@ public class CobolTest extends TestCase {
     }
 
     public static class LoanRecordFactory implements RecordFactory {
-        public Object build(Object fields, RecordLayout recordLayout) {
+        public Object build() {
             return new Loan();
         }
     }

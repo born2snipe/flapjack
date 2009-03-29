@@ -12,7 +12,6 @@
  */
 package flapjack.model;
 
-import flapjack.layout.RecordLayout;
 import flapjack.layout.SimpleRecordLayout;
 import junit.framework.TestCase;
 
@@ -52,7 +51,7 @@ public class SameRecordFactoryResolverTest extends TestCase {
     }
 
     private static class Factory implements RecordFactory {
-        public Object build(Object fields, RecordLayout recordLayout) {
+        public Object build() {
             return null;
         }
     }

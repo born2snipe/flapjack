@@ -128,13 +128,13 @@ public class DifferentRecordTypeTest extends TestCase {
      * This class is responsible for creating the POJO that represents the given record.
      */
     private static class UserRecordFactory implements RecordFactory {
-        public Object build(Object fields, RecordLayout recordLayout) {
+        public Object build() {
             return new User();
         }
     }
 
     private static class AddressRecordFactory implements RecordFactory {
-        public Object build(Object fields, RecordLayout recordLayout) {
+        public Object build() {
             return new Address();
         }
     }

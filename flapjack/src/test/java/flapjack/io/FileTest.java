@@ -12,7 +12,6 @@
  */
 package flapjack.io;
 
-import flapjack.layout.RecordLayout;
 import flapjack.layout.SimpleFieldDefinition;
 import flapjack.layout.SimpleRecordLayout;
 import flapjack.model.ObjectMapping;
@@ -94,7 +93,7 @@ public class FileTest extends TestCase {
     }
 
     private static class DummyFactory implements RecordFactory {
-        public Object build(Object fields, RecordLayout recordLayout) {
+        public Object build() {
             return new Record();
         }
     }
