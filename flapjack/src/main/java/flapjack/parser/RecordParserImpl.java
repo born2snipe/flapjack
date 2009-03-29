@@ -15,6 +15,7 @@ package flapjack.parser;
 import flapjack.io.RecordReader;
 import flapjack.layout.RecordLayout;
 import flapjack.model.*;
+import flapjack.util.TypeConverter;
 
 import java.io.IOException;
 
@@ -98,5 +99,9 @@ public class RecordParserImpl implements RecordParser {
 
     public void setObjectMappingStore(ObjectMappingStore objectMappingStore) {
         objectMapper.setObjectMappingStore(objectMappingStore);
+    }
+
+    public void setTypeConverter(TypeConverter typeConverter) {
+        objectMapper.setTypeConverter(typeConverter);
     }
 }

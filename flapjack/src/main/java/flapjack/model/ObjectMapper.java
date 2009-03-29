@@ -12,6 +12,8 @@
  */
 package flapjack.model;
 
+import flapjack.util.TypeConverter;
+
 
 public interface ObjectMapper {
 
@@ -37,4 +39,11 @@ public interface ObjectMapper {
      * @param objectMappingStore - the store to be used during mapping
      */
     void setObjectMappingStore(ObjectMappingStore objectMappingStore);
+
+    /**
+     * The TypeConverter to be used for the object mapping
+     *
+     * @param typeConverter
+     */
+    void setTypeConverter(TypeConverter typeConverter);
 }
