@@ -15,12 +15,16 @@ package flapjack.example;
 import flapjack.annotation.Field;
 import flapjack.annotation.Record;
 import flapjack.annotation.model.AnnotatedMappedRecordFactoryResolver;
+import flapjack.annotation.model.AnnotatedObjectMappingStore;
 import flapjack.parser.ByteMapRecordFieldParser;
 import flapjack.cobol.layout.AbstractCobolRecordLayout;
 import flapjack.io.LineRecordReader;
 import flapjack.parser.ParseResult;
 import flapjack.parser.RecordParserImpl;
 import flapjack.parser.SameRecordLayoutResolver;
+import flapjack.model.RecordFactory;
+import flapjack.model.SameRecordFactoryResolver;
+import flapjack.layout.RecordLayout;
 import junit.framework.TestCase;
 
 import java.io.ByteArrayInputStream;
@@ -33,19 +37,19 @@ public class CobolTest extends TestCase {
         String record = "123456789JOE A SCHMOE                  01500";
 
         /**
-         * Initialize the MappedRecordFactoryResolver with what packages need to be scanned for the domain classes
+         * Initialize the AnnotatedObjctMappingStore with what packages need to be scanned for the domain classes
          * that contain the annotations.
          */
-        AnnotatedMappedRecordFactoryResolver recordFactoryResolver = new AnnotatedMappedRecordFactoryResolver();
-        recordFactoryResolver.setPackages(Arrays.asList("flapjack.example"));
+        AnnotatedObjectMappingStore objectMappingStore = new AnnotatedObjectMappingStore();
+        objectMappingStore.setPackages(Arrays.asList("flapjack.example"));
 
         /**
          * Initialize the RecordParser with our RecordLayoutResolver and RecordFactoryResolver
          */
         RecordParserImpl recordParser = new RecordParserImpl();
         recordParser.setRecordLayoutResolver(new SameRecordLayoutResolver(LoanRecordLayout.class));
-        recordParser.setRecordFactoryResolver(recordFactoryResolver);
-        recordParser.setRecordFieldParser(new ByteMapRecordFieldParser());
+        recordParser.setRecordFactoryResolver(new SameRecordFactoryResolver(LoanRecordFactory.class));
+        recordParser.setObjectMappingStore(objectMappingStore);
 
         /**
          * Actually call the parser with our RecordReader
@@ -94,6 +98,12 @@ public class CobolTest extends TestCase {
 
         public int getAmount() {
             return amount;
+        }
+    }
+
+    public static class LoanRecordFactory implements RecordFactory {
+        public Object build(Object fields, RecordLayout recordLayout) {
+            return new Loan();
         }
     }
 }

@@ -37,12 +37,12 @@ public class ObjectMapping {
          * This will eliminate the potential of having multiple instances of the ValueConverters in memory
          */
         FieldMapping fieldMapping = new FieldMapping(recordFieldName, domainFieldName, valueConverter);
-        recordFieldToDomainFieldMappings.put(recordFieldName, fieldMapping);
+        recordFieldToDomainFieldMappings.put(recordFieldName.toLowerCase(), fieldMapping);
         domainFieldToRecordFieldMappings.put(domainFieldName, fieldMapping);
     }
 
     public FieldMapping find(String recordFieldName) {
-        return (FieldMapping) recordFieldToDomainFieldMappings.get(recordFieldName);
+        return (FieldMapping) recordFieldToDomainFieldMappings.get(recordFieldName.toLowerCase());
     }
 
     public Class getMappedClass() {
