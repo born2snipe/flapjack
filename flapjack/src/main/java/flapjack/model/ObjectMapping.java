@@ -19,7 +19,8 @@ import java.util.Map;
 
 
 public class ObjectMapping {
-    private Map fieldMappings = new HashMap();
+    private Map recordFieldToDomainFieldMappings = new HashMap();
+    private Map domainFieldToRecordFieldMappings = new HashMap();
     private Class clazz;
 
     public ObjectMapping(Class clazz) {
@@ -27,20 +28,28 @@ public class ObjectMapping {
     }
 
     public void add(String recordFieldName, String domainFieldName) {
-        fieldMappings.put(recordFieldName, new FieldMapping(recordFieldName, domainFieldName));
-
+        add(recordFieldName, domainFieldName, null);
     }
 
     public void add(String recordFieldName, String domainFieldName, ValueConverter valueConverter) {
-        fieldMappings.put(recordFieldName, new FieldMapping(recordFieldName, domainFieldName, valueConverter));
+        FieldMapping fieldMapping = new FieldMapping(recordFieldName, domainFieldName, valueConverter);
+        recordFieldToDomainFieldMappings.put(recordFieldName, fieldMapping);
+        domainFieldToRecordFieldMappings.put(domainFieldName, fieldMapping);
     }
 
     public FieldMapping find(String recordFieldName) {
-        return (FieldMapping) fieldMappings.get(recordFieldName);
+        return (FieldMapping) recordFieldToDomainFieldMappings.get(recordFieldName);
     }
 
     public Class getMappedClass() {
         return clazz;
     }
 
+    public int getFieldCount() {
+        return recordFieldToDomainFieldMappings.size();
+    }
+
+    public FieldMapping findDomainField(String domainFieldName) {
+        return (FieldMapping) domainFieldToRecordFieldMappings.get(domainFieldName);
+    }
 }

@@ -19,8 +19,8 @@ import java.util.Map;
 public class ObjectMappingStore {
     private Map mappings = new HashMap();
 
-    public ObjectMapping find(Class clazz) {
-        return (ObjectMapping) mappings.get(clazz);
+    public ObjectMapping find(Class domainClass) {
+        return (ObjectMapping) mappings.get(domainClass);
     }
 
     public void add(ObjectMapping objectMapping) throws IllegalArgumentException {
@@ -29,5 +29,9 @@ public class ObjectMappingStore {
             throw new IllegalArgumentException("Duplicate ObjectMapping for class " + mappedClass.getName());
         }
         mappings.put(mappedClass, objectMapping);
+    }
+
+    public int getObjectMappingCount() {
+        return mappings.size();
     }
 }

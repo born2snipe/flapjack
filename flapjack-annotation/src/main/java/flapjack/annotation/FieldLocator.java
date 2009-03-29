@@ -13,6 +13,7 @@
 package flapjack.annotation;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +27,18 @@ public class FieldLocator {
                 fields.add(field);
         }
         return fields;
+    }
+
+    public List<String> gatherFieldIds(Class<?> clazz) {
+        List<String> fieldNames = new ArrayList<String>();
+        for (java.lang.reflect.Field field : locateAnnotated(clazz, Field.class)) {
+            String id = field.getAnnotation(Field.class).value();
+            if (id == null || id.trim().length() == 0) {
+                id = field.getName();
+            }
+            fieldNames.add(id);
+        }
+        return fieldNames;
     }
 
     /**

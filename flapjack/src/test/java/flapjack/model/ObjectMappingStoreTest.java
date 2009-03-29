@@ -33,6 +33,7 @@ public class ObjectMappingStoreTest extends TestCase {
         } catch (IllegalArgumentException err) {
             assertEquals("Duplicate ObjectMapping for class java.lang.String", err.getMessage());
         }
+        assertEquals(1, store.getObjectMappingCount());
     }
 
     public void test_find_NoMappings() {
@@ -46,6 +47,7 @@ public class ObjectMappingStoreTest extends TestCase {
 
         assertNotNull(objMap);
         assertEquals(String.class, objMap.getMappedClass());
+        assertEquals(1, store.getObjectMappingCount());
     }
 
 

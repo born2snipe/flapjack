@@ -22,7 +22,10 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-
+// TODO - this class has been simplified to just building domain objects
+/**
+ * This can actually be simplied to the point of just taking the RecordLayout as a param
+ */
 public class BeanMappedRecordFactory implements RecordFactory {
     private static final String NO_FIELD_MAPPING = "Could not locate field mapping for field=\"{0}\"";
     private static final String NO_FIELD_ON_OBJECT = "Could not map {0} -> {1} on {2}, \"{1}\" could NOT be found";
