@@ -1,11 +1,11 @@
 /**
  * Copyright 2008-2009 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at:
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is
  * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and limitations under the License. 
@@ -14,17 +14,15 @@ package flapjack.example;
 
 import flapjack.annotation.Field;
 import flapjack.annotation.Record;
-import flapjack.annotation.model.AnnotatedMappedRecordFactoryResolver;
 import flapjack.annotation.model.AnnotatedObjectMappingStore;
-import flapjack.parser.ByteMapRecordFieldParser;
 import flapjack.cobol.layout.AbstractCobolRecordLayout;
 import flapjack.io.LineRecordReader;
+import flapjack.layout.RecordLayout;
+import flapjack.model.RecordFactory;
+import flapjack.model.SameRecordFactoryResolver;
 import flapjack.parser.ParseResult;
 import flapjack.parser.RecordParserImpl;
 import flapjack.parser.SameRecordLayoutResolver;
-import flapjack.model.RecordFactory;
-import flapjack.model.SameRecordFactoryResolver;
-import flapjack.layout.RecordLayout;
 import junit.framework.TestCase;
 
 import java.io.ByteArrayInputStream;
