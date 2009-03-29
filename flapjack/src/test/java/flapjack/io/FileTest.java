@@ -1,21 +1,28 @@
 /**
  * Copyright 2008-2009 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at:
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is
  * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and limitations under the License. 
  */
 package flapjack.io;
 
+import flapjack.layout.RecordLayout;
 import flapjack.layout.SimpleFieldDefinition;
 import flapjack.layout.SimpleRecordLayout;
-import flapjack.model.SimpleRecord;
-import flapjack.parser.*;
+import flapjack.model.ObjectMapping;
+import flapjack.model.ObjectMappingStore;
+import flapjack.model.RecordFactory;
+import flapjack.model.SameRecordFactoryResolver;
+import flapjack.parser.FlatFileParser;
+import flapjack.parser.ParseResult;
+import flapjack.parser.RecordParserImpl;
+import flapjack.parser.SameRecordLayoutResolver;
 import junit.framework.TestCase;
 
 import java.io.File;
@@ -34,7 +41,6 @@ public class FileTest extends TestCase {
         super.setUp();
         recordParser = new RecordParserImpl();
         recordParser.setRecordLayoutResolver(new SameRecordLayoutResolver(TestRecordLayout.class));
-        recordParser.setRecordFieldParser(new ByteRecordFieldParser());
         fileParser = new FlatFileParser();
         fileParser.setRecordParser(recordParser);
 
@@ -60,14 +66,22 @@ public class FileTest extends TestCase {
     }
 
     private void verifyRecordReader(RecordReaderFactory recordReaderFactory) throws IOException {
+        ObjectMappingStore store = new ObjectMappingStore();
+        ObjectMapping objMapping = new ObjectMapping(Record.class);
+        objMapping.add("data", "data");
+        store.add(objMapping);
+
+        recordParser.setObjectMappingStore(store);
+        recordParser.setRecordFactoryResolver(new SameRecordFactoryResolver(DummyFactory.class));
+
         fileParser.setRecordReaderFactory(recordReaderFactory);
 
         ParseResult result = fileParser.parse(file);
 
         Iterator it = result.getRecords().iterator();
         while (it.hasNext()) {
-            SimpleRecord record = (SimpleRecord) it.next();
-            assertEquals("1234567890", new String((byte[]) record.getField(0)));
+            Record record = (Record) it.next();
+            assertEquals("1234567890", record.data);
         }
         assertEquals(231000, result.getRecords().size());
     }
@@ -76,6 +90,24 @@ public class FileTest extends TestCase {
     private static class TestRecordLayout extends SimpleRecordLayout {
         private TestRecordLayout() {
             addFieldDefinition(new SimpleFieldDefinition("data", 0, 10));
+        }
+    }
+
+    private static class DummyFactory implements RecordFactory {
+        public Object build(Object fields, RecordLayout recordLayout) {
+            return new Record();
+        }
+    }
+
+    private static class Record {
+        private String data;
+
+        public String getData() {
+            return data;
+        }
+
+        public void setData(String data) {
+            this.data = data;
         }
     }
 }

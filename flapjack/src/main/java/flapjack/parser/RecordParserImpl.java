@@ -1,11 +1,11 @@
 /**
  * Copyright 2008-2009 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at:
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is
  * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and limitations under the License. 
@@ -14,9 +14,7 @@ package flapjack.parser;
 
 import flapjack.io.RecordReader;
 import flapjack.layout.RecordLayout;
-import flapjack.model.RecordFactory;
-import flapjack.model.RecordFactoryResolver;
-import flapjack.model.SimpleRecordFactoryResolver;
+import flapjack.model.*;
 
 import java.io.IOException;
 
@@ -26,12 +24,13 @@ public class RecordParserImpl implements RecordParser {
     private RecordFieldParser recordFieldParser;
     private BadRecordFactory badRecordFactory;
     private RecordFactoryResolver recordFactoryResolver;
+    private ObjectMapper objectMapper;
 
     public RecordParserImpl() {
         setBadRecordFactory(new DefaultBadRecordFactory());
-        setRecordFieldParser(new ByteRecordFieldParser());
+        setRecordFieldParser(new ByteMapRecordFieldParser());
         setParseResultFactory(new DefaultParseResultFactory());
-        setRecordFactoryResolver(new SimpleRecordFactoryResolver());
+        setObjectMapper(new BeanPathObjectMapper());
     }
 
     public ParseResult parse(RecordReader recordReader) throws IOException {
@@ -49,7 +48,10 @@ public class RecordParserImpl implements RecordParser {
                         result.addPartialRecord(badRecordFactory.build(record));
                     } else {
                         try {
-                            result.addRecord(recordFactory.build(recordFieldParser.parse(record, recordLayout), recordLayout));
+                            Object fields = recordFieldParser.parse(record, recordLayout);
+                            Object domain = recordFactory.build(fields, recordLayout);
+                            objectMapper.mapOnTo(fields, domain);
+                            result.addRecord(domain);
                         } catch (ParseException e) {
                             result.addUnparseableRecord(badRecordFactory.build(record, e));
                         }
@@ -84,5 +86,17 @@ public class RecordParserImpl implements RecordParser {
 
     public void setRecordFactoryResolver(RecordFactoryResolver recordFactoryResolver) {
         this.recordFactoryResolver = recordFactoryResolver;
+    }
+
+    protected void setObjectMapper(ObjectMapper objectMapper) {
+        this.objectMapper = objectMapper;
+    }
+
+    public void setIgnoreUnmappedFields(boolean ignoreUnmappedFields) {
+        objectMapper.setIgnoreUnmappedFields(ignoreUnmappedFields);
+    }
+
+    public void setObjectMappingStore(ObjectMappingStore objectMappingStore) {
+        objectMapper.setObjectMappingStore(objectMappingStore);
     }
 }

@@ -20,7 +20,8 @@ import java.text.MessageFormat;
 import java.util.Iterator;
 import java.util.Map;
 
-public class BeanPathObjectMapper {
+// TODO - should processing stop if a mapping problem occurs?!
+public class BeanPathObjectMapper implements ObjectMapper {
     private static final String NO_FIELD_MAPPING = "Could not locate field mapping for field=\"{0}\"";
     private static final String NO_FIELD_ON_OBJECT = "Could not map {0} -> {1} on {2}, \"{1}\" could NOT be found";
     private static final String NO_OBJECT_MAPPING = "Could not locate object mapping for class={0}";

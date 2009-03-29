@@ -1,11 +1,11 @@
 /**
  * Copyright 2008-2009 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at:
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is
  * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and limitations under the License. 
@@ -16,6 +16,7 @@ import flapjack.io.StubRecordReader;
 import flapjack.layout.FieldDefinition;
 import flapjack.layout.SimpleFieldDefinition;
 import flapjack.layout.SimpleRecordLayout;
+import flapjack.model.ObjectMapper;
 import flapjack.model.RecordFactory;
 import flapjack.model.RecordFactoryResolver;
 import org.jmock.Mock;
@@ -40,6 +41,7 @@ public class RecordParserImplTest extends MockObjectTestCase {
     private Mock recordFactory;
     private Mock badRecordFactory;
     private Mock recordFactoryResolver;
+    private Mock objectMapper;
 
     public void setUp() {
         parseResultFactory = mock(ParseResultFactory.class);
@@ -48,6 +50,7 @@ public class RecordParserImplTest extends MockObjectTestCase {
         recordFactory = mock(RecordFactory.class);
         badRecordFactory = mock(BadRecordFactory.class);
         recordFactoryResolver = mock(RecordFactoryResolver.class);
+        objectMapper = mock(ObjectMapper.class);
 
         recordReader = new StubRecordReader();
 
@@ -66,6 +69,7 @@ public class RecordParserImplTest extends MockObjectTestCase {
         parser.setRecordFieldParser((RecordFieldParser) recordFieldParser.proxy());
         parser.setBadRecordFactory((BadRecordFactory) badRecordFactory.proxy());
         parser.setRecordFactoryResolver((RecordFactoryResolver) recordFactoryResolver.proxy());
+        parser.setObjectMapper((ObjectMapper) objectMapper.proxy());
     }
 
     public void test_parse_ParseExceptionThrown() throws IOException {
@@ -141,7 +145,7 @@ public class RecordParserImplTest extends MockObjectTestCase {
         assertEquals(badRecord, this.result.getUnresolvedRecords().get(0));
         assertTrue(recordReader.isClosed());
     }
-    
+
     public void test_parse_UnableToResolveRecordFactory() throws IOException {
         parseResultFactory.expects(once()).method("build").will(returnValue(this.result));
 
@@ -175,6 +179,8 @@ public class RecordParserImplTest extends MockObjectTestCase {
 
         recordFactory.expects(once()).method("build").with(eq(fields), eq(recordLayout)).will(returnValue("record"));
 
+        objectMapper.expects(once()).method("mapOnTo").with(eq(fields), eq("record"));
+
         ParseResult result = parser.parse(recordReader);
 
         assertNotNull(result);
@@ -201,6 +207,9 @@ public class RecordParserImplTest extends MockObjectTestCase {
 
         recordFactory.expects(once()).method("build").with(eq(fields), eq(recordLayout)).will(returnValue("record-2"));
         recordFactory.expects(once()).method("build").with(eq(fields), eq(recordLayout)).will(returnValue("record-1"));
+
+        objectMapper.expects(once()).method("mapOnTo").with(eq(fields), eq("record-2"));
+        objectMapper.expects(once()).method("mapOnTo").with(eq(fields), eq("record-1"));
 
         recordReader.addRecord(RECORD2);
 

@@ -23,8 +23,8 @@ public class ObjectMapping {
     private Map domainFieldToRecordFieldMappings = new HashMap();
     private Class clazz;
 
-    public ObjectMapping(Class clazz) {
-        this.clazz = clazz;
+    public ObjectMapping(Class domainClass) {
+        this.clazz = domainClass;
     }
 
     public void add(String recordFieldName, String domainFieldName) {
