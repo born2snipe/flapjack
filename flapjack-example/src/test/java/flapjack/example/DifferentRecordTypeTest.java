@@ -1,11 +1,11 @@
 /**
  * Copyright 2008-2009 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at:
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is
  * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and limitations under the License. 
@@ -17,14 +17,17 @@ import flapjack.example.model.User;
 import flapjack.io.LineRecordReader;
 import flapjack.layout.RecordLayout;
 import flapjack.layout.SimpleRecordLayout;
+import flapjack.model.ObjectMapping;
+import flapjack.model.ObjectMappingStore;
 import flapjack.model.RecordFactory;
 import flapjack.model.RecordFactoryResolver;
-import flapjack.parser.*;
+import flapjack.parser.ParseResult;
+import flapjack.parser.RecordLayoutResolver;
+import flapjack.parser.RecordParserImpl;
 import junit.framework.TestCase;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.util.List;
 
 
 public class DifferentRecordTypeTest extends TestCase {
@@ -32,13 +35,32 @@ public class DifferentRecordTypeTest extends TestCase {
     public void test() throws IOException {
         String records = "#1Joe       Smith     jsmith    \n" +
                 "#21234 Easy St        Chicago        IL";
+
+        /**
+         * Configure the ObjectMapping from the record data to the domain objects
+         */
+        ObjectMapping userMapping = new ObjectMapping(User.class);
+        userMapping.add("First Name", "firstName");
+        userMapping.add("Last Name", "lastName");
+        userMapping.add("Username", "userName");
+
+        ObjectMapping addressMapping = new ObjectMapping(Address.class);
+        addressMapping.add("Address Line", "line");
+        addressMapping.add("City", "city");
+        addressMapping.add("State", "state");
+
+        ObjectMappingStore objectMappingStore = new ObjectMappingStore();
+        objectMappingStore.add(userMapping);
+        objectMappingStore.add(addressMapping);
+
         /**
          * Initialize the RecordParser with our RecordLayoutResolver and RecordFactoryResolver
          */
         RecordParserImpl recordParser = new RecordParserImpl();
         recordParser.setRecordLayoutResolver(new BasicRecordLayoutResolver());
         recordParser.setRecordFactoryResolver(new BasicRecordFactoryResolver());
-        recordParser.setRecordFieldParser(new StringRecordFieldParser());
+        recordParser.setObjectMappingStore(objectMappingStore);
+        recordParser.setIgnoreUnmappedFields(true);
 
         /**
          * Actually call the parser with our RecordReader
@@ -56,14 +78,14 @@ public class DifferentRecordTypeTest extends TestCase {
         assertEquals(2, result.getRecords().size());
 
         User user = (User) result.getRecords().get(0);
-        assertEquals("Joe       ", user.firstName);
-        assertEquals("Smith     ", user.lastName);
-        assertEquals("jsmith    ", user.userName);
+        assertEquals("Joe       ", user.getFirstName());
+        assertEquals("Smith     ", user.getLastName());
+        assertEquals("jsmith    ", user.getUserName());
 
         Address address = (Address) result.getRecords().get(1);
-        assertEquals("1234 Easy St        ", address.line);
-        assertEquals("Chicago        ", address.city);
-        assertEquals("IL", address.state);
+        assertEquals("1234 Easy St        ", address.getLine());
+        assertEquals("Chicago        ", address.getCity());
+        assertEquals("IL", address.getState());
     }
 
     /**
@@ -107,15 +129,13 @@ public class DifferentRecordTypeTest extends TestCase {
      */
     private static class UserRecordFactory implements RecordFactory {
         public Object build(Object fields, RecordLayout recordLayout) {
-            List strings = (List) fields;
-            return new User((String) strings.get(1), (String) strings.get(2), (String) strings.get(3));
+            return new User();
         }
     }
 
     private static class AddressRecordFactory implements RecordFactory {
         public Object build(Object fields, RecordLayout recordLayout) {
-            List strings = (List) fields;
-            return new Address((String) strings.get(1), (String) strings.get(2), (String) strings.get(3));
+            return new Address();
         }
     }
 

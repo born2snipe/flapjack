@@ -19,6 +19,8 @@ import flapjack.layout.RecordLayout;
 import flapjack.layout.SimpleRecordLayout;
 import flapjack.model.RecordFactory;
 import flapjack.model.RecordFactoryResolver;
+import flapjack.model.ObjectMapping;
+import flapjack.model.ObjectMappingStore;
 import flapjack.parser.*;
 import junit.framework.TestCase;
 
@@ -34,12 +36,30 @@ public class InlineRecordTest extends TestCase {
         String records = "#1030Joe       Smith     jsmith    #20371234 Easy St        Chicago        IL";
 
         /**
+         * Configure the ObjectMapping from the record data to the domain objects
+         */
+        ObjectMapping userMapping = new ObjectMapping(User.class);
+        userMapping.add("First Name", "firstName");
+        userMapping.add("Last Name", "lastName");
+        userMapping.add("Username", "userName");
+
+        ObjectMapping addressMapping = new ObjectMapping(Address.class);
+        addressMapping.add("Address Line", "line");
+        addressMapping.add("City", "city");
+        addressMapping.add("State", "state");
+
+        ObjectMappingStore objectMappingStore = new ObjectMappingStore();
+        objectMappingStore.add(userMapping);
+        objectMappingStore.add(addressMapping);
+
+        /**
          * Initialize the RecordParser with our RecordLayoutResolver and RecordFactoryResolver
          */
         RecordParserImpl recordParser = new RecordParserImpl();
         recordParser.setRecordLayoutResolver(new BasicRecordLayoutResolver());
         recordParser.setRecordFactoryResolver(new BasicRecordFactoryResolver());
-        recordParser.setRecordFieldParser(new StringRecordFieldParser());
+        recordParser.setObjectMappingStore(objectMappingStore);
+        recordParser.setIgnoreUnmappedFields(true);
 
         /**
          * Actually call the parser with our RecordReader
@@ -57,14 +77,14 @@ public class InlineRecordTest extends TestCase {
         assertEquals(2, result.getRecords().size());
 
         User user = (User) result.getRecords().get(0);
-        assertEquals("Joe       ", user.firstName);
-        assertEquals("Smith     ", user.lastName);
-        assertEquals("jsmith    ", user.userName);
+        assertEquals("Joe       ", user.getFirstName());
+        assertEquals("Smith     ", user.getLastName());
+        assertEquals("jsmith    ", user.getUserName());
 
         Address address = (Address) result.getRecords().get(1);
-        assertEquals("1234 Easy St        ", address.line);
-        assertEquals("Chicago        ", address.city);
-        assertEquals("IL", address.state);
+        assertEquals("1234 Easy St        ", address.getLine());
+        assertEquals("Chicago        ", address.getCity());
+        assertEquals("IL", address.getState());
     }
 
     /**
@@ -147,15 +167,13 @@ public class InlineRecordTest extends TestCase {
      */
     private static class UserRecordFactory implements RecordFactory {
         public Object build(Object fields, RecordLayout recordLayout) {
-            List strings = (List) fields;
-            return new User((String) strings.get(2), (String) strings.get(3), (String) strings.get(4));
+           return new User();
         }
     }
 
     private static class AddressRecordFactory implements RecordFactory {
         public Object build(Object fields, RecordLayout recordLayout) {
-            List strings = (List) fields;
-            return new Address((String) strings.get(2), (String) strings.get(3), (String) strings.get(4));
+            return new Address();
         }
     }
 

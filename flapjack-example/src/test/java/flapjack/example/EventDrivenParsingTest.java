@@ -18,6 +18,8 @@ import flapjack.layout.RecordLayout;
 import flapjack.layout.SimpleRecordLayout;
 import flapjack.model.RecordFactory;
 import flapjack.model.SameRecordFactoryResolver;
+import flapjack.model.ObjectMapping;
+import flapjack.model.ObjectMappingStore;
 import flapjack.parser.*;
 import junit.framework.TestCase;
 
@@ -57,13 +59,25 @@ public class EventDrivenParsingTest extends TestCase {
         });
 
         /**
+         * Configure the ObjectMapping from the record data to the User domain object
+         */
+        ObjectMapping userMapping = new ObjectMapping(User.class);
+        userMapping.add("First Name", "firstName");
+        userMapping.add("Last Name", "lastName");
+        userMapping.add("Username", "userName");
+
+        ObjectMappingStore objectMappingStore = new ObjectMappingStore();
+        objectMappingStore.add(userMapping);
+
+        /**
          * Initialize the RecordParser with our RecordLayoutResolver and RecordFactoryResolver
          */
         RecordParserImpl recordParser = new RecordParserImpl();
         recordParser.setRecordLayoutResolver(new SameRecordLayoutResolver(UserRecordLayout.class));
         recordParser.setRecordFactoryResolver(new SameRecordFactoryResolver(UserRecordFactory.class));
-        recordParser.setRecordFieldParser(new StringRecordFieldParser());
         recordParser.setParseResultFactory(resultFactory);
+        recordParser.setObjectMappingStore(objectMappingStore);
+        recordParser.setIgnoreUnmappedFields(true);
 
         /**
          * Actually call the parser with our RecordReader
@@ -77,14 +91,14 @@ public class EventDrivenParsingTest extends TestCase {
         assertEquals(2, records.size());
 
         User user1 = (User) records.get(0);
-        assertEquals("Joe        ", user1.firstName);
-        assertEquals("Schmoe     ", user1.lastName);
-        assertEquals("jschmoe111 ", user1.userName);
+        assertEquals("Joe        ", user1.getFirstName());
+        assertEquals("Schmoe     ", user1.getLastName());
+        assertEquals("jschmoe111 ", user1.getUserName());
 
         User user2 = (User) records.get(1);
-        assertEquals("Jimmy      ", user2.firstName);
-        assertEquals("Smith      ", user2.lastName);
-        assertEquals("jsmith     ", user2.userName);
+        assertEquals("Jimmy      ", user2.getFirstName());
+        assertEquals("Smith      ", user2.getLastName());
+        assertEquals("jsmith     ", user2.getUserName());
     }
 
     /**
@@ -104,8 +118,7 @@ public class EventDrivenParsingTest extends TestCase {
      */
     private static class UserRecordFactory implements RecordFactory {
         public Object build(Object fields, RecordLayout recordLayout) {
-            List strings = (List) fields;
-            return new User((String) strings.get(0), (String) strings.get(1), (String) strings.get(2));
+            return new User();
         }
     }
 

@@ -1,11 +1,11 @@
 /**
  * Copyright 2008-2009 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at:
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is
  * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and limitations under the License. 
@@ -16,16 +16,16 @@ import flapjack.example.model.User;
 import flapjack.io.LineRecordReader;
 import flapjack.layout.RecordLayout;
 import flapjack.layout.SimpleRecordLayout;
+import flapjack.model.ObjectMapping;
+import flapjack.model.ObjectMappingStore;
 import flapjack.model.RecordFactory;
 import flapjack.model.SameRecordFactoryResolver;
 import flapjack.parser.ParseResult;
 import flapjack.parser.RecordParserImpl;
 import flapjack.parser.SameRecordLayoutResolver;
-import flapjack.parser.StringRecordFieldParser;
 import junit.framework.TestCase;
 
 import java.io.ByteArrayInputStream;
-import java.util.List;
 
 
 public class SameRecordTypeTest extends TestCase {
@@ -35,12 +35,24 @@ public class SameRecordTypeTest extends TestCase {
                 "Jimmy      Smith      jsmith     #";
 
         /**
+         * Configure the ObjectMapping from the record data to the domain objects
+         */
+        ObjectMapping userMapping = new ObjectMapping(User.class);
+        userMapping.add("First Name", "firstName");
+        userMapping.add("Last Name", "lastName");
+        userMapping.add("Username", "userName");
+
+        ObjectMappingStore objectMappingStore = new ObjectMappingStore();
+        objectMappingStore.add(userMapping);
+
+        /**
          * Initialize the RecordParser with our RecordLayoutResolver and RecordFactoryResolver
          */
         RecordParserImpl recordParser = new RecordParserImpl();
         recordParser.setRecordLayoutResolver(new SameRecordLayoutResolver(UserRecordLayout.class));
         recordParser.setRecordFactoryResolver(new SameRecordFactoryResolver(UserRecordFactory.class));
-        recordParser.setRecordFieldParser(new StringRecordFieldParser());
+        recordParser.setObjectMappingStore(objectMappingStore);
+        recordParser.setIgnoreUnmappedFields(true);
 
         /**
          * Actually call the parser with our RecordReader
@@ -58,14 +70,14 @@ public class SameRecordTypeTest extends TestCase {
         assertEquals(2, result.getRecords().size());
 
         User user1 = (User) result.getRecords().get(0);
-        assertEquals("Joe        ", user1.firstName);
-        assertEquals("Schmoe     ", user1.lastName);
-        assertEquals("jschmoe111 ", user1.userName);
+        assertEquals("Joe        ", user1.getFirstName());
+        assertEquals("Schmoe     ", user1.getLastName());
+        assertEquals("jschmoe111 ", user1.getUserName());
 
         User user2 = (User) result.getRecords().get(1);
-        assertEquals("Jimmy      ", user2.firstName);
-        assertEquals("Smith      ", user2.lastName);
-        assertEquals("jsmith     ", user2.userName);
+        assertEquals("Jimmy      ", user2.getFirstName());
+        assertEquals("Smith      ", user2.getLastName());
+        assertEquals("jsmith     ", user2.getUserName());
     }
 
     /**
@@ -85,8 +97,7 @@ public class SameRecordTypeTest extends TestCase {
      */
     private static class UserRecordFactory implements RecordFactory {
         public Object build(Object fields, RecordLayout recordLayout) {
-            List strings = (List) fields;
-            return new User((String) strings.get(0), (String) strings.get(1), (String) strings.get(2));
+            return new User();
         }
     }
 

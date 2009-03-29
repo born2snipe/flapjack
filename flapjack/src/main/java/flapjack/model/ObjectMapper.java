@@ -10,23 +10,13 @@
  * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and limitations under the License. 
  */
-package flapjack.parser;
+package flapjack.model;
 
-import flapjack.layout.FieldDefinition;
 
-import java.util.ArrayList;
-import java.util.List;
+public interface ObjectMapper {
+    void mapOnTo(Object parsedFields, Object domain) throws IllegalArgumentException;
 
-/**
- * Breaks up the array of bytes into fields and converts them to Strings
- */
-public class StringRecordFieldParser extends AbstractRecordFieldParser {
-    protected Object createObject() {
-        return new ArrayList();
-    }
+    void setIgnoreUnmappedFields(boolean ignoreUnmappedFields);
 
-    protected void processField(byte[] field, FieldDefinition definition, Object obj) {
-        ((List) obj).add(new String(field));
-    }
-
+    void setObjectMappingStore(ObjectMappingStore objectMappingStore);
 }

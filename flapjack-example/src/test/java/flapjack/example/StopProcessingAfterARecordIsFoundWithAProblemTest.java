@@ -13,11 +13,14 @@
 package flapjack.example;
 
 import flapjack.example.model.User;
+import flapjack.example.model.Address;
 import flapjack.io.LineRecordReader;
 import flapjack.layout.RecordLayout;
 import flapjack.layout.SimpleRecordLayout;
 import flapjack.model.RecordFactory;
 import flapjack.model.RecordFactoryResolver;
+import flapjack.model.ObjectMapping;
+import flapjack.model.ObjectMappingStore;
 import flapjack.parser.*;
 import junit.framework.TestCase;
 
@@ -32,13 +35,25 @@ public class StopProcessingAfterARecordIsFoundWithAProblemTest extends TestCase 
         String records = "Joe        Schmoe     jschmoe111";
 
         /**
+         * Configure the ObjectMapping from the record data to the domain objects
+         */
+        ObjectMapping userMapping = new ObjectMapping(User.class);
+        userMapping.add("First Name", "firstName");
+        userMapping.add("Last Name", "lastName");
+        userMapping.add("Username", "userName");
+
+        ObjectMappingStore objectMappingStore = new ObjectMappingStore();
+        objectMappingStore.add(userMapping);
+
+        /**
          * Initialize the RecordParser with our RecordLayoutResolver and RecordFactoryResolver
          */
         RecordParserImpl recordParser = new RecordParserImpl();
         recordParser.setRecordLayoutResolver(new SameRecordLayoutResolver(UserRecordLayout.class));
         recordParser.setRecordFactoryResolver(new BasicRecordFactoryResolver());
-        recordParser.setRecordFieldParser(new StringRecordFieldParser());
         recordParser.setParseResultFactory(new ExplodindParseResultFactory());
+        recordParser.setObjectMappingStore(objectMappingStore);
+        recordParser.setIgnoreUnmappedFields(true);
 
         /**
          * Actually call the parser with our RecordReader
@@ -103,8 +118,7 @@ public class StopProcessingAfterARecordIsFoundWithAProblemTest extends TestCase 
      */
     private static class UserRecordFactory implements RecordFactory {
         public Object build(Object fields, RecordLayout recordLayout) {
-            List strings = (List) fields;
-            return new User((String) strings.get(0), (String) strings.get(1), (String) strings.get(2));
+            return new User();
         }
     }
 

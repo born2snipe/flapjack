@@ -1,11 +1,11 @@
 /**
  * Copyright 2008-2009 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at:
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is
  * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and limitations under the License. 
@@ -14,10 +14,12 @@ package flapjack.example;
 
 import flapjack.annotation.Field;
 import flapjack.annotation.Record;
-import flapjack.annotation.model.AnnotatedMappedRecordFactoryResolver;
-import flapjack.parser.ByteMapRecordFieldParser;
+import flapjack.annotation.model.AnnotatedObjectMappingStore;
 import flapjack.io.LineRecordReader;
+import flapjack.layout.RecordLayout;
 import flapjack.layout.SimpleRecordLayout;
+import flapjack.model.RecordFactory;
+import flapjack.model.SameRecordFactoryResolver;
 import flapjack.parser.ParseResult;
 import flapjack.parser.RecordParserImpl;
 import flapjack.parser.SameRecordLayoutResolver;
@@ -33,19 +35,19 @@ public class UseAnnotationTest extends TestCase {
         String records = "Coldplay  Clocks    03:45";
 
         /**
-         * Initialize the MappedRecordFactoryResolver with what packages need to be scanned for the domain classes
+         * Initialize the AnnotatedObjctMappingStore with what packages need to be scanned for the domain classes
          * that contain the annotations.
          */
-        AnnotatedMappedRecordFactoryResolver recordFactoryResolver = new AnnotatedMappedRecordFactoryResolver();
-        recordFactoryResolver.setPackages(Arrays.asList("flapjack.example"));
+        AnnotatedObjectMappingStore objectMappingStore = new AnnotatedObjectMappingStore();
+        objectMappingStore.setPackages(Arrays.asList("flapjack.example"));
 
         /**
-         * Initialize the RecordParser with our RecordLayoutResolver and RecordFactoryResolver
+         * Initialize the RecordParser with our ObjectMappingStore
          */
         RecordParserImpl recordParser = new RecordParserImpl();
         recordParser.setRecordLayoutResolver(new SameRecordLayoutResolver(SongRecordLayout.class));
-        recordParser.setRecordFactoryResolver(recordFactoryResolver);
-        recordParser.setRecordFieldParser(new ByteMapRecordFieldParser());
+        recordParser.setRecordFactoryResolver(new SameRecordFactoryResolver(SongFactory.class));
+        recordParser.setObjectMappingStore(objectMappingStore);
 
         /**
          * Actually call the parser with our RecordReader
@@ -56,7 +58,7 @@ public class UseAnnotationTest extends TestCase {
         assertEquals(0, result.getUnparseableRecords().size());
         assertEquals(0, result.getUnresolvedRecords().size());
         assertEquals(0, result.getPartialRecords().size());
-        assertEquals(1, result.getRecords().size());                                              
+        assertEquals(1, result.getRecords().size());
 
         Song song = (Song) result.getRecords().get(0);
         assertEquals("Coldplay  ", song.getArtist());
@@ -113,6 +115,12 @@ public class UseAnnotationTest extends TestCase {
 
         public void setLength(String length) {
             this.length = length;
+        }
+    }
+
+    private static class SongFactory implements RecordFactory {
+        public Object build(Object fields, RecordLayout recordLayout) {
+            return new Song();
         }
     }
 }
