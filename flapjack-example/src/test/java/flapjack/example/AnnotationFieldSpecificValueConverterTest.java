@@ -30,7 +30,7 @@ import java.io.ByteArrayInputStream;
 import java.util.Arrays;
 
 
-public class FieldSpecificValueConverterTest extends TestCase {
+public class AnnotationFieldSpecificValueConverterTest extends TestCase {
     public void test() throws Exception {
         String records = "Joe        Schmoe     Y";
 
