@@ -38,6 +38,8 @@ public class AnnotatedObjectMappingStoreTest extends TestCase {
         assertNotNull(objMapping.findDomainField("firstName"));
         assertNotNull(objMapping.findDomainField("lastName"));
         assertNotNull(objMapping.findRecordField("last name"));
+        assertNull(objMapping.findDomainField("middleIntial"));
+        assertNull(objMapping.findDomainField("surname"));
         ObjectMapping addressMapping = objMappingStore.find(Address.class);
         assertNotNull(addressMapping);
         FieldMapping line1Mapping = addressMapping.findRecordField("line1");
@@ -50,6 +52,11 @@ public class AnnotatedObjectMappingStoreTest extends TestCase {
         private String firstName;
         @Field("last name")
         private String lastName;
+
+        private String middleInitial;
+
+        @Converter(CustomValueConverter.class)
+        private String surname;
     }
 
     @Record(SimpleRecordLayout.class)

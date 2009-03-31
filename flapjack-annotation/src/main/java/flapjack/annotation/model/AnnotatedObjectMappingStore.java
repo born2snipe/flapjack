@@ -12,10 +12,9 @@
  */
 package flapjack.annotation.model;
 
-import flapjack.annotation.Field;
+import flapjack.annotation.Converter;
 import flapjack.annotation.FieldLocator;
 import flapjack.annotation.RecordPackageClassScanner;
-import flapjack.annotation.Converter;
 import flapjack.model.ObjectMapping;
 import flapjack.model.ObjectMappingStore;
 import flapjack.util.ValueConverter;
@@ -43,7 +42,6 @@ public class AnnotatedObjectMappingStore extends ObjectMappingStore {
             List<String> fieldIds = FIELD_LOCATOR.gatherFieldIds(clazz);
             for (String id : fieldIds) {
                 java.lang.reflect.Field domainField = FIELD_LOCATOR.locateById(clazz, id);
-                Field field = domainField.getAnnotation(Field.class);
                 Converter converter = domainField.getAnnotation(Converter.class);
                 if (converter != null && !converter.value().equals(ValueConverter.class)) {
                     objMapping.add(id, domainField.getName(), converter.value());
