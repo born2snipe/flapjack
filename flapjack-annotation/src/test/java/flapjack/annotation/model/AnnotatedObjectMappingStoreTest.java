@@ -14,6 +14,7 @@ package flapjack.annotation.model;
 
 import flapjack.annotation.Field;
 import flapjack.annotation.Record;
+import flapjack.annotation.Converter;
 import flapjack.layout.SimpleRecordLayout;
 import flapjack.model.FieldMapping;
 import flapjack.model.ObjectMapping;
@@ -53,7 +54,7 @@ public class AnnotatedObjectMappingStoreTest extends TestCase {
 
     @Record(SimpleRecordLayout.class)
     private static class Address {
-        @Field(value = "line1", converter = CustomValueConverter.class)
+        @Field("line1") @Converter(CustomValueConverter.class)
         private String line1;
     }
 
