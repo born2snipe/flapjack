@@ -23,5 +23,5 @@ import java.lang.annotation.RetentionPolicy;
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Converter {
-    Class<? extends ValueConverter> value() default ValueConverter.class;
+    Class<? extends ValueConverter> value();
 }
