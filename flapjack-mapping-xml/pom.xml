@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<project>
+    <parent>
+        <groupId>flapjack</groupId>
+        <artifactId>flapjack-dependency-management</artifactId>
+        <version>1.0.3-SNAPSHOT</version>
+    </parent>
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>flapjack-mapping-xml</artifactId>
+    <name>Flapjack Object Mapping with XML</name>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>commons-digester</groupId>
+            <artifactId>commons-digester</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>flapjack</groupId>
+            <artifactId>flapjack</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>3.8.1</version>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+</project>
