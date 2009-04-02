@@ -55,12 +55,30 @@ public class XmlObjectMappingStoreTest extends TestCase {
         assertNotNull(fieldMapping);
         assertEquals("field2", fieldMapping.getRecordFieldName());
         assertEquals("city", fieldMapping.getDomainFieldName());
-        
+
         fieldMapping = objMapping.findRecordField("field3");
         assertNotNull(fieldMapping);
         assertEquals("field3", fieldMapping.getRecordFieldName());
         assertEquals("state", fieldMapping.getDomainFieldName());
 
         assertEquals(3, objMapping.getFieldCount());
+    }
+
+    public void test_duplicateMappings() {
+        try {
+            new XmlObjectMappingStore(Thread.currentThread().getContextClassLoader().getResource("duplicate-mappings.xml"));
+            fail();
+        } catch (IllegalArgumentException err) {
+            assertEquals("Duplicate ObjectMapping for class flapjack.xml.model.Address", err.getMessage());
+        }
+    }
+    
+    public void test_duplicateFieldMappings() {
+        try {
+            new XmlObjectMappingStore(Thread.currentThread().getContextClassLoader().getResource("duplicate-field-mappings.xml"));
+            fail();
+        } catch (IllegalArgumentException err) {
+            assertEquals("Duplicate mapping of field='field1' for class=flapjack.xml.model.User", err.getMessage());
+        }
     }
 }

@@ -1,0 +1,15 @@
+<mappings>
+
+    <object-mapping mappedClass="flapjack.xml.model.Address">
+        <field id="field1" bean="line"/>
+        <field id="field2" bean="city"/>
+        <field id="field3" bean="state"/>
+    </object-mapping>
+
+    <object-mapping mappedClass="flapjack.xml.model.Address">
+        <field id="field1" bean="line"/>
+        <field id="field2" bean="city"/>
+        <field id="field3" bean="state"/>
+    </object-mapping>
+
+</mappings>
