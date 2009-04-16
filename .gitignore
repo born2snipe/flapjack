@@ -1,8 +1,5 @@
 
-*/target
-*/*.iml
-*/*.ipr
-*/*.iws
+target
 *.iml
-*.iws
 *.ipr
+*.iws
