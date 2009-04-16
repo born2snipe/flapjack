@@ -24,50 +24,62 @@ import java.util.Map;
 // TODO - should processing stop if a mapping problem occurs?!
 public class BeanPathObjectMapper implements ObjectMapper {
     private static final String NO_FIELD_MAPPING = "Could not locate field mapping for field=\"{0}\"";
-    private static final String NO_FIELD_ON_OBJECT = "Could not map {0} -> {1} on {2}, \"{1}\" could NOT be found";
+    private static final String NO_FIELD_ON_OBJECT = "Could not map {0} to {1} on {2}, \"{1}\" could NOT be found";
     private static final String NO_OBJECT_MAPPING = "Could not locate object mapping for class={0}";
+    private static final String NO_VALUE_CONVERTER = "Could not find a {0} in the TypeConverter";
 
     private TypeConverter typeConverter = new TypeConverter();
     private boolean ignoreUnmappedFields;
     private ObjectMappingStore objectMappingStore;
-    private static final String NO_VALUE_CONVERTER = "Could not find a {0} in the TypeConverter";
+
 
     public void mapOnTo(Object parsedFields, Object domain) throws IllegalArgumentException {
         Map fields = (Map) parsedFields;
         Class domainClass = domain.getClass();
-        ObjectMapping objectMapping = objectMappingStore.find(domainClass);
-        if (objectMapping == null) {
+        if (!objectMappingStore.isMapped(domainClass)) {
             throw new IllegalArgumentException(MessageFormat.format(NO_OBJECT_MAPPING, new String[]{domainClass.getName()}));
         }
+        ObjectMapping objectMapping = objectMappingStore.find(domainClass);
         Iterator it = fields.keySet().iterator();
         while (it.hasNext()) {
-            String key = (String) it.next();
-            FieldMapping fieldMapping = objectMapping.findRecordField(key);
-            if (fieldMapping == null) {
+            String recordFieldId = (String) it.next();
+            if (!objectMapping.hasFieldMappingFor(recordFieldId)) {
                 if (!ignoreUnmappedFields) {
-                    throw new IllegalArgumentException(MessageFormat.format(NO_FIELD_MAPPING, new String[]{key}));
+                    throw new IllegalArgumentException(MessageFormat.format(NO_FIELD_MAPPING, new String[]{recordFieldId}));
                 }
             } else {
+                FieldMapping fieldMapping = objectMapping.findRecordField(recordFieldId);
                 String beanPath = fieldMapping.getDomainFieldName();
-                Field field = ClassUtil.findField(domain, beanPath);
-                if (field == null) {
-                    throw new IllegalArgumentException(MessageFormat.format(NO_FIELD_ON_OBJECT, new String[]{key, beanPath, domainClass.getName()}));
-                }
-                Object value = null;
-                byte[] data = (byte[]) fields.get(key);
-                Class converterClass = fieldMapping.getValueConverterClass();
-                if (converterClass != null) {
-                    ValueConverter valueConverter = typeConverter.find(converterClass);
-                    if (valueConverter == null) {
-                        throw new IllegalArgumentException(MessageFormat.format(NO_VALUE_CONVERTER, new String[]{converterClass.getName()}));
-                    }
-                    value = valueConverter.convert(data);
-                } else {
-                    value = typeConverter.convert(field.getType(), data);
-                }
+                Field field = locateDomainField(domain, recordFieldId, beanPath);
+                byte[] data = (byte[]) fields.get(recordFieldId);
+                Object value = convertRecordFieldToDomainType(fieldMapping, field, data);
                 ClassUtil.setBean(domain, beanPath, value);
             }
         }
+    }
+
+
+    private Object convertRecordFieldToDomainType(FieldMapping fieldMapping, Field field, byte[] data) {
+        Object value;
+        Class converterClass = fieldMapping.getValueConverterClass();
+        if (converterClass != null) {
+            ValueConverter valueConverter = typeConverter.find(converterClass);
+            if (valueConverter == null) {
+                throw new IllegalArgumentException(MessageFormat.format(NO_VALUE_CONVERTER, new String[]{converterClass.getName()}));
+            }
+            value = valueConverter.convert(data);
+        } else {
+            value = typeConverter.convert(field.getType(), data);
+        }
+        return value;
+    }
+
+    private Field locateDomainField(Object domain, String key, String beanPath) {
+        Field field = ClassUtil.findField(domain, beanPath);
+        if (field == null) {
+            throw new IllegalArgumentException(MessageFormat.format(NO_FIELD_ON_OBJECT, new String[]{key, beanPath, domain.getClass().getName()}));
+        }
+        return field;
     }
 
     public void setIgnoreUnmappedFields(boolean ignoreUnmappedFields) {

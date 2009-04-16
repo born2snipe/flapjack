@@ -34,4 +34,8 @@ public class ObjectMappingStore {
     public int getObjectMappingCount() {
         return mappings.size();
     }
+
+    public boolean isMapped(Class domainClass) {
+        return find(domainClass) != null;
+    }
 }

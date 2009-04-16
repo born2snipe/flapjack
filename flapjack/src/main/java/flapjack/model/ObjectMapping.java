@@ -90,4 +90,8 @@ public class ObjectMapping {
     public FieldMapping findDomainField(String domainFieldName) {
         return (FieldMapping) domainFieldToRecordFieldMappings.get(domainFieldName);
     }
+
+    public boolean hasFieldMappingFor(String recordFieldName) {
+        return findRecordField(recordFieldName) != null;
+    }
 }

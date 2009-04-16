@@ -106,7 +106,7 @@ public class BeanPathObjectMapperTest extends TestCase {
             mapper.mapOnTo(fields, person);
             fail();
         } catch (IllegalArgumentException err) {
-            assertEquals("Could not map field1 -> address on " + Person.class.getName() + ", \"address\" could NOT be found", err.getMessage());
+            assertEquals("Could not map field1 to address on " + Person.class.getName() + ", \"address\" could NOT be found", err.getMessage());
         }
     }
 
