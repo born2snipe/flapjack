@@ -45,9 +45,6 @@ public class ObjectMapping {
      * @param valueConverterClass - the ValueConverter class to be used converting the field data
      */
     public void add(String recordFieldName, String domainFieldName, Class valueConverterClass) {
-        /**
-         * This will eliminate the potential of having multiple instances of the ValueConverters in memory
-         */
         FieldMapping fieldMapping = new FieldMapping(recordFieldName, domainFieldName, valueConverterClass);
         recordFieldToDomainFieldMappings.put(recordFieldName.toLowerCase(), fieldMapping);
         domainFieldToRecordFieldMappings.put(domainFieldName, fieldMapping);
