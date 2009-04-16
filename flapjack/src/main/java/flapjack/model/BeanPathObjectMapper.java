@@ -14,7 +14,6 @@ package flapjack.model;
 
 import flapjack.util.ClassUtil;
 import flapjack.util.TypeConverter;
-import flapjack.util.ValueConverter;
 
 import java.lang.reflect.Field;
 import java.text.MessageFormat;
@@ -60,18 +59,15 @@ public class BeanPathObjectMapper implements ObjectMapper {
 
 
     private Object convertRecordFieldToDomainType(FieldMapping fieldMapping, Field field, byte[] data) {
-        Object value;
         Class converterClass = fieldMapping.getValueConverterClass();
         if (converterClass != null) {
-            ValueConverter valueConverter = typeConverter.find(converterClass);
-            if (valueConverter == null) {
+            if (!typeConverter.isRegistered(converterClass)) {
                 throw new IllegalArgumentException(MessageFormat.format(NO_VALUE_CONVERTER, new String[]{converterClass.getName()}));
             }
-            value = valueConverter.convert(data);
+            return typeConverter.find(converterClass).convert(data);
         } else {
-            value = typeConverter.convert(field.getType(), data);
+            return typeConverter.convert(field.getType(), data);
         }
-        return value;
     }
 
     private Field locateDomainField(Object domain, String key, String beanPath) {

@@ -82,4 +82,8 @@ public class TypeConverter {
     public void registerConverter(ValueConverter valueConverter) {
         converterClassToConverter.put(valueConverter.getClass(), valueConverter);
     }
+
+    public boolean isRegistered(Class valueConverterClass) {
+        return find(valueConverterClass) != null;
+    }
 }

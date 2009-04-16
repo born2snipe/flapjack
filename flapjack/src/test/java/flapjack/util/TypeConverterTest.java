@@ -28,6 +28,14 @@ public class TypeConverterTest extends MockObjectTestCase {
         converter.registerConverter(new MockWrappingValueConverter(Long.class, (ValueConverter) mockConverter.proxy()));
     }
 
+    public void test_isRegistered_Registered() {
+        assertTrue(converter.isRegistered(BooleanTextValueConverter.class));
+    }
+
+    public void test_isRegistered_NotRegistered() {
+        assertFalse(converter.isRegistered(ValueConverter.class));
+    }
+
     public void test_find() {
         assertTrue(converter.find(BooleanTextValueConverter.class) instanceof BooleanTextValueConverter);
         assertNull(converter.find(ValueConverter.class));
