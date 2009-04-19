@@ -46,7 +46,7 @@ public class AnnotatedObjectMappingStoreTest extends TestCase {
         assertTrue(line1Mapping.getValueConverterClass().equals(CustomValueConverter.class));
     }
 
-    @Record(SimpleRecordLayout.class)
+    @Record("person")
     private static class Person {
         @Field
         private String firstName;
@@ -59,7 +59,7 @@ public class AnnotatedObjectMappingStoreTest extends TestCase {
         private String surname;
     }
 
-    @Record(SimpleRecordLayout.class)
+    @Record("address")
     private static class Address {
         @Field("line1") @Converter(CustomValueConverter.class)
         private String line1;

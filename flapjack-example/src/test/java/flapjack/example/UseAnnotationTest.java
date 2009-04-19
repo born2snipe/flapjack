@@ -84,7 +84,7 @@ public class UseAnnotationTest extends TestCase {
      * The names you give the the @Field annotation are very IMPORTANT they should match the descriptions
      * you have defined in your RecordLayout you have defined in the @Record annotation.
      */
-    @Record(SongRecordLayout.class)
+    @Record("song")
     public static class Song {
         @Field
         private String artist;

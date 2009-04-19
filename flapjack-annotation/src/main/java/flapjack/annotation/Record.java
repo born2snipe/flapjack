@@ -23,9 +23,9 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Record {
     /**
-     * The RecordLayout that represents this type of record
+     * The RecordLayout's Id that represents this type of record
      *
-     * @return the record layout class
+     * @return the record layout id
      */
-    Class<? extends RecordLayout> value();
+    String value();
 }

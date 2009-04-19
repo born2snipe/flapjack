@@ -79,7 +79,7 @@ public class FieldLocatorTest extends TestCase {
         assertEquals(Arrays.asList("field1", "field2", "fieldThree", "fieldA", "FieldB"), fields);
     }
 
-    @Record(SimpleRecordLayout.class)
+    @Record("dummy")
     private static class Dummy {
         @Field("field1")
         private String fieldOne;

@@ -16,7 +16,7 @@ import flapjack.annotation.Field;
 import flapjack.annotation.Record;
 
 
-@Record(UserRecordLayout.class)
+@Record("user")
 public class User {
     @Field("First Name")
     private String firstName;

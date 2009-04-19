@@ -15,7 +15,7 @@ package flapjack.test2;
 import flapjack.annotation.Field;
 import flapjack.annotation.Record;
 
-@Record(PhoneRecordLayout.class)
+@Record("phone")
 public class Phone {
     @Field("Area")
     private String areaCode;

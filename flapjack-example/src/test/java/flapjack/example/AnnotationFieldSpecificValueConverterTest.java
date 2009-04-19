@@ -112,7 +112,7 @@ public class AnnotationFieldSpecificValueConverterTest extends TestCase {
         }
     }
 
-    @Record(PersonRecordLayout.class)
+    @Record("person")
     private static class Person {
         @Field("First Name")
         private String firstName;

@@ -78,7 +78,7 @@ public class CobolTest extends TestCase {
         }
     }
 
-    @Record(LoanRecordLayout.class)
+    @Record("loan")
     private static class Loan {
         @Field
         private String ssn;
