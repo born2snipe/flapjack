@@ -54,7 +54,7 @@ public class BeanFieldSpecificValueConverterTest extends TestCase {
          * Initialize the RecordParser with our RecordLayoutResolver and RecordFactoryResolver
          */
         RecordParserImpl recordParser = new RecordParserImpl();
-        recordParser.setRecordLayoutResolver(new SameRecordLayoutResolver(PersonRecordLayout.class));
+        recordParser.setRecordLayoutResolver(new SameRecordLayoutResolver(new PersonRecordLayout()));
         recordParser.setRecordFactoryResolver(new SameRecordFactoryResolver(PersonFactory.class));
         recordParser.setObjectMappingStore(objectMappingStore);
         recordParser.setTypeConverter(typeConverter);
@@ -85,6 +85,7 @@ public class BeanFieldSpecificValueConverterTest extends TestCase {
      */
     private static class PersonRecordLayout extends SimpleRecordLayout {
         private PersonRecordLayout() {
+            super("person");
             field("First Name", 11);
             field("Last Name", 11);
             field("Parent", 1);

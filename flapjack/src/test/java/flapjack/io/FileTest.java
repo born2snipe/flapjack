@@ -39,7 +39,7 @@ public class FileTest extends TestCase {
     protected void setUp() throws Exception {
         super.setUp();
         recordParser = new RecordParserImpl();
-        recordParser.setRecordLayoutResolver(new SameRecordLayoutResolver(TestRecordLayout.class));
+        recordParser.setRecordLayoutResolver(new SameRecordLayoutResolver(new TestRecordLayout()));
         fileParser = new FlatFileParser();
         fileParser.setRecordParser(recordParser);
 
@@ -88,6 +88,7 @@ public class FileTest extends TestCase {
 
     private static class TestRecordLayout extends SimpleRecordLayout {
         private TestRecordLayout() {
+            super("id");
             addFieldDefinition(new SimpleFieldDefinition("data", 0, 10));
         }
     }

@@ -47,6 +47,7 @@ public class SameRecordFactoryResolverTest extends TestCase {
 
     private static class NoDefaultConstructor extends SimpleRecordLayout {
         private NoDefaultConstructor(String blah) {
+            super(blah);
         }
     }
 

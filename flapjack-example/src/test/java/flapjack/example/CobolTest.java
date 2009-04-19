@@ -15,7 +15,7 @@ package flapjack.example;
 import flapjack.annotation.Field;
 import flapjack.annotation.Record;
 import flapjack.annotation.model.AnnotatedObjectMappingStore;
-import flapjack.cobol.layout.AbstractCobolRecordLayout;
+import flapjack.cobol.layout.CobolRecordLayout;
 import flapjack.io.LineRecordReader;
 import flapjack.model.RecordFactory;
 import flapjack.model.SameRecordFactoryResolver;
@@ -44,7 +44,7 @@ public class CobolTest extends TestCase {
          * Initialize the RecordParser with our RecordLayoutResolver and RecordFactoryResolver
          */
         RecordParserImpl recordParser = new RecordParserImpl();
-        recordParser.setRecordLayoutResolver(new SameRecordLayoutResolver(LoanRecordLayout.class));
+        recordParser.setRecordLayoutResolver(new SameRecordLayoutResolver(new LoanRecordLayout()));
         recordParser.setRecordFactoryResolver(new SameRecordFactoryResolver(LoanRecordFactory.class));
         recordParser.setObjectMappingStore(objectMappingStore);
 
@@ -68,11 +68,13 @@ public class CobolTest extends TestCase {
     /**
      * A COBOL style record layout
      */
-    private static class LoanRecordLayout extends AbstractCobolRecordLayout {
-        protected void defineFields() {
-            cobolField("SSN", "9(9)");
-            cobolField("NAME", "X(30)");
-            cobolField("AMOUNT", "9(5)");
+    private static class LoanRecordLayout extends CobolRecordLayout {
+        private LoanRecordLayout() {
+            super("loan");
+
+            field("SSN", "9(9)");
+            field("NAME", "X(30)");
+            field("AMOUNT", "9(5)");
         }
     }
 

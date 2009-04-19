@@ -88,15 +88,15 @@ public class ClassUtilTest extends TestCase {
     }
 
     public void test_findDefaultContructor() {
-        assertNotNull(ClassUtil.findDefaultConstructor(SimpleRecordLayout.class));
+        assertNotNull(ClassUtil.findDefaultConstructor(NestClass.class));
         assertNull(ClassUtil.findDefaultConstructor(NoDefaultConstructor.class));
     }
 
     public void test_newInstance() {
-        Object obj = ClassUtil.newInstance(SimpleRecordLayout.class);
+        Object obj = ClassUtil.newInstance(NoSetterDomain.class);
 
         assertNotNull(obj);
-        assertTrue(obj instanceof SimpleRecordLayout);
+        assertTrue(obj instanceof NoSetterDomain);
     }
 
     public void test_newInstance_NoDefaultConstructor() {

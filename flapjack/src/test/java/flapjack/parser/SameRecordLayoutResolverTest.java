@@ -19,33 +19,11 @@ import flapjack.layout.RecordLayout;
 
 public class SameRecordLayoutResolverTest extends TestCase {
 
-    public void test_constructor() {
-        try {
-            new SameRecordLayoutResolver(null);
-            fail();
-        } catch (IllegalArgumentException err) {
-            assertEquals("Cannot construct with a 'null' RecordLayout", err.getMessage());
-        }
-    }
-    
-    public void test_constructor_NoDefaultConstructor() {
-        try {
-            new SameRecordLayoutResolver(NoDefaultConstructor.class);
-            fail();
-        } catch (IllegalArgumentException err) {
-            assertEquals("Cannot construct without a default constructor", err.getMessage());
-        }
-    }
-    
     public void test_resolve() {
-        SameRecordLayoutResolver resolver = new SameRecordLayoutResolver(SimpleRecordLayout.class);
+        SimpleRecordLayout original = new SimpleRecordLayout("id");
+        SameRecordLayoutResolver resolver = new SameRecordLayoutResolver(original);
 
-        RecordLayout recordLayout = resolver.resolve(null);
-        assertTrue(recordLayout instanceof SimpleRecordLayout);
+        assertSame(original, resolver.resolve(null));
     }
 
-    private static class NoDefaultConstructor extends SimpleRecordLayout {
-        private NoDefaultConstructor(String blah) {
-        }
-    }
 }

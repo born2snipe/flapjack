@@ -92,7 +92,8 @@ public class DifferentRecordTypeTest extends TestCase {
      * These RecordLayouts represent the different possible record types that should be encounted in out data
      */
     private static class UserRecordLayout extends SimpleRecordLayout {
-        private UserRecordLayout() {
+        public UserRecordLayout() {
+            super("user");
             field("Record Type", 2);
             field("First Name", 10);
             field("Last Name", 10);
@@ -102,6 +103,7 @@ public class DifferentRecordTypeTest extends TestCase {
 
     private static class AddressRecordLayout extends SimpleRecordLayout {
         private AddressRecordLayout() {
+            super("address");
             field("Record Type", 2);
             field("Address Line", 20);
             field("City", 15);

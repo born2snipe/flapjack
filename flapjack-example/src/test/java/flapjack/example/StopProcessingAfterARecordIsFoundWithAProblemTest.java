@@ -47,7 +47,7 @@ public class StopProcessingAfterARecordIsFoundWithAProblemTest extends TestCase 
          * Initialize the RecordParser with our RecordLayoutResolver and RecordFactoryResolver
          */
         RecordParserImpl recordParser = new RecordParserImpl();
-        recordParser.setRecordLayoutResolver(new SameRecordLayoutResolver(UserRecordLayout.class));
+        recordParser.setRecordLayoutResolver(new SameRecordLayoutResolver(new UserRecordLayout()));
         recordParser.setRecordFactoryResolver(new BasicRecordFactoryResolver());
         recordParser.setParseResultFactory(new ExplodindParseResultFactory());
         recordParser.setObjectMappingStore(objectMappingStore);
@@ -104,6 +104,7 @@ public class StopProcessingAfterARecordIsFoundWithAProblemTest extends TestCase 
      */
     private static class UserRecordLayout extends SimpleRecordLayout {
         private UserRecordLayout() {
+            super("user");
             field("First Name", 11);
             field("Last Name", 11);
             field("Username", 11);

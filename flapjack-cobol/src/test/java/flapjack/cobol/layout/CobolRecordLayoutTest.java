@@ -15,10 +15,10 @@ package flapjack.cobol.layout;
 import junit.framework.TestCase;
 
 
-public class AbstractCobolRecordLayoutTest extends TestCase {
+public class CobolRecordLayoutTest extends TestCase {
 
     public void test_initializeFields() {
-        new AbstractCobolRecordLayout() {
+        new CobolRecordLayout("id") {
             protected void defineFields() {
 
             }

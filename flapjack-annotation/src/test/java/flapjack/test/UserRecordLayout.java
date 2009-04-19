@@ -16,4 +16,7 @@ import flapjack.layout.SimpleRecordLayout;
 
 
 public class UserRecordLayout extends SimpleRecordLayout {
+    public UserRecordLayout(String id) {
+        super(id);
+    }
 }

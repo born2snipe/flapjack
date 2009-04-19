@@ -27,7 +27,7 @@ public class ByteRecordFieldParserTest extends TestCase {
     protected void setUp() throws Exception {
         super.setUp();
         parser = new ByteRecordFieldParser();
-        recordLayout = new SimpleRecordLayout();
+        recordLayout = new SimpleRecordLayout("id");
     }
 
     public void test_parse_ExceptionHandling() {

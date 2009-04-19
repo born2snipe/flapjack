@@ -57,7 +57,7 @@ public class RecordParserImplTest extends MockObjectTestCase {
         result = new ParseResult();
         recordReader.addRecord(RECORD);
 
-        recordLayout = new SimpleRecordLayout();
+        recordLayout = new SimpleRecordLayout("id");
         recordLayout.addFieldDefinition(new SimpleFieldDefinition("label", 0, 9));
 
         fields = new ArrayList();
@@ -99,7 +99,7 @@ public class RecordParserImplTest extends MockObjectTestCase {
 
 
     public void test_parse_RecordDoesNotMatchTheRecordLayoutLength() throws IOException {
-        SimpleRecordLayout recordLayout = new SimpleRecordLayout();
+        SimpleRecordLayout recordLayout = new SimpleRecordLayout("id");
         recordLayout.addFieldDefinition(new SimpleFieldDefinition("label", 0, 12));
 
         parseResultFactory.expects(once()).method("build").will(returnValue(this.result));

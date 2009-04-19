@@ -44,7 +44,7 @@ public class UseAnnotationTest extends TestCase {
          * Initialize the RecordParser with our ObjectMappingStore
          */
         RecordParserImpl recordParser = new RecordParserImpl();
-        recordParser.setRecordLayoutResolver(new SameRecordLayoutResolver(SongRecordLayout.class));
+        recordParser.setRecordLayoutResolver(new SameRecordLayoutResolver(new SongRecordLayout()));
         recordParser.setRecordFactoryResolver(new SameRecordFactoryResolver(SongFactory.class));
         recordParser.setObjectMappingStore(objectMappingStore);
 
@@ -70,6 +70,7 @@ public class UseAnnotationTest extends TestCase {
      */
     private static class SongRecordLayout extends SimpleRecordLayout {
         private SongRecordLayout() {
+            super("song");
             field("Artist", 10);
             field("Title", 10);
             field("Length of Song", 5);

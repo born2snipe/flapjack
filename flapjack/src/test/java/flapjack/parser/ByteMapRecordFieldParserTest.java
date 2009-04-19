@@ -24,7 +24,7 @@ public class ByteMapRecordFieldParserTest extends TestCase {
     private ByteMapRecordFieldParser fieldParser;
 
     public void test_MultipleFields() throws ParseException {
-        SimpleRecordLayout layout = new SimpleRecordLayout();
+        SimpleRecordLayout layout = new SimpleRecordLayout("id");
         layout.addFieldDefinition(new SimpleFieldDefinition("last name", 0, 10));
         layout.addFieldDefinition(new SimpleFieldDefinition("first name", 11, 10));
 

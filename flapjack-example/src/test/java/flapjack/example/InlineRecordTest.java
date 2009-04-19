@@ -1,11 +1,11 @@
 /**
  * Copyright 2008-2009 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at:
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is
  * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and limitations under the License. 
@@ -17,11 +17,13 @@ import flapjack.example.model.User;
 import flapjack.io.RecordReader;
 import flapjack.layout.RecordLayout;
 import flapjack.layout.SimpleRecordLayout;
-import flapjack.model.RecordFactory;
-import flapjack.model.RecordFactoryResolver;
 import flapjack.model.ObjectMapping;
 import flapjack.model.ObjectMappingStore;
-import flapjack.parser.*;
+import flapjack.model.RecordFactory;
+import flapjack.model.RecordFactoryResolver;
+import flapjack.parser.ParseResult;
+import flapjack.parser.RecordLayoutResolver;
+import flapjack.parser.RecordParserImpl;
 import junit.framework.TestCase;
 
 import java.io.ByteArrayInputStream;
@@ -128,6 +130,7 @@ public class InlineRecordTest extends TestCase {
      */
     private static class UserRecordLayout extends SimpleRecordLayout {
         private UserRecordLayout() {
+            super("user");
             field("Record Type", 2);
             field("Record Length", 3);
             field("First Name", 10);
@@ -138,8 +141,9 @@ public class InlineRecordTest extends TestCase {
 
     private static class AddressRecordLayout extends SimpleRecordLayout {
         private AddressRecordLayout() {
+            super("address");
             field("Record Type", 2);
-            field("Record Length",3);
+            field("Record Length", 3);
             field("Address Line", 20);
             field("City", 15);
             field("State", 2);
@@ -166,7 +170,7 @@ public class InlineRecordTest extends TestCase {
      */
     private static class UserRecordFactory implements RecordFactory {
         public Object build() {
-           return new User();
+            return new User();
         }
     }
 

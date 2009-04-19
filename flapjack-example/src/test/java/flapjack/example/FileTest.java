@@ -49,7 +49,7 @@ public class FileTest extends TestCase {
 		 * Initialize the RecordParser with our RecordLayoutResolver and RecordFactoryResolver
 		 */
 		RecordParserImpl recordParser = new RecordParserImpl();
-		recordParser.setRecordLayoutResolver(new SameRecordLayoutResolver(UserRecordLayout.class));
+		recordParser.setRecordLayoutResolver(new SameRecordLayoutResolver(new UserRecordLayout()));
 		recordParser.setRecordFactoryResolver(new SameRecordFactoryResolver(UserRecordFactory.class));
 		recordParser.setObjectMappingStore(objectMappingStore);
 		recordParser.setIgnoreUnmappedFields(true);
@@ -86,6 +86,7 @@ public class FileTest extends TestCase {
 	 */
 	private static class UserRecordLayout extends SimpleRecordLayout {
 		private UserRecordLayout() {
+            super("user");
 			field("First Name", 11);
 			field("Last Name", 11);
 			field("Username", 11);
