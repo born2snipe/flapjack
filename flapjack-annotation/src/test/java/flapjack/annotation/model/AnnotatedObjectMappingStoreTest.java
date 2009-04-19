@@ -12,10 +12,9 @@
  */
 package flapjack.annotation.model;
 
+import flapjack.annotation.Converter;
 import flapjack.annotation.Field;
 import flapjack.annotation.Record;
-import flapjack.annotation.Converter;
-import flapjack.layout.SimpleRecordLayout;
 import flapjack.model.FieldMapping;
 import flapjack.model.ObjectMapping;
 import flapjack.util.ValueConverter;
@@ -61,17 +60,14 @@ public class AnnotatedObjectMappingStoreTest extends TestCase {
 
     @Record("address")
     private static class Address {
-        @Field("line1") @Converter(CustomValueConverter.class)
+        @Field("line1")
+        @Converter(CustomValueConverter.class)
         private String line1;
     }
 
     public static class CustomValueConverter implements ValueConverter {
         public Object convert(byte[] bytes) {
             return null;
-        }
-
-        public Class[] types() {
-            return new Class[0];
         }
     }
 }
