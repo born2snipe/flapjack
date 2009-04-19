@@ -17,18 +17,11 @@ import java.util.*;
 /**
  * Basic implementation of the RecordLayout
  */
-public class SimpleRecordLayout implements RecordLayout {
-    private List fieldDefinitions = new ArrayList();
+public class SimpleRecordLayout extends AbstractRecordLayout {
     private int offset = 0;
-    private String id;
 
     public SimpleRecordLayout(String id) {
-        this.id = id;
-    }
-
-    public void addFieldDefinition(FieldDefinition fieldDef) {
-        fieldDefinitions.add(fieldDef);
-        Collections.sort(fieldDefinitions, new FieldDefinitionComparator());
+        super(id);
     }
 
     public void field(String name, int length) {
@@ -36,30 +29,4 @@ public class SimpleRecordLayout implements RecordLayout {
         offset += length;
     }
 
-    public List getFieldDefinitions() {
-        return Collections.unmodifiableList(fieldDefinitions);
-    }
-
-    public int getLength() {
-        int len = 0;
-        Iterator it = fieldDefinitions.iterator();
-        while (it.hasNext()) {
-            FieldDefinition fieldDef = (FieldDefinition) it.next();
-            len += fieldDef.getLength();
-        }
-        return len;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    private static class FieldDefinitionComparator implements Comparator {
-
-        public int compare(Object o, Object o1) {
-            FieldDefinition fieldDef1 = (FieldDefinition) o;
-            FieldDefinition fieldDef2 = (FieldDefinition) o1;
-            return new Integer(fieldDef1.getPosition()).compareTo(new Integer(fieldDef2.getPosition()));
-        }
-    }
 }

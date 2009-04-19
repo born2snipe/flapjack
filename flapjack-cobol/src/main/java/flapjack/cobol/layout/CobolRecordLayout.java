@@ -12,10 +12,10 @@
  */
 package flapjack.cobol.layout;
 
-import flapjack.layout.SimpleRecordLayout;
+import flapjack.layout.AbstractRecordLayout;
 
 
-public class CobolRecordLayout extends SimpleRecordLayout {
+public class CobolRecordLayout extends AbstractRecordLayout {
     private int offset = 0;
     private CobolFieldPatternValidator patternValidator = new CobolFieldPatternValidator();
     private CobolFieldTypeResolver fieldTypeResolver = new CobolFieldTypeResolver();
@@ -26,11 +26,11 @@ public class CobolRecordLayout extends SimpleRecordLayout {
         setFieldDefFactory(new CobolFieldDefinitionFactory());
     }
 
-    protected void field(String name, String pattern) {
+    public void field(String name, String pattern) {
         field(new CobolFieldInfo(name, pattern));
     }
 
-    protected void field(CobolFieldInfo fieldInfo) {
+    public void field(CobolFieldInfo fieldInfo) {
         if (!patternValidator.validate(fieldInfo.getPattern())) {
             throw new IllegalArgumentException("'" + fieldInfo.getPattern() + "' is not a valid COBOL field definition pattern");
         }
