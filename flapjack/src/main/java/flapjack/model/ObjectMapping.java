@@ -57,6 +57,9 @@ public class ObjectMapping {
      * @return the FieldMapping for the given field
      */
     public FieldMapping findRecordField(String recordFieldName) {
+        if (recordFieldName == null) {
+            return null;
+        }
         return (FieldMapping) recordFieldToDomainFieldMappings.get(recordFieldName.toLowerCase());
     }
 

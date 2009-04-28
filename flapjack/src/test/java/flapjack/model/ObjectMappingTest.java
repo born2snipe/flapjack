@@ -48,6 +48,14 @@ public class ObjectMappingTest extends TestCase {
         assertSame(fieldMapping, mapping.findDomainField("domainField"));
     }
 
+    public void test_findDomainField_Null() {
+        assertNull(mapping.findDomainField(null));
+    }
+
+    public void test_findRecordField_Null() {
+        assertNull(mapping.findRecordField(null));
+    }
+
     public void test_findRecordField_Uppercase() {
         mapping.add("field", "domainField");
         assertNotNull(mapping.findRecordField("FIELD"));
