@@ -13,45 +13,56 @@
     <name>Flapjack Distribution</name>
     <packaging>pom</packaging>
 
+    <properties>
+        <flapjack.version>1.0.3</flapjack.version>
+    </properties>
+
     <dependencies>
 
         <dependency>
             <groupId>flapjack</groupId>
             <artifactId>flapjack</artifactId>
+            <version>${flapjack.version}</version>
         </dependency>
 
         <dependency>
             <groupId>flapjack</groupId>
             <artifactId>flapjack</artifactId>
+            <version>${flapjack.version}</version>
             <classifier>sources</classifier>
         </dependency>
 
         <dependency>
             <groupId>flapjack</groupId>
             <artifactId>flapjack</artifactId>
+            <version>${flapjack.version}</version>
             <classifier>javadoc</classifier>
         </dependency>
 
         <dependency>
             <groupId>flapjack</groupId>
             <artifactId>flapjack-annotation</artifactId>
+            <version>${flapjack.version}</version>
         </dependency>
 
         <dependency>
             <groupId>flapjack</groupId>
             <artifactId>flapjack-annotation</artifactId>
+            <version>${flapjack.version}</version>
             <classifier>sources</classifier>
         </dependency>
 
         <dependency>
             <groupId>flapjack</groupId>
             <artifactId>flapjack-annotation</artifactId>
+            <version>${flapjack.version}</version>
             <classifier>javadoc</classifier>
         </dependency>
 
         <dependency>
             <groupId>flapjack</groupId>
             <artifactId>flapjack-example</artifactId>
+            <version>${flapjack.version}</version>
             <classifier>test-sources</classifier>
         </dependency>
 

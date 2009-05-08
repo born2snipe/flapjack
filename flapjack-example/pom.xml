@@ -24,18 +24,21 @@
         <dependency>
             <groupId>flapjack</groupId>
             <artifactId>flapjack</artifactId>
+            <version>${version}</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>flapjack</groupId>
             <artifactId>flapjack-annotation</artifactId>
+            <version>${version}</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>flapjack</groupId>
             <artifactId>flapjack-cobol</artifactId>
+            <version>${version}</version>
             <scope>test</scope>
         </dependency>
 

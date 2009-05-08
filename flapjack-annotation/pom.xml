@@ -26,6 +26,7 @@
         <dependency>
             <groupId>flapjack</groupId>
             <artifactId>flapjack</artifactId>
+            <version>${version}</version>
         </dependency>
 
         <dependency>
