@@ -61,9 +61,9 @@ public class EventDrivenParsingTest extends TestCase {
          * Configure the ObjectMapping from the record data to the User domain object
          */
         ObjectMapping userMapping = new ObjectMapping(User.class);
-        userMapping.add("First Name", "firstName");
-        userMapping.add("Last Name", "lastName");
-        userMapping.add("Username", "userName");
+        userMapping.field("First Name", "firstName");
+        userMapping.field("Last Name", "lastName");
+        userMapping.field("Username", "userName");
 
         ObjectMappingStore objectMappingStore = new ObjectMappingStore();
         objectMappingStore.add(userMapping);

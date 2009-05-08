@@ -67,7 +67,7 @@ public class FileTest extends TestCase {
     private void verifyRecordReader(RecordReaderFactory recordReaderFactory) throws IOException {
         ObjectMappingStore store = new ObjectMappingStore();
         ObjectMapping objMapping = new ObjectMapping(Record.class);
-        objMapping.add("data", "data");
+        objMapping.field("data", "data");
         store.add(objMapping);
 
         recordParser.setObjectMappingStore(store);

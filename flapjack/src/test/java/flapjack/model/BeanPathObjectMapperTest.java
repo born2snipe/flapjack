@@ -37,8 +37,8 @@ public class BeanPathObjectMapperTest extends TestCase {
 
     public void test_mapOnTo_MultipleFields() {
         ObjectMapping objMapping = new ObjectMapping(Person.class);
-        objMapping.add("field1", "firstName");
-        objMapping.add("field2", "lastName");
+        objMapping.field("field1", "firstName");
+        objMapping.field("field2", "lastName");
 
         mappingStore.add(objMapping);
 
@@ -53,7 +53,7 @@ public class BeanPathObjectMapperTest extends TestCase {
 
     public void test_mapOnTo_SingleField() {
         ObjectMapping objMapping = new ObjectMapping(Person.class);
-        objMapping.add("field1", "firstName");
+        objMapping.field("field1", "firstName");
         mappingStore.add(objMapping);
 
         fields.put("field1", "Jim".getBytes());
@@ -70,7 +70,7 @@ public class BeanPathObjectMapperTest extends TestCase {
         mapper.setTypeConverter(typeConverter);
 
         ObjectMapping objMapping = new ObjectMapping(Person.class);
-        objMapping.add("field1", "firstName", CustomConverter.class);
+        objMapping.field("field1", "firstName", CustomConverter.class);
         mappingStore.add(objMapping);
 
         fields.put("field1", "Jim".getBytes());
@@ -82,7 +82,7 @@ public class BeanPathObjectMapperTest extends TestCase {
 
     public void test_mapOnTo_SingleField_UseCustomValueConverter_NotRegisteredInTypeConverter() {
         ObjectMapping objMapping = new ObjectMapping(Person.class);
-        objMapping.add("field1", "firstName", CustomConverter.class);
+        objMapping.field("field1", "firstName", CustomConverter.class);
         mappingStore.add(objMapping);
 
         fields.put("field1", "Jim".getBytes());
@@ -97,7 +97,7 @@ public class BeanPathObjectMapperTest extends TestCase {
 
     public void test_mapOnTo_FieldDoesNotExistOnDomain() {
         ObjectMapping objMapping = new ObjectMapping(Person.class);
-        objMapping.add("field1", "address");
+        objMapping.field("field1", "address");
         mappingStore.add(objMapping);
 
         fields.put("field1", "Jim".getBytes());

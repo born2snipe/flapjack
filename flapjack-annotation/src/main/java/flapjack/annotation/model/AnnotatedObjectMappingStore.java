@@ -44,9 +44,9 @@ public class AnnotatedObjectMappingStore extends ObjectMappingStore {
                 java.lang.reflect.Field domainField = FIELD_LOCATOR.locateById(clazz, id);
                 Converter converter = domainField.getAnnotation(Converter.class);
                 if (converter != null && !converter.value().equals(ValueConverter.class)) {
-                    objMapping.add(id, domainField.getName(), converter.value());
+                    objMapping.field(id, domainField.getName(), converter.value());
                 } else {
-                    objMapping.add(id, domainField.getName());
+                    objMapping.field(id, domainField.getName());
                 }
             }
             add(objMapping);

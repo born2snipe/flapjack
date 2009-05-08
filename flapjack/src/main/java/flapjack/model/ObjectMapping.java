@@ -33,8 +33,8 @@ public class ObjectMapping {
      * @param recordFieldName - the name/id that will be given to a record field
      * @param domainFieldName - the field name on the domain object
      */
-    public void add(String recordFieldName, String domainFieldName) {
-        add(recordFieldName, domainFieldName, null);
+    public void field(String recordFieldName, String domainFieldName) {
+        field(recordFieldName, domainFieldName, null);
     }
 
     /**
@@ -44,7 +44,7 @@ public class ObjectMapping {
      * @param domainFieldName     - the field name on the domain object
      * @param valueConverterClass - the ValueConverter class to be used converting the field data
      */
-    public void add(String recordFieldName, String domainFieldName, Class valueConverterClass) {
+    public void field(String recordFieldName, String domainFieldName, Class valueConverterClass) {
         FieldMapping fieldMapping = new FieldMapping(recordFieldName, domainFieldName, valueConverterClass);
         recordFieldToDomainFieldMappings.put(recordFieldName.toLowerCase(), fieldMapping);
         domainFieldToRecordFieldMappings.put(domainFieldName, fieldMapping);

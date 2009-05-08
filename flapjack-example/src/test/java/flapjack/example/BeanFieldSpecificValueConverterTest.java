@@ -36,9 +36,9 @@ public class BeanFieldSpecificValueConverterTest extends TestCase {
          * Configure the ObjectMapping from the record data to the domain objects
          */
         ObjectMapping userMapping = new ObjectMapping(Person.class);
-        userMapping.add("First Name", "firstName");
-        userMapping.add("Last Name", "lastName");
-        userMapping.add("Parent", "parent", YesNoValueConverter.class);
+        userMapping.field("First Name", "firstName");
+        userMapping.field("Last Name", "lastName");
+        userMapping.field("Parent", "parent", YesNoValueConverter.class);
 
         ObjectMappingStore objectMappingStore = new ObjectMappingStore();
         objectMappingStore.add(userMapping);

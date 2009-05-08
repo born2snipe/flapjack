@@ -34,9 +34,9 @@ public class CustomFieldIdentifierTest extends TestCase {
          * Configure the ObjectMapping from the record data to the domain objects
          */
         ObjectMapping userMapping = new ObjectMapping(User.class);
-        userMapping.add("emaN tsriF", "firstName");
-        userMapping.add("emaN tsaL", "lastName");
-        userMapping.add("emanresU", "userName");
+        userMapping.field("emaN tsriF", "firstName");
+        userMapping.field("emaN tsaL", "lastName");
+        userMapping.field("emanresU", "userName");
 
         ObjectMappingStore objectMappingStore = new ObjectMappingStore();
         objectMappingStore.add(userMapping);
