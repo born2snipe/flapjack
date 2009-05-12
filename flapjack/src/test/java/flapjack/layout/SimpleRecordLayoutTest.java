@@ -44,6 +44,21 @@ public class SimpleRecordLayoutTest extends TestCase {
         assertEquals(1, layout.getFieldDefinitions().size());
     }
 
+    public void test_field_OneFieldDefinition_DoesNotStartFromBeginning() {
+        layout.field("", 2, 2);
+
+        assertEquals(4, layout.getLength());
+        assertEquals(1, layout.getFieldDefinitions().size());
+    }
+
+    public void test_field_TwoFieldDefinition_DoesNotStartFromBeginning() {
+        layout.field("", 2, 2);
+        layout.field("", 2);
+
+        assertEquals(6, layout.getLength());
+        assertEquals(2, layout.getFieldDefinitions().size());
+    }
+
     public void test_TwoFieldDefinition_OutOfOrder() {
         layout.addFieldDefinition(new SimpleFieldDefinition("", 2, 2));
         layout.addFieldDefinition(new SimpleFieldDefinition("", 0, 2));

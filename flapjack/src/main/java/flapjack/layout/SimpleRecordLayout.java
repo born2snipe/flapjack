@@ -12,8 +12,6 @@
  */
 package flapjack.layout;
 
-import java.util.*;
-
 /**
  * Basic implementation of the RecordLayout
  */
@@ -25,8 +23,14 @@ public class SimpleRecordLayout extends AbstractRecordLayout {
     }
 
     public void field(String name, int length) {
-        addFieldDefinition(new SimpleFieldDefinition(name, offset, length));
-        offset += length;
+        field(name, offset, length);
     }
 
+    public void field(String name, int position, int length) {
+        addFieldDefinition(new SimpleFieldDefinition(name, position, length));
+        if (offset != position) {
+            offset = position;
+        }
+        offset += length;
+    }
 }

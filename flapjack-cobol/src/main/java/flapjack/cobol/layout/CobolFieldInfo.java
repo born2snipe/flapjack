@@ -25,7 +25,6 @@ public class CobolFieldInfo {
     public CobolFieldInfo(String name, String pattern) {
         this.name = name;
         this.pattern = pattern;
-        this.position = position;
     }
 
     public String getName() {
