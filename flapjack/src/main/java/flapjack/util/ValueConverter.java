@@ -25,5 +25,11 @@ public interface ValueConverter {
      */
     Object toDomain(byte[] bytes);
 
+    /**
+     * Attempts to convert the given domain object to a byte array
+     *
+     * @param domain - the domain object to be serialized to bytes
+     * @return the binary data representing the domain object
+     */
     byte[] toBytes(Object domain);
 }
