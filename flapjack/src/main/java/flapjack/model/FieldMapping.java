@@ -31,6 +31,11 @@ public class FieldMapping {
         this.valueConverter = valueConverterClass;
     }
 
+    public FieldMapping(List recordFields, String domainFieldName) {
+        this.recordFields.addAll(recordFields);
+        this.domainFieldName = domainFieldName;
+    }
+
     public String getDomainFieldName() {
         return domainFieldName;
     }

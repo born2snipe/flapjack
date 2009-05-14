@@ -37,6 +37,11 @@ public class ObjectMappingTest extends TestCase {
 
         assertNotNull(mapping.findRecordField("field1"));
         assertNotNull(mapping.findRecordField("field2"));
+
+        FieldMapping fieldMapping = mapping.findDomainField("domainField");
+        assertEquals("field1", fieldMapping.getRecordFields().get(0));
+        assertEquals("field2", fieldMapping.getRecordFields().get(1));
+        assertEquals(2, fieldMapping.getRecordFields().size());
     }
 
     public void test_add_WithValueConverter() {

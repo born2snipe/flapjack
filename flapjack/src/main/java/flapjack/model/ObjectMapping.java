@@ -31,11 +31,7 @@ public class ObjectMapping {
 
 
     public void field(List recordFields, String domainFieldName) {
-        Iterator it = recordFields.iterator();
-        while (it.hasNext()) {
-            String fieldName = (String) it.next();
-            field(fieldName, domainFieldName);
-        }
+        register(new FieldMapping(recordFields, domainFieldName));
     }
 
     /**
@@ -45,7 +41,7 @@ public class ObjectMapping {
      * @param domainFieldName - the field name on the domain object
      */
     public void field(String recordFieldName, String domainFieldName) {
-        field(recordFieldName, domainFieldName, null);
+        register(new FieldMapping(recordFieldName, domainFieldName));
     }
 
     /**
@@ -56,9 +52,7 @@ public class ObjectMapping {
      * @param valueConverterClass - the ValueConverter class to be used converting the field data
      */
     public void field(String recordFieldName, String domainFieldName, Class valueConverterClass) {
-        FieldMapping fieldMapping = new FieldMapping(recordFieldName, domainFieldName, valueConverterClass);
-        recordFieldToDomainFieldMappings.put(recordFieldName.toLowerCase(), fieldMapping);
-        domainFieldToRecordFieldMappings.put(domainFieldName, fieldMapping);
+        register(new FieldMapping(recordFieldName, domainFieldName, valueConverterClass));
     }
 
     /**
@@ -106,5 +100,12 @@ public class ObjectMapping {
         return findRecordField(recordFieldName) != null;
     }
 
-
+    private void register(FieldMapping fieldMapping) {
+        Iterator it = fieldMapping.getRecordFields().iterator();
+        while (it.hasNext()) {
+            String recordFieldName = (String) it.next();
+            recordFieldToDomainFieldMappings.put(recordFieldName.toLowerCase(), fieldMapping);
+        }
+        domainFieldToRecordFieldMappings.put(fieldMapping.getDomainFieldName(), fieldMapping);
+    }
 }
