@@ -17,7 +17,7 @@ import java.io.DataInputStream;
 import java.io.IOException;
 
 
-public abstract class AbstractBinaryValueConverter implements TypedValueConverter {
+public abstract class AbstractBinaryValueConverter implements ValueConverter {
     public final Object convert(byte[] bytes) {
         if (bytes == null)
             throw new IllegalArgumentException("Byte array given was null");

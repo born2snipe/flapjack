@@ -16,7 +16,7 @@ import java.io.DataInputStream;
 import java.io.IOException;
 
 
-public class FloatBinaryValueConverter extends AbstractBinaryValueConverter {
+public class FloatBinaryValueConverter extends AbstractBinaryValueConverter implements TypedValueConverter {
     protected int requiredNumberOfBytes() {
         return 4;
     }

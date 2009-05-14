@@ -15,7 +15,7 @@ package flapjack.util;
 import java.io.DataInputStream;
 import java.io.IOException;
 
-public class DoubleBinaryValueConverter extends AbstractBinaryValueConverter {
+public class DoubleBinaryValueConverter extends AbstractBinaryValueConverter implements  TypedValueConverter {
     protected int requiredNumberOfBytes() {
         return 8;
     }

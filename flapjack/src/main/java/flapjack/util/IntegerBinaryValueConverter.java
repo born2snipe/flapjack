@@ -16,7 +16,7 @@ import java.io.DataInputStream;
 import java.io.IOException;
 
 
-public class IntegerBinaryValueConverter extends AbstractBinaryValueConverter {
+public class IntegerBinaryValueConverter extends AbstractBinaryValueConverter implements TypedValueConverter {
 
     public Class[] types() {
         return new Class[]{int.class, Integer.class};

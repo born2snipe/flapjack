@@ -16,7 +16,7 @@ import java.io.DataInputStream;
 import java.io.IOException;
 
 
-public class LongBinaryValueConverter extends AbstractBinaryValueConverter {
+public class LongBinaryValueConverter extends AbstractBinaryValueConverter implements TypedValueConverter {
     protected int requiredNumberOfBytes() {
         return 8;
     }
