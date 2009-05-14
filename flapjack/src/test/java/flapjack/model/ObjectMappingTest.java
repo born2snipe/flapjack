@@ -57,7 +57,7 @@ public class ObjectMappingTest extends TestCase {
         FieldMapping fieldMapping = mapping.findRecordField("field");
 
         assertNotNull(fieldMapping);
-        assertEquals("field", fieldMapping.getRecordFieldName());
+        assertEquals("field", fieldMapping.getRecordFields().get(0));
         assertEquals("domainField", fieldMapping.getDomainFieldName());
         assertEquals(1, mapping.getFieldCount());
         assertSame(fieldMapping, mapping.findDomainField("domainField"));

@@ -12,17 +12,21 @@
  */
 package flapjack.model;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public class FieldMapping {
     private String domainFieldName;
-    private String recordFieldName;
     private Class valueConverter;
+    private List recordFields = new ArrayList();
 
     public FieldMapping(String recordFieldName, String domainFieldName) {
         this(recordFieldName, domainFieldName, null);
     }
 
     public FieldMapping(String recordFieldName, String domainFieldName, Class valueConverterClass) {
-        this.recordFieldName = recordFieldName;
+        recordFields.add(recordFieldName);
         this.domainFieldName = domainFieldName;
         this.valueConverter = valueConverterClass;
     }
@@ -31,8 +35,8 @@ public class FieldMapping {
         return domainFieldName;
     }
 
-    public String getRecordFieldName() {
-        return recordFieldName;
+    public List getRecordFields() {
+        return Collections.unmodifiableList(recordFields);
     }
 
     public Class getValueConverterClass() {
