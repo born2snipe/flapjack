@@ -22,6 +22,13 @@ public class BigDecimalTextValueConverterTest extends ValueConverterTestCase {
         converter = new BigDecimalTextValueConverter();
     }
 
+    public void test_toBytes() {
+        assertEquals(binary("1"), converter.toBytes(new BigDecimal("1")));
+        assertEquals(binary("1.0"), converter.toBytes(new BigDecimal("1.0")));
+        assertEquals(binary("1.0"), converter.toBytes(new BigDecimal("01.0")));
+        assertNull(converter.toBytes(null));
+    }
+
     public void test_toDomain() {
         assertEquals(new BigDecimal("1"), converter.toDomain("1".getBytes()));
         assertEquals(new BigDecimal("1.0"), converter.toDomain("1.0".getBytes()));
@@ -29,10 +36,6 @@ public class BigDecimalTextValueConverterTest extends ValueConverterTestCase {
     }
 
     public void test_types() {
-        Class[] classes = converter.types();
-
-        assertNotNull(classes);
-        assertEquals(1, classes.length);
-        assertEquals(BigDecimal.class, classes[0]);
+        assertEquals(new Class[]{BigDecimal.class}, converter.types());
     }
 }

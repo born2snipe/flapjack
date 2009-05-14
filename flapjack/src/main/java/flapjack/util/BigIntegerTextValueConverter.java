@@ -15,16 +15,12 @@ package flapjack.util;
 import java.math.BigInteger;
 
 
-public class BigIntegerTextValueConverter implements TypedValueConverter {
+public class BigIntegerTextValueConverter extends AbstractTextValueConverter implements TypedValueConverter {
     public Class[] types() {
         return new Class[]{BigInteger.class};
     }
 
-    public Object toDomain(byte[] bytes) {
-        return new BigInteger(new String(bytes));
-    }
-
-    public byte[] toBytes(Object domain) {
-        return new byte[0];  //To change body of implemented methods use File | Settings | File Templates.
+    protected Object fromText(String text) {
+        return new BigInteger(text);
     }
 }

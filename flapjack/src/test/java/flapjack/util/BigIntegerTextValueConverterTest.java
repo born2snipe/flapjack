@@ -22,16 +22,17 @@ public class BigIntegerTextValueConverterTest extends ValueConverterTestCase {
         converter = new BigIntegerTextValueConverter();
     }
 
+    public void test_toBytes() {
+        assertEquals(binary("1"), converter.toBytes(new BigInteger("1")));
+        assertNull(converter.toBytes(null));
+    }
+
     public void test_toDomain() {
         assertEquals(new BigInteger("1"), converter.toDomain(binary("1")));
         assertEquals(new BigInteger("1"), converter.toDomain(binary("01")));
     }
 
     public void test_types() {
-        Class[] classes = converter.types();
-
-        assertNotNull(classes);
-        assertEquals(1, classes.length);
-        assertEquals(BigInteger.class, classes[0]);
+        assertEquals(new Class[]{BigInteger.class}, converter.types());
     }
 }

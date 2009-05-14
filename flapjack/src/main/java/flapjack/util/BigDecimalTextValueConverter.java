@@ -15,16 +15,12 @@ package flapjack.util;
 import java.math.BigDecimal;
 
 
-public class BigDecimalTextValueConverter implements TypedValueConverter {
+public class BigDecimalTextValueConverter extends AbstractTextValueConverter implements TypedValueConverter {
     public Class[] types() {
         return new Class[]{BigDecimal.class};
     }
 
-    public Object toDomain(byte[] bytes) {
-        return new BigDecimal(new String(bytes));
-    }
-
-    public byte[] toBytes(Object domain) {
-        return null;
+    protected Object fromText(String text) {
+        return new BigDecimal(text);
     }
 }
