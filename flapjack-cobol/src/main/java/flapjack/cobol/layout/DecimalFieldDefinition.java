@@ -12,30 +12,12 @@
  */
 package flapjack.cobol.layout;
 
-import flapjack.layout.SimpleFieldDefinition;
-
-import java.util.regex.Matcher;
-
-
-public class DecimalFieldDefinition extends SimpleFieldDefinition implements CobolFieldDefinition {
-    private String pattern;
+public class DecimalFieldDefinition extends AbstractCobolFieldDefinition {
 
     public DecimalFieldDefinition(String name, int position, String pattern) {
-        super(name, position, -1);
-        this.pattern = pattern.trim();
-        String[] parts = this.pattern.split("v|V");
+        super(name, position, -1, pattern);
+        String[] parts = pattern.split("v|V");
         setLength(parseLength(parts[0]) + parseLength(parts[1]));
     }
 
-    private int parseLength(String part) {
-        Matcher matcher = MULTIPLIER_PATTERN.matcher(part);
-        if (matcher.find()) {
-            return Integer.parseInt(matcher.group(1));
-        }
-        return part.length();
-    }
-
-    public String getPattern() {
-        return pattern;
-    }
 }

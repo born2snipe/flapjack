@@ -14,11 +14,7 @@ package flapjack.cobol.layout;
 
 import flapjack.layout.FieldDefinition;
 
-import java.util.regex.Pattern;
-
 
 public interface CobolFieldDefinition extends FieldDefinition {
-    static final Pattern MULTIPLIER_PATTERN = Pattern.compile(".\\(([0-9]+)\\)", Pattern.CASE_INSENSITIVE);
-
     String getPattern();
 }

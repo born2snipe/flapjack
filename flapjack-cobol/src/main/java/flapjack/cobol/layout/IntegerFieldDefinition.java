@@ -12,29 +12,11 @@
  */
 package flapjack.cobol.layout;
 
-import flapjack.layout.SimpleFieldDefinition;
-
-import java.util.regex.Matcher;
-
-
-public class IntegerFieldDefinition extends SimpleFieldDefinition implements CobolFieldDefinition {
-    private String pattern;
+public class IntegerFieldDefinition extends AbstractCobolFieldDefinition {
 
     public IntegerFieldDefinition(String name, int position, String pattern) {
-        super(name, position, -1);
-        this.pattern = pattern;
+        super(name, position, -1, pattern);
         setLength(parseLength(pattern.trim()));
     }
 
-    private int parseLength(String pattern) {
-        Matcher matcher = MULTIPLIER_PATTERN.matcher(pattern);
-        if (matcher.find()) {
-            return Integer.parseInt(matcher.group(1));
-        }
-        return pattern.length();
-    }
-
-    public String getPattern() {
-        return pattern;
-    }
 }
