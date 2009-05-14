@@ -15,6 +15,8 @@ package flapjack.model;
 import flapjack.util.IntegerTextValueConverter;
 import junit.framework.TestCase;
 
+import java.util.Arrays;
+
 
 public class ObjectMappingTest extends TestCase {
     private ObjectMapping mapping;
@@ -22,6 +24,19 @@ public class ObjectMappingTest extends TestCase {
     protected void setUp() throws Exception {
         super.setUp();
         mapping = new ObjectMapping(String.class);
+    }
+
+    public void test_fieldWithAList_SingleField() {
+        mapping.field(Arrays.asList(new String[]{"field1"}), "domainField");
+
+        assertNotNull(mapping.findRecordField("field1"));
+    }
+
+    public void test_fieldWithAList_MultipleFields() {
+        mapping.field(Arrays.asList(new String[]{"field1", "field2"}), "domainField");
+
+        assertNotNull(mapping.findRecordField("field1"));
+        assertNotNull(mapping.findRecordField("field2"));
     }
 
     public void test_add_WithValueConverter() {

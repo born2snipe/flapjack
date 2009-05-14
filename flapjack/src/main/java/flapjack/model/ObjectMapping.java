@@ -13,6 +13,8 @@
 package flapjack.model;
 
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -25,6 +27,15 @@ public class ObjectMapping {
 
     public ObjectMapping(Class domainClass) {
         this.clazz = domainClass;
+    }
+
+
+    public void field(List recordFields, String domainFieldName) {
+        Iterator it = recordFields.iterator();
+        while (it.hasNext()) {
+            String fieldName = (String) it.next();
+            field(fieldName, domainFieldName);
+        }
     }
 
     /**
@@ -94,4 +105,6 @@ public class ObjectMapping {
     public boolean hasFieldMappingFor(String recordFieldName) {
         return findRecordField(recordFieldName) != null;
     }
+
+
 }
