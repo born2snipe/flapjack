@@ -18,7 +18,7 @@ public class FloatTextValueConverter implements TypedValueConverter {
         return new Class[]{float.class, Float.class};
     }
 
-    public Object convert(byte[] bytes) {
+    public Object toDomain(byte[] bytes) {
         return Float.valueOf(new String(bytes));
     }
 }

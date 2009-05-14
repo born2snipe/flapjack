@@ -66,7 +66,7 @@ public class AnnotatedObjectMappingStoreTest extends TestCase {
     }
 
     public static class CustomValueConverter implements ValueConverter {
-        public Object convert(byte[] bytes) {
+        public Object toDomain(byte[] bytes) {
             return null;
         }
     }

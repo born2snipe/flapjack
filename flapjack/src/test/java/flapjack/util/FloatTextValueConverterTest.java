@@ -25,9 +25,9 @@ public class FloatTextValueConverterTest extends TestCase {
     }
 
     public void test_convert() {
-        assertEquals(new Float(1), converter.convert("1".getBytes()));
-        assertEquals(new Float(1), converter.convert("1.0".getBytes()));
-        assertEquals(new Float(1), converter.convert("01".getBytes()));
+        assertEquals(new Float(1), converter.toDomain("1".getBytes()));
+        assertEquals(new Float(1), converter.toDomain("1.0".getBytes()));
+        assertEquals(new Float(1), converter.toDomain("01".getBytes()));
     }
 
     public void test_types() {

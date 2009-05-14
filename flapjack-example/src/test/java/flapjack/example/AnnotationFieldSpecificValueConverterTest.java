@@ -103,7 +103,7 @@ public class AnnotationFieldSpecificValueConverterTest extends TestCase {
      * Custom ValueConverter to handle Y/N as a Boolean
      */
     private static class YesNoValueConverter implements ValueConverter {
-        public Object convert(byte[] bytes) {
+        public Object toDomain(byte[] bytes) {
             String value = new String(bytes);
             if (value.equalsIgnoreCase("Y")) {
                 return Boolean.TRUE;

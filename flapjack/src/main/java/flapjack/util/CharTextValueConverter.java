@@ -14,7 +14,7 @@ package flapjack.util;
 
 
 public class CharTextValueConverter implements ValueConverter {
-    public Object convert(byte[] bytes) {
+    public Object toDomain(byte[] bytes) {
         if (bytes == null || bytes.length == 0)
             return null;
         if (bytes.length > 1)

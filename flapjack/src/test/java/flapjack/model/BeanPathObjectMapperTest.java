@@ -147,7 +147,7 @@ public class BeanPathObjectMapperTest extends TestCase {
     }
 
     private static class CustomConverter implements ValueConverter {
-        public Object convert(byte[] bytes) {
+        public Object toDomain(byte[] bytes) {
             return "customValue";
         }
     }

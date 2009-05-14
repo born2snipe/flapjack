@@ -25,12 +25,12 @@ public class FloatBinaryValueConverterTest extends TestCase {
     }
     
     public void test_convert() {
-        assertEquals(new Float(1.0f), converter.convert(ValueConverterTestUtil.binary(1.0f)));
+        assertEquals(new Float(1.0f), converter.toDomain(ValueConverterTestUtil.binary(1.0f)));
     }
 
     public void test_convert_NotEnoughData() {
         try {
-            converter.convert(new byte[3]);
+            converter.toDomain(new byte[3]);
             fail();
         } catch (IllegalArgumentException err) {
             assertEquals("There are not enough bytes expected 4 got 3 bytes", err.getMessage());
@@ -39,7 +39,7 @@ public class FloatBinaryValueConverterTest extends TestCase {
     
     public void test_convert_NullByteArray() {
         try {
-            converter.convert(null);
+            converter.toDomain(null);
             fail();
         } catch (IllegalArgumentException err) {
             assertEquals("Byte array given was null", err.getMessage());

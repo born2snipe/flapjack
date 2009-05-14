@@ -20,7 +20,7 @@ public class BigDecimalTextValueConverter implements TypedValueConverter {
         return new Class[]{BigDecimal.class};
     }
 
-    public Object convert(byte[] bytes) {
+    public Object toDomain(byte[] bytes) {
         return new BigDecimal(new String(bytes));
     }
 }

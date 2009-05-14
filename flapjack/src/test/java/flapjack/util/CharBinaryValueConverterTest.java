@@ -25,12 +25,12 @@ public class CharBinaryValueConverterTest extends TestCase {
     }
 
     public void test_convert() {
-        assertEquals(new Character('1'), converter.convert(ValueConverterTestUtil.binary('1')));
+        assertEquals(new Character('1'), converter.toDomain(ValueConverterTestUtil.binary('1')));
     }
 
     public void test_convert_NotEnoughData() {
         try {
-            converter.convert(new byte[1]);
+            converter.toDomain(new byte[1]);
             fail();
         } catch (IllegalArgumentException err) {
             assertEquals("There are not enough bytes expected 2 got 1 bytes", err.getMessage());
@@ -39,7 +39,7 @@ public class CharBinaryValueConverterTest extends TestCase {
 
     public void test_convert_NullByteArray() {
         try {
-            converter.convert(null);
+            converter.toDomain(null);
             fail();
         } catch (IllegalArgumentException err) {
             assertEquals("Byte array given was null", err.getMessage());

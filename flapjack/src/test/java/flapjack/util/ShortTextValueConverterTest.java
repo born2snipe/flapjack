@@ -26,9 +26,9 @@ public class ShortTextValueConverterTest extends TestCase {
     }
 
     public void test_convert() {
-        assertEquals(new Short((short) 2), converter.convert(ValueConverterTestUtil.text(2)));
-        assertEquals(new Short((short) 0), converter.convert("".getBytes()));
-        assertEquals(new Short((short) 0), converter.convert(null));
+        assertEquals(new Short((short) 2), converter.toDomain(ValueConverterTestUtil.text(2)));
+        assertEquals(new Short((short) 0), converter.toDomain("".getBytes()));
+        assertEquals(new Short((short) 0), converter.toDomain(null));
     }
 
     public void test_types() {

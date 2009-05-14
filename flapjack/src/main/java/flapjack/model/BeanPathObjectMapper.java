@@ -64,7 +64,7 @@ public class BeanPathObjectMapper implements ObjectMapper {
             if (!typeConverter.isRegistered(converterClass)) {
                 throw new IllegalArgumentException(MessageFormat.format(NO_VALUE_CONVERTER, new String[]{converterClass.getName()}));
             }
-            return typeConverter.find(converterClass).convert(data);
+            return typeConverter.find(converterClass).toDomain(data);
         } else {
             return typeConverter.convert(field.getType(), data);
         }

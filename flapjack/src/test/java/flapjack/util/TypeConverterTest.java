@@ -61,13 +61,13 @@ public class TypeConverterTest extends MockObjectTestCase {
 
     public void test_typeRegistered_TEXT() {
         byte[] bytes = "text".getBytes();
-        mockConverter.expects(once()).method("convert").with(eq(bytes)).will(returnValue(new Long(1)));
+        mockConverter.expects(once()).method("toDomain").with(eq(bytes)).will(returnValue(new Long(1)));
         assertEquals(new Long(1), converter.convert(Long.class, bytes));
     }
 
     public void test_typeRegistered_BINARY() {
         byte[] bytes = "text".getBytes();
-        mockConverter.expects(once()).method("convert").with(eq(bytes)).will(returnValue(new Integer(1)));
+        mockConverter.expects(once()).method("toDomain").with(eq(bytes)).will(returnValue(new Integer(1)));
         assertEquals(new Integer(1), converter.convert(Integer.class, bytes));
     }
 
@@ -83,7 +83,7 @@ public class TypeConverterTest extends MockObjectTestCase {
     public void test_ValueConverterThrowsException() {
         byte[] bytes = "text".getBytes();
         NullPointerException original = new NullPointerException();
-        mockConverter.expects(once()).method("convert").with(eq(bytes)).will(throwException(original));
+        mockConverter.expects(once()).method("toDomain").with(eq(bytes)).will(throwException(original));
         try {
             converter.convert(Long.class, bytes);
             fail();
@@ -111,8 +111,8 @@ public class TypeConverterTest extends MockObjectTestCase {
             this.types = types;
         }
 
-        public Object convert(byte[] bytes) {
-            return mock.convert(bytes);
+        public Object toDomain(byte[] bytes) {
+            return mock.toDomain(bytes);
         }
 
         public Class[] types() {
@@ -121,7 +121,7 @@ public class TypeConverterTest extends MockObjectTestCase {
     }
 
     private static class SimpleValueConverter implements ValueConverter {
-        public Object convert(byte[] bytes) {
+        public Object toDomain(byte[] bytes) {
             return null;
         }
     }

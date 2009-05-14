@@ -18,7 +18,7 @@ public class BooleanTextValueConverter implements TypedValueConverter {
         return new Class[]{boolean.class, Boolean.class};
     }
 
-    public Object convert(byte[] bytes) {
+    public Object toDomain(byte[] bytes) {
         return Boolean.valueOf(new String(bytes));
     }
 }

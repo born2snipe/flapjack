@@ -23,12 +23,12 @@ public class IntegerBinaryValueConverterTest extends TestCase {
     }
 
     public void test_convert() {
-        assertEquals(new Integer(1), converter.convert(ValueConverterTestUtil.binary(1)));
+        assertEquals(new Integer(1), converter.toDomain(ValueConverterTestUtil.binary(1)));
     }
 
     public void test_convert_NotEnoughBytes() {
         try {
-            converter.convert(new byte[3]);
+            converter.toDomain(new byte[3]);
             fail();
         } catch (IllegalArgumentException err) {
             assertEquals("There are not enough bytes expected 4 got 3 bytes", err.getMessage());

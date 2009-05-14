@@ -63,7 +63,7 @@ public class TypeConverter {
             throw new IllegalArgumentException("No " + ValueConverter.class.getName() + " registered for types " + clazz.getName());
         }
         try {
-            return converter.convert(bytes);
+            return converter.toDomain(bytes);
         } catch (RuntimeException err) {
             throw new IllegalArgumentException("Problem converting \"" + new String(bytes) + "\" to " + clazz.getName(), err);
         }

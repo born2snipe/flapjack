@@ -20,7 +20,7 @@ public class BigIntegerTextValueConverter implements TypedValueConverter {
         return new Class[]{BigInteger.class};
     }
 
-    public Object convert(byte[] bytes) {
+    public Object toDomain(byte[] bytes) {
         return new BigInteger(new String(bytes));
     }
 }

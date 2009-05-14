@@ -18,7 +18,7 @@ public class IntegerTextValueConverter implements TypedValueConverter {
         return new Class[]{Integer.class, int.class};
     }
 
-    public Object convert(byte[] bytes) {
+    public Object toDomain(byte[] bytes) {
         if (bytes == null)
             return new Integer(0);
         String text = new String(bytes);

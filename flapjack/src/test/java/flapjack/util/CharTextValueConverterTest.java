@@ -26,14 +26,14 @@ public class CharTextValueConverterTest extends TestCase {
     }
 
     public void test_convert() {
-        assertEquals(new Character('1'), converter.convert(ValueConverterTestUtil.text(1)));
-        assertNull(converter.convert("".getBytes()));
-        assertNull(converter.convert(null));
+        assertEquals(new Character('1'), converter.toDomain(ValueConverterTestUtil.text(1)));
+        assertNull(converter.toDomain("".getBytes()));
+        assertNull(converter.toDomain(null));
     }
 
     public void test_convert_MoreThanOneByteGiven() {
         try {
-            converter.convert("12".getBytes());
+            converter.toDomain("12".getBytes());
             fail();
         } catch (IllegalArgumentException err) {
             assertEquals("To many bytes was given length=2, was expecting a single byte", err.getMessage());

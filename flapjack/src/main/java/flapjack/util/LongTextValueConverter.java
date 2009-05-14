@@ -18,7 +18,7 @@ public class LongTextValueConverter implements TypedValueConverter {
         return new Class[]{long.class, Long.class};
     }
 
-    public Object convert(byte[] bytes) {
+    public Object toDomain(byte[] bytes) {
         return Long.valueOf(new String(bytes));
     }
 }

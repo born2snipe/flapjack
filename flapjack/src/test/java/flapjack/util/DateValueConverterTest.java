@@ -32,12 +32,12 @@ public class DateValueConverterTest extends TestCase {
     }
 
     public void test_convert() {
-        assertEquals(createDate("01/20/1908 00:00"), converter.convert("01/20/1908".getBytes()));
-        assertEquals(createDate("01/01/1908 00:00"), converter.convert("01/1908".getBytes()));
+        assertEquals(createDate("01/20/1908 00:00"), converter.toDomain("01/20/1908".getBytes()));
+        assertEquals(createDate("01/01/1908 00:00"), converter.toDomain("01/1908".getBytes()));
     }
 
     public void test_convert_NoPatternFound() {
-        assertNull(converter.convert("01-20-1908".getBytes()));
+        assertNull(converter.toDomain("01-20-1908".getBytes()));
     }
 
     private Date createDate(String value) {

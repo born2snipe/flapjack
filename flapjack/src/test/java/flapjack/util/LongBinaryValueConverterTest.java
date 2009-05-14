@@ -25,12 +25,12 @@ public class LongBinaryValueConverterTest extends TestCase {
     }
 
     public void test_convert() {
-        assertEquals(new Long(1), converter.convert(ValueConverterTestUtil.binary(1l)));
+        assertEquals(new Long(1), converter.toDomain(ValueConverterTestUtil.binary(1l)));
     }
 
     public void test_convert_NotEnoughData() {
         try {
-            converter.convert(new byte[7]);
+            converter.toDomain(new byte[7]);
             fail();
         } catch (IllegalArgumentException err) {
             assertEquals("There are not enough bytes expected 8 got 7 bytes", err.getMessage());
@@ -39,7 +39,7 @@ public class LongBinaryValueConverterTest extends TestCase {
     
     public void test_convert_NullByteArray() {
         try {
-            converter.convert(null);
+            converter.toDomain(null);
             fail();
         } catch (IllegalArgumentException err) {
             assertEquals("Byte array given was null", err.getMessage());

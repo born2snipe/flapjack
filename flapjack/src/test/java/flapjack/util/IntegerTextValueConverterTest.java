@@ -29,19 +29,19 @@ public class IntegerTextValueConverterTest extends TestCase {
     }
 
     public void test_convert() {
-        assertEquals(new Integer(1), converter.convert("1".getBytes()));
+        assertEquals(new Integer(1), converter.toDomain("1".getBytes()));
     }
     
     public void test_convert_LeadingZeros() {
-        assertEquals(new Integer(999), converter.convert("0000999".getBytes()));
+        assertEquals(new Integer(999), converter.toDomain("0000999".getBytes()));
     }
 
     
     public void test_convert_EmptyString() {
-        assertEquals(new Integer(0), converter.convert("".getBytes()));
+        assertEquals(new Integer(0), converter.toDomain("".getBytes()));
     }
     
     public void test_convert_NullString() {
-        assertEquals(new Integer(0), converter.convert((byte[])null));
+        assertEquals(new Integer(0), converter.toDomain((byte[])null));
     }
 }

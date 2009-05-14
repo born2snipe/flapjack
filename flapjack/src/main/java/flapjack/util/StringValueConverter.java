@@ -18,7 +18,7 @@ public class StringValueConverter implements TypedValueConverter {
         return new Class[]{String.class};
     }
 
-    public Object convert(byte[] bytes) {
+    public Object toDomain(byte[] bytes) {
         return new String(bytes);
     }
 }

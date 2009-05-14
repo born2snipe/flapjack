@@ -18,7 +18,7 @@ import java.io.IOException;
 
 
 public abstract class AbstractBinaryValueConverter implements ValueConverter {
-    public final Object convert(byte[] bytes) {
+    public final Object toDomain(byte[] bytes) {
         if (bytes == null)
             throw new IllegalArgumentException("Byte array given was null");
         if (bytes.length < requiredNumberOfBytes())

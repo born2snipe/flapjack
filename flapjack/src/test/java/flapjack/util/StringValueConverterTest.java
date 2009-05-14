@@ -34,6 +34,6 @@ public class StringValueConverterTest extends TestCase {
     
     public void test_convert() {
         String value = "value";
-        assertEquals(value, converter.convert(value.getBytes()));
+        assertEquals(value, converter.toDomain(value.getBytes()));
     }
 }

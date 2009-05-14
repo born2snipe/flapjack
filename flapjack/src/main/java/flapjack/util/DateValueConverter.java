@@ -32,7 +32,7 @@ public class DateValueConverter implements ValueConverter {
         return new Class[]{Date.class};
     }
 
-    public Object convert(byte[] bytes) {
+    public Object toDomain(byte[] bytes) {
         String text = new String(bytes);
         for (int i = 0; i < patterns.length; i++) {
             SimpleDateFormat formatter = new SimpleDateFormat(patterns[i]);

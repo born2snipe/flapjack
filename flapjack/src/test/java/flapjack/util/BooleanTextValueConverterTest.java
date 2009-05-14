@@ -26,12 +26,12 @@ public class BooleanTextValueConverterTest extends TestCase {
 
 
     public void test_convert() {
-        assertEquals(new Boolean(true), converter.convert("true".getBytes()));
-        assertEquals(new Boolean(true), converter.convert("TRUE".getBytes()));
-        assertEquals(new Boolean(true), converter.convert("True".getBytes()));
-        assertEquals(new Boolean(false), converter.convert("false".getBytes()));
-        assertEquals(new Boolean(false), converter.convert("FALSE".getBytes()));
-        assertEquals(new Boolean(false), converter.convert("False".getBytes()));
+        assertEquals(new Boolean(true), converter.toDomain("true".getBytes()));
+        assertEquals(new Boolean(true), converter.toDomain("TRUE".getBytes()));
+        assertEquals(new Boolean(true), converter.toDomain("True".getBytes()));
+        assertEquals(new Boolean(false), converter.toDomain("false".getBytes()));
+        assertEquals(new Boolean(false), converter.toDomain("FALSE".getBytes()));
+        assertEquals(new Boolean(false), converter.toDomain("False".getBytes()));
     }
 
     public void test_types() {

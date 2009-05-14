@@ -23,6 +23,6 @@ public interface ValueConverter {
      * @param bytes - the bytes to be converted
      * @return the result of the conversion attempt
      */
-    Object convert(byte[] bytes);
+    Object toDomain(byte[] bytes);
 
 }

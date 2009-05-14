@@ -18,7 +18,7 @@ public class DoubleTextValueConverter implements TypedValueConverter {
         return new Class[]{double.class, Double.class};
     }
 
-    public Object convert(byte[] bytes) {
+    public Object toDomain(byte[] bytes) {
         return Double.valueOf(new String(bytes));
     }
 }
