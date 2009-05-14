@@ -115,6 +115,10 @@ public class TypeConverterTest extends MockObjectTestCase {
             return mock.toDomain(bytes);
         }
 
+        public byte[] toBytes(Object domain) {
+            return mock.toBytes(domain);
+        }
+
         public Class[] types() {
             return types;
         }
@@ -122,6 +126,10 @@ public class TypeConverterTest extends MockObjectTestCase {
 
     private static class SimpleValueConverter implements ValueConverter {
         public Object toDomain(byte[] bytes) {
+            return null;
+        }
+
+        public byte[] toBytes(Object domain) {
             return null;
         }
     }

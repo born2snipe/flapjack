@@ -110,6 +110,10 @@ public class AnnotationFieldSpecificValueConverterTest extends TestCase {
             }
             return Boolean.FALSE;
         }
+
+        public byte[] toBytes(Object domain) {
+            return null;
+        }
     }
 
     @Record("person")

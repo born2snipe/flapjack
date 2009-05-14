@@ -150,5 +150,9 @@ public class BeanPathObjectMapperTest extends TestCase {
         public Object toDomain(byte[] bytes) {
             return "customValue";
         }
+
+        public byte[] toBytes(Object domain) {
+            return null;
+        }
     }
 }

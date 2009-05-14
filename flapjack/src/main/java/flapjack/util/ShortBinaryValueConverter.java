@@ -13,6 +13,7 @@
 package flapjack.util;
 
 import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 
 
@@ -23,6 +24,10 @@ public class ShortBinaryValueConverter extends AbstractBinaryValueConverter impl
 
     protected Object readData(DataInputStream input) throws IOException {
         return new Short(input.readShort());
+    }
+
+    protected void writeData(DataOutputStream output, Object domain) throws IOException {
+        output.writeShort(((Short) domain).shortValue());
     }
 
     public Class[] types() {

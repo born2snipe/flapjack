@@ -12,9 +12,7 @@
  */
 package flapjack.util;
 
-import java.io.ByteArrayInputStream;
-import java.io.DataInputStream;
-import java.io.IOException;
+import java.io.*;
 
 
 public abstract class AbstractBinaryValueConverter implements ValueConverter {
@@ -41,7 +39,23 @@ public abstract class AbstractBinaryValueConverter implements ValueConverter {
         }
     }
 
+    public final byte[] toBytes(Object domain) {
+        if (domain == null) {
+            return null;
+        }
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(requiredNumberOfBytes());
+        DataOutputStream dataOutput = new DataOutputStream(baos);
+        try {
+            writeData(dataOutput, domain);
+            return baos.toByteArray();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     protected abstract int requiredNumberOfBytes();
 
     protected abstract Object readData(DataInputStream input) throws IOException;
+
+    protected abstract void writeData(DataOutputStream output, Object domain) throws IOException;
 }

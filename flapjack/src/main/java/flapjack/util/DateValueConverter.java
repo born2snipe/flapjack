@@ -1,11 +1,11 @@
 /**
  * Copyright 2008-2009 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at:
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is
  * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and limitations under the License. 
@@ -21,7 +21,7 @@ import java.util.Date;
  * <p/>
  * It takes in multiple date patterns and will go until if finds a match otherwise it will return null.
  */
-public class DateValueConverter implements ValueConverter {
+public class DateValueConverter extends AbstractTextValueConverter implements ValueConverter {
     private String[] patterns;
 
     public DateValueConverter(String[] patterns) {
@@ -32,8 +32,7 @@ public class DateValueConverter implements ValueConverter {
         return new Class[]{Date.class};
     }
 
-    public Object toDomain(byte[] bytes) {
-        String text = new String(bytes);
+    protected Object fromText(String text) {
         for (int i = 0; i < patterns.length; i++) {
             SimpleDateFormat formatter = new SimpleDateFormat(patterns[i]);
             try {

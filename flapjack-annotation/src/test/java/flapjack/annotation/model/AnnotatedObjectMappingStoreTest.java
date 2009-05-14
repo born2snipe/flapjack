@@ -69,5 +69,9 @@ public class AnnotatedObjectMappingStoreTest extends TestCase {
         public Object toDomain(byte[] bytes) {
             return null;
         }
+
+        public byte[] toBytes(Object domain) {
+            return null;
+        }
     }
 }

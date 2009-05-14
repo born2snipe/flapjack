@@ -12,25 +12,26 @@
  */
 package flapjack.util;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
 
-public class DoubleBinaryValueConverter extends AbstractBinaryValueConverter implements TypedValueConverter {
-    protected int requiredNumberOfBytes() {
-        return 8;
+public abstract class AbstractTextValueConverter implements ValueConverter {
+    public final Object toDomain(byte[] bytes) {
+        if (bytes == null)
+            return null;
+        String text = new String(bytes);
+        if (text.length() == 0)
+            return null;
+        return fromText(text);
     }
 
-    protected Object readData(DataInputStream input) throws IOException {
-        return new Double(input.readDouble());
+    public final byte[] toBytes(Object domain) {
+        if (domain == null)
+            return null;
+        return toText(domain).getBytes();
     }
 
-    protected void writeData(DataOutputStream output, Object domain) throws IOException {
-        output.writeDouble(((Double) domain).doubleValue());
-    }
+    protected abstract Object fromText(String text);
 
-    public Class[] types() {
-        return new Class[]{double.class, Double.class};
+    protected String toText(Object domain) {
+        return domain.toString();
     }
-
 }

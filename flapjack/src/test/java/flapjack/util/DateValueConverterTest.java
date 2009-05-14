@@ -1,11 +1,11 @@
 /**
  * Copyright 2008-2009 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at:
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is
  * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and limitations under the License. 
@@ -16,8 +16,8 @@ import junit.framework.TestCase;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Arrays;
+import java.util.Date;
 
 
 public class DateValueConverterTest extends TestCase {
@@ -26,17 +26,17 @@ public class DateValueConverterTest extends TestCase {
     public void setUp() {
         converter = new DateValueConverter(new String[]{"MM/dd/yyyy", "MM/yyyy"});
     }
-    
+
     public void test_type() {
         assertTrue(Arrays.equals(new Class[]{Date.class}, converter.types()));
     }
 
-    public void test_convert() {
+    public void test_toDomain() {
         assertEquals(createDate("01/20/1908 00:00"), converter.toDomain("01/20/1908".getBytes()));
         assertEquals(createDate("01/01/1908 00:00"), converter.toDomain("01/1908".getBytes()));
     }
 
-    public void test_convert_NoPatternFound() {
+    public void test_toDomain_NoPatternFound() {
         assertNull(converter.toDomain("01-20-1908".getBytes()));
     }
 
