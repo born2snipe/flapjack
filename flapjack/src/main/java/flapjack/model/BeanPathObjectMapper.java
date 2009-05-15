@@ -25,6 +25,7 @@ public class BeanPathObjectMapper implements ObjectMapper {
     private static final String NO_FIELD_MAPPING = "Could not locate field mapping for field=\"{0}\"";
     private static final String NO_FIELD_ON_OBJECT = "Could not map {0} to {1} on {2}, \"{1}\" could NOT be found";
     private static final String NO_OBJECT_MAPPING = "Could not locate object mapping for class={0}";
+    private static final FieldNameMassager MASSAGER = new FieldNameMassager();
 
     private TypeConverter typeConverter = new TypeConverter();
     private boolean ignoreUnmappedFields;
@@ -50,13 +51,12 @@ public class BeanPathObjectMapper implements ObjectMapper {
                 FieldMapping fieldMapping = objectMapping.findRecordField(recordFieldId);
                 Iterator fieldIterator = fieldMapping.getRecordFields().iterator();
                 while (fieldIterator.hasNext()) {
-                    listMap.put(recordFieldId, fields.get(fieldIterator.next()));
+                    listMap.put(recordFieldId, MASSAGER.get(fields, (String) fieldIterator.next()));
                 }
                 String beanPath = fieldMapping.getDomainFieldName();
                 Field field = locateDomainField(domain, recordFieldId, beanPath);
                 DomainFieldFactory domainFieldFactory = fieldMapping.getFactory();
-                Object value = domainFieldFactory.build(listMap, field.getType(), typeConverter);
-                ClassUtil.setBean(domain, beanPath, value);
+                ClassUtil.setBean(domain, beanPath, domainFieldFactory.build(listMap, field.getType(), typeConverter));
             }
         }
     }
