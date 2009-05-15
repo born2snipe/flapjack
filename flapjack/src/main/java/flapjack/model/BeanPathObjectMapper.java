@@ -18,6 +18,7 @@ import flapjack.util.TypeConverter;
 import java.lang.reflect.Field;
 import java.text.MessageFormat;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 
@@ -25,6 +26,7 @@ public class BeanPathObjectMapper implements ObjectMapper {
     private static final String NO_FIELD_MAPPING = "Could not locate field mapping for field=\"{0}\"";
     private static final String NO_FIELD_ON_OBJECT = "Could not map {0} to {1} on {2}, \"{1}\" could NOT be found";
     private static final String NO_OBJECT_MAPPING = "Could not locate object mapping for class={0}";
+    private static final String X = "'{0}' was not found in record, field mapping for '{1}' on {2}";
     private static final FieldNameMassager MASSAGER = new FieldNameMassager();
 
     private TypeConverter typeConverter = new TypeConverter();
@@ -35,9 +37,7 @@ public class BeanPathObjectMapper implements ObjectMapper {
     public void mapOnTo(Object parsedFields, Object domain) throws IllegalArgumentException {
         Map fields = (Map) parsedFields;
         Class domainClass = domain.getClass();
-        if (!objectMappingStore.isMapped(domainClass)) {
-            throw new IllegalArgumentException(MessageFormat.format(NO_OBJECT_MAPPING, new String[]{domainClass.getName()}));
-        }
+        verifyClassIsMapped(domainClass);
         ObjectMapping objectMapping = objectMappingStore.find(domainClass);
         Iterator it = fields.keySet().iterator();
         while (it.hasNext()) {
@@ -47,20 +47,30 @@ public class BeanPathObjectMapper implements ObjectMapper {
                     throw new IllegalArgumentException(MessageFormat.format(NO_FIELD_MAPPING, new String[]{recordFieldId}));
                 }
             } else {
-                ListMap listMap = new ListMap();
                 FieldMapping fieldMapping = objectMapping.findRecordField(recordFieldId);
-                Iterator fieldIterator = fieldMapping.getRecordFields().iterator();
-                while (fieldIterator.hasNext()) {
-                    listMap.put(recordFieldId, MASSAGER.get(fields, (String) fieldIterator.next()));
-                }
                 String beanPath = fieldMapping.getDomainFieldName();
                 Field field = locateDomainField(domain, recordFieldId, beanPath);
                 DomainFieldFactory domainFieldFactory = fieldMapping.getFactory();
-                ClassUtil.setBean(domain, beanPath, domainFieldFactory.build(listMap, field.getType(), typeConverter));
+                ListMap recordData = grabRecordDataForField(fields, recordFieldId, fieldMapping.getRecordFields());
+                ClassUtil.setBean(domain, beanPath, domainFieldFactory.build(recordData, field.getType(), typeConverter));
             }
         }
     }
 
+    private ListMap grabRecordDataForField(Map fields, String recordFieldId, List recordFields) {
+        ListMap listMap = new ListMap();
+        Iterator fieldIterator = recordFields.iterator();
+        while (fieldIterator.hasNext()) {
+            listMap.put(recordFieldId, MASSAGER.get(fields, (String) fieldIterator.next()));
+        }
+        return listMap;
+    }
+
+    private void verifyClassIsMapped(Class domainClass) {
+        if (!objectMappingStore.isMapped(domainClass)) {
+            throw new IllegalArgumentException(MessageFormat.format(NO_OBJECT_MAPPING, new String[]{domainClass.getName()}));
+        }
+    }
 
     private Field locateDomainField(Object domain, String key, String beanPath) {
         Field field = ClassUtil.findField(domain, beanPath);
