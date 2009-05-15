@@ -17,6 +17,7 @@ import flapjack.util.TypeConverter;
 
 import java.lang.reflect.Field;
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -39,6 +40,7 @@ public class BeanPathObjectMapper implements ObjectMapper {
         Class domainClass = domain.getClass();
         verifyClassIsMapped(domainClass);
         ObjectMapping objectMapping = objectMappingStore.find(domainClass);
+        List alreadyMappedFields = new ArrayList();
         Iterator it = fields.keySet().iterator();
         while (it.hasNext()) {
             String recordFieldId = (String) it.next();
@@ -47,12 +49,15 @@ public class BeanPathObjectMapper implements ObjectMapper {
                     throw new IllegalArgumentException(MessageFormat.format(NO_FIELD_MAPPING, new String[]{recordFieldId}));
                 }
             } else {
-                FieldMapping fieldMapping = objectMapping.findRecordField(recordFieldId);
-                String beanPath = fieldMapping.getDomainFieldName();
-                Field field = locateDomainField(domain, recordFieldId, beanPath);
-                DomainFieldFactory domainFieldFactory = fieldMapping.getFactory();
-                ListMap recordData = grabRecordDataForField(fields, recordFieldId, fieldMapping.getRecordFields());
-                ClassUtil.setBean(domain, beanPath, domainFieldFactory.build(recordData, field.getType(), typeConverter));
+                if (!alreadyMappedFields.contains(recordFieldId)) {
+                    FieldMapping fieldMapping = objectMapping.findRecordField(recordFieldId);
+                    String beanPath = fieldMapping.getDomainFieldName();
+                    Field field = locateDomainField(domain, recordFieldId, beanPath);
+                    DomainFieldFactory domainFieldFactory = fieldMapping.getFactory();
+                    ListMap recordData = grabRecordDataForField(fields, recordFieldId, fieldMapping.getRecordFields());
+                    ClassUtil.setBean(domain, beanPath, domainFieldFactory.build(recordData, field.getType(), typeConverter));
+                    alreadyMappedFields.addAll(fieldMapping.getRecordFields());
+                }
             }
         }
     }

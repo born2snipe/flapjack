@@ -14,14 +14,15 @@ package flapjack.model;
 
 import flapjack.util.TypeConverter;
 import flapjack.util.ValueConverter;
-import junit.framework.TestCase;
+import org.jmock.Mock;
+import org.jmock.MockObjectTestCase;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 
-public class BeanPathObjectMapperTest extends TestCase {
+public class BeanPathObjectMapperTest extends MockObjectTestCase {
     private BeanPathObjectMapper mapper;
     private Map fields;
     private Person person;
@@ -34,6 +35,43 @@ public class BeanPathObjectMapperTest extends TestCase {
         mapper.setObjectMappingStore(mappingStore);
         fields = new HashMap();
         person = new Person();
+    }
+
+    public void test_mapOnTo_EnsureCompoundFieldsAreOnlyMappedOnce() {
+        Mock factory = mock(DomainFieldFactory.class);
+
+        ObjectMapping objMapping = new ObjectMapping(Person.class);
+        objMapping.field(Arrays.asList(new String[]{"field1", "field2"}), "firstName", (DomainFieldFactory) factory.proxy());
+
+        mappingStore.add(objMapping);
+
+        fields.put("field1", "Jim".getBytes());
+        fields.put("field2", "Smith".getBytes());
+
+        factory.expects(once())
+                .method("build").with(isA(ListMap.class), eq(String.class), isA(TypeConverter.class))
+                .will(returnValue("JimSmith"));
+
+        mapper.mapOnTo(fields, person);
+
+        assertEquals("JimSmith", person.firstName);
+    }
+
+    public void MAYBE_NOT_NEEDED_test_mapOnTo_MultipleFields_FieldNotFoundInRecord() {
+        ObjectMapping objMapping = new ObjectMapping(Person.class);
+        objMapping.field(Arrays.asList(new String[]{"field1", "field2"}), "firstName", null);
+
+        mappingStore.add(objMapping);
+
+        fields.put("field1", "Jim".getBytes());
+        fields.put("field3", "Smith".getBytes());
+
+        try {
+            mapper.mapOnTo(fields, person);
+            fail();
+        } catch (IllegalArgumentException err) {
+            assertEquals("'field2' was not found in record, field mapping for 'firstName' on " + Person.class, err.getMessage());
+        }
     }
 
     public void test_mapOnTo_MultipleFields_ToSingleDomainField() {
