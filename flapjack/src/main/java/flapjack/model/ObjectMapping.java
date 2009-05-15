@@ -12,10 +12,7 @@
  */
 package flapjack.model;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * This class contains all the FieldMappings for a given domain class
@@ -29,6 +26,9 @@ public class ObjectMapping {
         this.clazz = domainClass;
     }
 
+    public void field(String[] recordFields, String domainFieldName, DomainFieldFactory domainFieldFactory) {
+        register(new CompoundFieldMapping(Arrays.asList(recordFields), domainFieldName, domainFieldFactory));
+    }
 
     public void field(List recordFields, String domainFieldName, DomainFieldFactory domainFieldFactory) {
         register(new CompoundFieldMapping(recordFields, domainFieldName, domainFieldFactory));
@@ -108,4 +108,5 @@ public class ObjectMapping {
         }
         domainFieldToRecordFieldMappings.put(fieldMapping.getDomainFieldName(), fieldMapping);
     }
+
 }

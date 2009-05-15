@@ -44,6 +44,18 @@ public class ObjectMappingTest extends TestCase {
         assertEquals(2, fieldMapping.getRecordFields().size());
     }
 
+    public void test_fieldWithAnArray_MultipleFields() {
+        mapping.field(new String[]{"field1", "field2"}, "domainField", null);
+
+        assertNotNull(mapping.findRecordField("field1"));
+        assertNotNull(mapping.findRecordField("field2"));
+
+        FieldMapping fieldMapping = mapping.findDomainField("domainField");
+        assertEquals("field1", fieldMapping.getRecordFields().get(0));
+        assertEquals("field2", fieldMapping.getRecordFields().get(1));
+        assertEquals(2, fieldMapping.getRecordFields().size());
+    }
+
     public void test_add_WithValueConverter() {
         mapping.field("field", "domainField", IntegerTextValueConverter.class);
 
