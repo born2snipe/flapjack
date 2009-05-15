@@ -61,11 +61,11 @@ public class ObjectMapping {
      * @param recordFieldName - the name/id that will be given to a record field
      * @return the FieldMapping for the given field
      */
-    public AbstractFieldMapping findRecordField(String recordFieldName) {
+    public FieldMapping findRecordField(String recordFieldName) {
         if (recordFieldName == null) {
             return null;
         }
-        return (AbstractFieldMapping) recordFieldToDomainFieldMappings.get(recordFieldName.toLowerCase());
+        return (FieldMapping) recordFieldToDomainFieldMappings.get(recordFieldName.toLowerCase());
     }
 
     /**
@@ -100,7 +100,7 @@ public class ObjectMapping {
         return findRecordField(recordFieldName) != null;
     }
 
-    private void register(AbstractFieldMapping fieldMapping) {
+    private void register(FieldMapping fieldMapping) {
         Iterator it = fieldMapping.getRecordFields().iterator();
         while (it.hasNext()) {
             String recordFieldName = (String) it.next();
