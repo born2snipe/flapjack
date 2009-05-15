@@ -18,7 +18,7 @@ import org.jmock.Mock;
 import org.jmock.MockObjectTestCase;
 
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 
@@ -34,7 +34,7 @@ public class BeanPathObjectMapperTest extends MockObjectTestCase {
         mappingStore = new ObjectMappingStore();
         mapper = new BeanPathObjectMapper();
         mapper.setObjectMappingStore(mappingStore);
-        fields = new HashMap();
+        fields = new LinkedHashMap();
         person = new Person();
         objMapping = new ObjectMapping(Person.class);
         mappingStore.add(objMapping);
@@ -55,8 +55,14 @@ public class BeanPathObjectMapperTest extends MockObjectTestCase {
         mapper.mapOnTo(fields, person);
     }
 
-    public void FAILING_test_mapOnTo_MultipleFields_FieldNotFoundInRecord() {
-        objMapping.field(Arrays.asList(new String[]{"field1", "field2"}), "firstName", null);
+    public void test_mapOnTo_MultipleFields_FieldNotFoundInRecord() {
+        DomainFieldFactory factory = new DomainFieldFactory() {
+            public Object build(ListMap fields, Class domainFieldType, TypeConverter typeConverter) {
+                return new String((byte[]) fields.get("field1")) + new String((byte[]) fields.get("field2"));
+            }
+        };
+
+        objMapping.field(Arrays.asList(new String[]{"field1", "field2"}), "firstName", factory);
 
         fields.put("field1", "Jim".getBytes());
         fields.put("field3", "Smith".getBytes());
@@ -64,15 +70,33 @@ public class BeanPathObjectMapperTest extends MockObjectTestCase {
         try {
             mapper.mapOnTo(fields, person);
             fail();
-        } catch (IllegalArgumentException err) {
-            assertEquals("'field2' was not found in record, field mapping for 'firstName' on " + Person.class, err.getMessage());
+        } catch (ObjectMappingException err) {
+            assertEquals("\"field2\" was not found in record, field mapping for \"firstName\" on " + Person.class.getName(), err.getMessage());
         }
     }
 
-    public void test_mapOnTo_MultipleFields_ToSingleDomainField() {
+    public void test_mapOnTo_MultipleFields_ToSingleDomainField_UseIndexes() {
         DomainFieldFactory factory = new DomainFieldFactory() {
             public Object build(ListMap fields, Class domainFieldType, TypeConverter typeConverter) {
                 return new String((byte[]) fields.get(0)) + new String((byte[]) fields.get(1));
+            }
+        };
+
+        objMapping.field(Arrays.asList(new String[]{"field1", "field2"}), "firstName", factory);
+
+        fields.put("field1", "Jim".getBytes());
+        fields.put("field2", "Smith".getBytes());
+
+        mapper.mapOnTo(fields, person);
+
+        assertEquals("JimSmith", person.firstName);
+        assertNull(person.lastName);
+    }
+
+    public void test_mapOnTo_MultipleFields_ToSingleDomainField_UseKeys() {
+        DomainFieldFactory factory = new DomainFieldFactory() {
+            public Object build(ListMap fields, Class domainFieldType, TypeConverter typeConverter) {
+                return new String((byte[]) fields.get("field1")) + new String((byte[]) fields.get("field2"));
             }
         };
 
@@ -146,7 +170,7 @@ public class BeanPathObjectMapperTest extends MockObjectTestCase {
         try {
             mapper.mapOnTo(fields, person);
             fail();
-        } catch (IllegalArgumentException err) {
+        } catch (ObjectMappingException err) {
             assertEquals("Could not map field1 to address on " + Person.class.getName() + ", \"address\" could NOT be found", err.getMessage());
         }
     }
@@ -157,7 +181,7 @@ public class BeanPathObjectMapperTest extends MockObjectTestCase {
         try {
             mapper.mapOnTo(fields, person);
             fail();
-        } catch (IllegalArgumentException err) {
+        } catch (ObjectMappingException err) {
             assertEquals("Could not locate field mapping for field=\"field1\"", err.getMessage());
         }
     }
@@ -168,7 +192,7 @@ public class BeanPathObjectMapperTest extends MockObjectTestCase {
         try {
             mapper.mapOnTo(fields, person);
             fail();
-        } catch (IllegalArgumentException err) {
+        } catch (ObjectMappingException err) {
             assertEquals("Could not locate object mapping for class=" + Person.class.getName(), err.getMessage());
         }
     }

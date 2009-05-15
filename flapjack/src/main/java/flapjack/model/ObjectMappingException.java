@@ -12,39 +12,13 @@
  */
 package flapjack.model;
 
-import java.util.*;
 
-
-public class ListMap {
-    private Map map = new LinkedHashMap();
-    private List list = new ArrayList();
-
-    public void put(String key, Object value) {
-        map.put(key, value);
-        list.add(value);
+public class ObjectMappingException extends RuntimeException {
+    public ObjectMappingException(String message) {
+        super(message);
     }
 
-    public int size() {
-        return map.size();
-    }
-
-    public Object get(String key) {
-        return map.get(key);
-    }
-
-    public Object get(int index) {
-        return list.get(index);
-    }
-
-    public Iterator iterator() {
-        return list.iterator();
-    }
-
-    public Set keys() {
-        return map.keySet();
-    }
-
-    public String toString() {
-        return map.toString();
+    public ObjectMappingException(String message, Throwable cause) {
+        super(message, cause);
     }
 }

@@ -14,7 +14,7 @@ package flapjack.parser;
 
 import flapjack.layout.FieldDefinition;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 
@@ -22,7 +22,7 @@ public class ByteMapRecordFieldParser extends AbstractRecordFieldParser {
     private MappedFieldIdGenerator fieldIdGenerator = new FieldNameGenerator();
 
     protected Object createObject() {
-        return new HashMap();
+        return new LinkedHashMap();
     }
 
     protected void processField(byte[] field, FieldDefinition definition, Object obj) {

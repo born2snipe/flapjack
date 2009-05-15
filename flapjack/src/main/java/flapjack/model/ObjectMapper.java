@@ -22,9 +22,9 @@ public interface ObjectMapper {
      *
      * @param parsedFields - the fields parsed from the record
      * @param domain       - the domain model to map the fields to
-     * @throws IllegalArgumentException - thrown when a problem occurs while trying to map the fields
+     * @throws ObjectMappingException - thrown when a problem occurs while trying to map the fields
      */
-    void mapOnTo(Object parsedFields, Object domain) throws IllegalArgumentException;
+    void mapOnTo(Object parsedFields, Object domain) throws ObjectMappingException;
 
     /**
      * You may not want to map all the fields in the record
