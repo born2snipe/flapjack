@@ -16,6 +16,7 @@ import flapjack.util.TypeConverter;
 import flapjack.util.ValueConverter;
 import junit.framework.TestCase;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,6 +34,27 @@ public class BeanPathObjectMapperTest extends TestCase {
         mapper.setObjectMappingStore(mappingStore);
         fields = new HashMap();
         person = new Person();
+    }
+
+    public void test_mapOnTo_MultipleFields_ToSingleDomainField() {
+        DomainFieldFactory factory = new DomainFieldFactory() {
+            public Object build(ListMap fields, Class domainFieldType, TypeConverter typeConverter) {
+                return new String((byte[]) fields.get(0)) + new String((byte[]) fields.get(1));
+            }
+        };
+
+        ObjectMapping objMapping = new ObjectMapping(Person.class);
+        objMapping.field(Arrays.asList(new String[]{"field1", "field2"}), "firstName", factory);
+
+        mappingStore.add(objMapping);
+
+        fields.put("field1", "Jim".getBytes());
+        fields.put("field2", "Smith".getBytes());
+
+        mapper.mapOnTo(fields, person);
+
+        assertEquals("JimSmith", person.firstName);
+        assertNull(person.lastName);
     }
 
     public void test_mapOnTo_MultipleFields() {

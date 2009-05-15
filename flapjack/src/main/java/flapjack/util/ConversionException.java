@@ -10,15 +10,15 @@
  * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and limitations under the License. 
  */
-package flapjack.model;
-
-import java.util.List;
+package flapjack.util;
 
 
-public interface FieldMapping {
-    String getDomainFieldName();
+public class ConversionException extends RuntimeException {
+    public ConversionException(String message) {
+        super(message);
+    }
 
-    List getRecordFields();
-
-    DomainFieldFactory getFactory();
+    public ConversionException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }

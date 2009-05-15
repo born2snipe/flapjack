@@ -57,15 +57,15 @@ public class TypeConverter {
      * @return the result of the coversion attempt
      * @throws IllegalArgumentException thrown when an error is encoutered during convesion
      */
-    public Object convert(Class clazz, byte[] bytes) throws IllegalArgumentException {
-        ValueConverter converter = (ValueConverter) typeToConverter.get(clazz);
+    public Object convert(Class clazz, byte[] bytes) throws ConversionException {
+        ValueConverter converter = type(clazz);
         if (converter == null) {
             throw new IllegalArgumentException("No " + ValueConverter.class.getName() + " registered for types " + clazz.getName());
         }
         try {
             return converter.toDomain(bytes);
         } catch (RuntimeException err) {
-            throw new IllegalArgumentException("Problem converting \"" + new String(bytes) + "\" to " + clazz.getName(), err);
+            throw new ConversionException("Problem converting \"" + new String(bytes) + "\" to " + clazz.getName(), err);
         }
     }
 
@@ -76,7 +76,10 @@ public class TypeConverter {
      * @return the instance of the class given
      */
     public ValueConverter find(Class valueConverterClass) {
-        return (ValueConverter) converterClassToConverter.get(valueConverterClass);
+        if (ValueConverter.class.isAssignableFrom(valueConverterClass)) {
+            return (ValueConverter) converterClassToConverter.get(valueConverterClass);
+        }
+        throw new IllegalArgumentException(valueConverterClass + " is not a " + ValueConverter.class);
     }
 
     public void registerConverter(ValueConverter valueConverter) {
@@ -85,5 +88,9 @@ public class TypeConverter {
 
     public boolean isRegistered(Class valueConverterClass) {
         return find(valueConverterClass) != null;
+    }
+
+    public ValueConverter type(Class domainType) {
+        return (ValueConverter) typeToConverter.get(domainType);
     }
 }

@@ -28,12 +28,32 @@ public class TypeConverterTest extends MockObjectTestCase {
         converter.registerConverter(new MockWrappingValueConverter(Long.class, (ValueConverter) mockConverter.proxy()));
     }
 
+    public void test_type_DoesNotFindConverter() {
+        assertNull(converter.type(TypeConverterTest.class));
+    }
+
+    public void test_type_HasConverter() {
+        IntegerTextValueConverter valueConverter = new IntegerTextValueConverter();
+        converter.registerConverter(valueConverter);
+
+        assertSame(valueConverter, converter.type(Integer.class));
+    }
+
     public void test_isRegistered_Registered() {
         assertTrue(converter.isRegistered(BooleanTextValueConverter.class));
     }
 
     public void test_isRegistered_NotRegistered() {
         assertFalse(converter.isRegistered(ValueConverter.class));
+    }
+
+    public void test_find_NotValueConverter() {
+        try {
+            converter.find(String.class);
+            fail();
+        } catch (IllegalArgumentException err) {
+            assertEquals(String.class + " is not a " + ValueConverter.class, err.getMessage());
+        }
     }
 
     public void test_find() {
@@ -87,7 +107,7 @@ public class TypeConverterTest extends MockObjectTestCase {
         try {
             converter.convert(Long.class, bytes);
             fail();
-        } catch (IllegalArgumentException err) {
+        } catch (ConversionException err) {
             assertEquals("Problem converting \"text\" to java.lang.Long", err.getMessage());
             assertSame(original, err.getCause());
         }

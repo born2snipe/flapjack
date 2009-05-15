@@ -15,7 +15,6 @@ package flapjack.annotation.model;
 import flapjack.annotation.Converter;
 import flapjack.annotation.Field;
 import flapjack.annotation.Record;
-import flapjack.model.FieldMapping;
 import flapjack.model.ObjectMapping;
 import flapjack.util.ValueConverter;
 import junit.framework.TestCase;
@@ -41,8 +40,7 @@ public class AnnotatedObjectMappingStoreTest extends TestCase {
         assertNull(objMapping.findDomainField("surname"));
         ObjectMapping addressMapping = objMappingStore.find(Address.class);
         assertNotNull(addressMapping);
-        FieldMapping line1Mapping = addressMapping.findRecordField("line1");
-        assertTrue(line1Mapping.getValueConverterClass().equals(CustomValueConverter.class));
+        assertNotNull(addressMapping.findRecordField("line1"));
     }
 
     @Record("person")

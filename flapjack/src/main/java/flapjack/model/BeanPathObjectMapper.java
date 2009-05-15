@@ -25,7 +25,6 @@ public class BeanPathObjectMapper implements ObjectMapper {
     private static final String NO_FIELD_MAPPING = "Could not locate field mapping for field=\"{0}\"";
     private static final String NO_FIELD_ON_OBJECT = "Could not map {0} to {1} on {2}, \"{1}\" could NOT be found";
     private static final String NO_OBJECT_MAPPING = "Could not locate object mapping for class={0}";
-    private static final String NO_VALUE_CONVERTER = "Could not find a {0} in the TypeConverter";
 
     private TypeConverter typeConverter = new TypeConverter();
     private boolean ignoreUnmappedFields;
@@ -47,28 +46,21 @@ public class BeanPathObjectMapper implements ObjectMapper {
                     throw new IllegalArgumentException(MessageFormat.format(NO_FIELD_MAPPING, new String[]{recordFieldId}));
                 }
             } else {
+                ListMap listMap = new ListMap();
                 FieldMapping fieldMapping = objectMapping.findRecordField(recordFieldId);
+                Iterator fieldIterator = fieldMapping.getRecordFields().iterator();
+                while (fieldIterator.hasNext()) {
+                    listMap.put(recordFieldId, fields.get(fieldIterator.next()));
+                }
                 String beanPath = fieldMapping.getDomainFieldName();
                 Field field = locateDomainField(domain, recordFieldId, beanPath);
-                byte[] data = (byte[]) fields.get(recordFieldId);
-                Object value = convertRecordFieldToDomainType(fieldMapping, field, data);
+                DomainFieldFactory domainFieldFactory = fieldMapping.getFactory();
+                Object value = domainFieldFactory.build(listMap, field.getType(), typeConverter);
                 ClassUtil.setBean(domain, beanPath, value);
             }
         }
     }
 
-
-    private Object convertRecordFieldToDomainType(FieldMapping fieldMapping, Field field, byte[] data) {
-        Class converterClass = fieldMapping.getValueConverterClass();
-        if (converterClass != null) {
-            if (!typeConverter.isRegistered(converterClass)) {
-                throw new IllegalArgumentException(MessageFormat.format(NO_VALUE_CONVERTER, new String[]{converterClass.getName()}));
-            }
-            return typeConverter.find(converterClass).toDomain(data);
-        } else {
-            return typeConverter.convert(field.getType(), data);
-        }
-    }
 
     private Field locateDomainField(Object domain, String key, String beanPath) {
         Field field = ClassUtil.findField(domain, beanPath);

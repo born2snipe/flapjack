@@ -29,7 +29,15 @@ public abstract class ValueConverterTestCase extends TestCase {
     }
 
     protected void assertEquals(Class[] expected, Class[] actual) {
-        assertTrue(MessageFormat.format(EQUALS, new Object[]{Arrays.toString(expected), Arrays.toString(actual)}), Arrays.equals(expected, actual));
+        assertTrue(MessageFormat.format(EQUALS, new Object[]{toString(expected), toString(actual)}), Arrays.equals(expected, actual));
+    }
+
+    protected String toString(Object[] obj) {
+        StringBuffer buf = new StringBuffer();
+        for (int i = 0; i < obj.length; i++) {
+            buf.append(obj[i]);
+        }
+        return buf.toString();
     }
 
     protected byte[] binary(String value) {

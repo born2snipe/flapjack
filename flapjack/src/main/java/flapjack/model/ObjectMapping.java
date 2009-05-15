@@ -30,8 +30,8 @@ public class ObjectMapping {
     }
 
 
-    public void field(List recordFields, String domainFieldName) {
-        register(new FieldMapping(recordFields, domainFieldName));
+    public void field(List recordFields, String domainFieldName, DomainFieldFactory domainFieldFactory) {
+        register(new CompoundFieldMapping(recordFields, domainFieldName, domainFieldFactory));
     }
 
     /**
@@ -41,7 +41,7 @@ public class ObjectMapping {
      * @param domainFieldName - the field name on the domain object
      */
     public void field(String recordFieldName, String domainFieldName) {
-        register(new FieldMapping(recordFieldName, domainFieldName));
+        register(new SingleFieldMapping(recordFieldName, domainFieldName));
     }
 
     /**
@@ -52,7 +52,7 @@ public class ObjectMapping {
      * @param valueConverterClass - the ValueConverter class to be used converting the field data
      */
     public void field(String recordFieldName, String domainFieldName, Class valueConverterClass) {
-        register(new FieldMapping(recordFieldName, domainFieldName, valueConverterClass));
+        register(new SingleFieldMapping(recordFieldName, domainFieldName, valueConverterClass));
     }
 
     /**
@@ -61,11 +61,11 @@ public class ObjectMapping {
      * @param recordFieldName - the name/id that will be given to a record field
      * @return the FieldMapping for the given field
      */
-    public FieldMapping findRecordField(String recordFieldName) {
+    public AbstractFieldMapping findRecordField(String recordFieldName) {
         if (recordFieldName == null) {
             return null;
         }
-        return (FieldMapping) recordFieldToDomainFieldMappings.get(recordFieldName.toLowerCase());
+        return (AbstractFieldMapping) recordFieldToDomainFieldMappings.get(recordFieldName.toLowerCase());
     }
 
     /**
@@ -100,7 +100,7 @@ public class ObjectMapping {
         return findRecordField(recordFieldName) != null;
     }
 
-    private void register(FieldMapping fieldMapping) {
+    private void register(AbstractFieldMapping fieldMapping) {
         Iterator it = fieldMapping.getRecordFields().iterator();
         while (it.hasNext()) {
             String recordFieldName = (String) it.next();

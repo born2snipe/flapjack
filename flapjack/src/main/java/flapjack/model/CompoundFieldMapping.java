@@ -12,39 +12,18 @@
  */
 package flapjack.model;
 
-import java.util.*;
+import java.util.List;
 
 
-public class ListMap {
-    private Map map = new LinkedHashMap();
-    private List list = new ArrayList();
+public class CompoundFieldMapping extends AbstractFieldMapping {
+    private DomainFieldFactory factory;
 
-    public void put(String key, Object value) {
-        map.put(key, value);
-        list.add(value);
+    public CompoundFieldMapping(List recordFields, String domainFieldName, DomainFieldFactory factory) {
+        super(recordFields, domainFieldName);
+        this.factory = factory;
     }
 
-    public int size() {
-        return map.size();
-    }
-
-    public Object get(String key) {
-        return map.get(key);
-    }
-
-    public Object get(int index) {
-        return list.get(index);
-    }
-
-    public Iterator iterator() {
-        return list.iterator();
-    }
-
-    public Set keys() {
-        return map.keySet();
-    }
-
-    public String toString() {
-        return list.toString();
+    public DomainFieldFactory getFactory() {
+        return factory;
     }
 }

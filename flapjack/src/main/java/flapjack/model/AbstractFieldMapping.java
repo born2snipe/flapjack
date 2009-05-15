@@ -12,39 +12,25 @@
  */
 package flapjack.model;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
+public abstract class AbstractFieldMapping implements FieldMapping {
+    private String domainFieldName;
+    private List recordFields = new ArrayList();
 
-public class ListMap {
-    private Map map = new LinkedHashMap();
-    private List list = new ArrayList();
-
-    public void put(String key, Object value) {
-        map.put(key, value);
-        list.add(value);
+    protected AbstractFieldMapping(List recordFields, String domainFieldName) {
+        this.recordFields.addAll(recordFields);
+        this.domainFieldName = domainFieldName;
     }
 
-    public int size() {
-        return map.size();
+    public String getDomainFieldName() {
+        return domainFieldName;
     }
 
-    public Object get(String key) {
-        return map.get(key);
+    public List getRecordFields() {
+        return Collections.unmodifiableList(recordFields);
     }
 
-    public Object get(int index) {
-        return list.get(index);
-    }
-
-    public Iterator iterator() {
-        return list.iterator();
-    }
-
-    public Set keys() {
-        return map.keySet();
-    }
-
-    public String toString() {
-        return list.toString();
-    }
 }
