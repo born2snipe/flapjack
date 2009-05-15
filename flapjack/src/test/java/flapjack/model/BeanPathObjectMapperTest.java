@@ -27,6 +27,7 @@ public class BeanPathObjectMapperTest extends MockObjectTestCase {
     private Map fields;
     private Person person;
     private ObjectMappingStore mappingStore;
+    private ObjectMapping objMapping;
 
     protected void setUp() throws Exception {
         super.setUp();
@@ -35,33 +36,27 @@ public class BeanPathObjectMapperTest extends MockObjectTestCase {
         mapper.setObjectMappingStore(mappingStore);
         fields = new HashMap();
         person = new Person();
+        objMapping = new ObjectMapping(Person.class);
+        mappingStore.add(objMapping);
     }
 
     public void test_mapOnTo_EnsureCompoundFieldsAreOnlyMappedOnce() {
         Mock factory = mock(DomainFieldFactory.class);
 
-        ObjectMapping objMapping = new ObjectMapping(Person.class);
         objMapping.field(Arrays.asList(new String[]{"field1", "field2"}), "firstName", (DomainFieldFactory) factory.proxy());
-
-        mappingStore.add(objMapping);
 
         fields.put("field1", "Jim".getBytes());
         fields.put("field2", "Smith".getBytes());
 
         factory.expects(once())
                 .method("build").with(isA(ListMap.class), eq(String.class), isA(TypeConverter.class))
-                .will(returnValue("JimSmith"));
+                .will(returnValue(""));
 
         mapper.mapOnTo(fields, person);
-
-        assertEquals("JimSmith", person.firstName);
     }
 
-    public void MAYBE_NOT_NEEDED_test_mapOnTo_MultipleFields_FieldNotFoundInRecord() {
-        ObjectMapping objMapping = new ObjectMapping(Person.class);
+    public void FAILING_test_mapOnTo_MultipleFields_FieldNotFoundInRecord() {
         objMapping.field(Arrays.asList(new String[]{"field1", "field2"}), "firstName", null);
-
-        mappingStore.add(objMapping);
 
         fields.put("field1", "Jim".getBytes());
         fields.put("field3", "Smith".getBytes());
@@ -81,10 +76,7 @@ public class BeanPathObjectMapperTest extends MockObjectTestCase {
             }
         };
 
-        ObjectMapping objMapping = new ObjectMapping(Person.class);
         objMapping.field(Arrays.asList(new String[]{"field1", "field2"}), "firstName", factory);
-
-        mappingStore.add(objMapping);
 
         fields.put("field1", "Jim".getBytes());
         fields.put("field2", "Smith".getBytes());
@@ -96,11 +88,8 @@ public class BeanPathObjectMapperTest extends MockObjectTestCase {
     }
 
     public void test_mapOnTo_MultipleFields() {
-        ObjectMapping objMapping = new ObjectMapping(Person.class);
         objMapping.field("field1", "firstName");
         objMapping.field("field2", "lastName");
-
-        mappingStore.add(objMapping);
 
         fields.put("field1", "Jim".getBytes());
         fields.put("field2", "Smith".getBytes());
@@ -112,9 +101,7 @@ public class BeanPathObjectMapperTest extends MockObjectTestCase {
     }
 
     public void test_mapOnTo_SingleField() {
-        ObjectMapping objMapping = new ObjectMapping(Person.class);
         objMapping.field("field1", "firstName");
-        mappingStore.add(objMapping);
 
         fields.put("field1", "Jim".getBytes());
 
@@ -129,9 +116,7 @@ public class BeanPathObjectMapperTest extends MockObjectTestCase {
 
         mapper.setTypeConverter(typeConverter);
 
-        ObjectMapping objMapping = new ObjectMapping(Person.class);
         objMapping.field("field1", "firstName", CustomConverter.class);
-        mappingStore.add(objMapping);
 
         fields.put("field1", "Jim".getBytes());
 
@@ -141,9 +126,7 @@ public class BeanPathObjectMapperTest extends MockObjectTestCase {
     }
 
     public void test_mapOnTo_SingleField_UseCustomValueConverter_NotRegisteredInTypeConverter() {
-        ObjectMapping objMapping = new ObjectMapping(Person.class);
         objMapping.field("field1", "firstName", CustomConverter.class);
-        mappingStore.add(objMapping);
 
         fields.put("field1", "Jim".getBytes());
 
@@ -156,9 +139,7 @@ public class BeanPathObjectMapperTest extends MockObjectTestCase {
     }
 
     public void test_mapOnTo_FieldDoesNotExistOnDomain() {
-        ObjectMapping objMapping = new ObjectMapping(Person.class);
         objMapping.field("field1", "address");
-        mappingStore.add(objMapping);
 
         fields.put("field1", "Jim".getBytes());
 
@@ -171,8 +152,6 @@ public class BeanPathObjectMapperTest extends MockObjectTestCase {
     }
 
     public void test_build_FieldMappingNotFoundForField() {
-        mappingStore.add(new ObjectMapping(Person.class));
-
         fields.put("field1", "value".getBytes());
 
         try {
@@ -184,6 +163,8 @@ public class BeanPathObjectMapperTest extends MockObjectTestCase {
     }
 
     public void test_build_NoObjectMappingFound() {
+        mapper.setObjectMappingStore(new ObjectMappingStore());
+
         try {
             mapper.mapOnTo(fields, person);
             fail();
@@ -193,8 +174,6 @@ public class BeanPathObjectMapperTest extends MockObjectTestCase {
     }
 
     public void test_build_IgnoreUnmappedFields() {
-        mappingStore.add(new ObjectMapping(Person.class));
-
         mapper.setIgnoreUnmappedFields(true);
         fields.put("field1", "value".getBytes());
 

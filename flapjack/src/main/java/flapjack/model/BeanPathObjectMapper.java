@@ -44,22 +44,26 @@ public class BeanPathObjectMapper implements ObjectMapper {
         Iterator it = fields.keySet().iterator();
         while (it.hasNext()) {
             String recordFieldId = (String) it.next();
-            if (!objectMapping.hasFieldMappingFor(recordFieldId)) {
-                if (!ignoreUnmappedFields) {
-                    throw new IllegalArgumentException(MessageFormat.format(NO_FIELD_MAPPING, new String[]{recordFieldId}));
-                }
-            } else {
-                if (!alreadyMappedFields.contains(recordFieldId)) {
-                    FieldMapping fieldMapping = objectMapping.findRecordField(recordFieldId);
-                    String beanPath = fieldMapping.getDomainFieldName();
-                    Field field = locateDomainField(domain, recordFieldId, beanPath);
-                    DomainFieldFactory domainFieldFactory = fieldMapping.getFactory();
-                    ListMap recordData = grabRecordDataForField(fields, recordFieldId, fieldMapping.getRecordFields());
-                    ClassUtil.setBean(domain, beanPath, domainFieldFactory.build(recordData, field.getType(), typeConverter));
-                    alreadyMappedFields.addAll(fieldMapping.getRecordFields());
-                }
+            if (shouldFieldBeMappedToDomain(objectMapping, alreadyMappedFields, recordFieldId)) {
+                FieldMapping fieldMapping = objectMapping.findRecordField(recordFieldId);
+                String beanPath = fieldMapping.getDomainFieldName();
+                Field field = locateDomainField(domain, recordFieldId, beanPath);
+                DomainFieldFactory domainFieldFactory = fieldMapping.getFactory();
+                ListMap recordData = grabRecordDataForField(fields, recordFieldId, fieldMapping.getRecordFields());
+                ClassUtil.setBean(domain, beanPath, domainFieldFactory.build(recordData, field.getType(), typeConverter));
+                alreadyMappedFields.addAll(fieldMapping.getRecordFields());
             }
         }
+    }
+
+    private boolean shouldFieldBeMappedToDomain(ObjectMapping objectMapping, List alreadyMappedFields, String recordFieldId) {
+        if (!objectMapping.hasFieldMappingFor(recordFieldId)) {
+            if (!ignoreUnmappedFields) {
+                throw new IllegalArgumentException(MessageFormat.format(NO_FIELD_MAPPING, new String[]{recordFieldId}));
+            }
+            return false;
+        }
+        return !alreadyMappedFields.contains(recordFieldId);
     }
 
     private ListMap grabRecordDataForField(Map fields, String recordFieldId, List recordFields) {
