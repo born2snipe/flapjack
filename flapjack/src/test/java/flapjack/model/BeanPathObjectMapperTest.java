@@ -175,7 +175,7 @@ public class BeanPathObjectMapperTest extends MockObjectTestCase {
         }
     }
 
-    public void test_build_FieldMappingNotFoundForField() {
+    public void test_mapOnTo_FieldMappingNotFoundForField() {
         fields.put("field1", "value".getBytes());
 
         try {
@@ -186,7 +186,7 @@ public class BeanPathObjectMapperTest extends MockObjectTestCase {
         }
     }
 
-    public void test_build_NoObjectMappingFound() {
+    public void test_mapOnTo_NoObjectMappingFound() {
         mapper.setObjectMappingStore(new ObjectMappingStore());
 
         try {
@@ -197,7 +197,7 @@ public class BeanPathObjectMapperTest extends MockObjectTestCase {
         }
     }
 
-    public void test_build_IgnoreUnmappedFields() {
+    public void test_mapOnTo_IgnoreUnmappedFields() {
         mapper.setIgnoreUnmappedFields(true);
         fields.put("field1", "value".getBytes());
 
