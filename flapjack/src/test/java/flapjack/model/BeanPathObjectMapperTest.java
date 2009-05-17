@@ -158,7 +158,7 @@ public class BeanPathObjectMapperTest extends MockObjectTestCase {
             mapper.mapOnTo(fields, person);
             fail();
         } catch (IllegalArgumentException err) {
-            assertEquals("Could not find a flapjack.model.BeanPathObjectMapperTest$CustomConverter in the TypeConverter", err.getMessage());
+            assertEquals("Could not find a flapjack.model.BeanPathObjectMapperTest$CustomConverter registered! Are you sure you registered flapjack.model.BeanPathObjectMapperTest$CustomConverter in the TypeConverter?", err.getMessage());
         }
     }
 
@@ -171,7 +171,7 @@ public class BeanPathObjectMapperTest extends MockObjectTestCase {
             mapper.mapOnTo(fields, person);
             fail();
         } catch (ObjectMappingException err) {
-            assertEquals("Could not map field1 to address on " + Person.class.getName() + ", \"address\" could NOT be found", err.getMessage());
+            assertEquals("Could not map \"field1\" to \"address\" on " + Person.class.getName() + ", \"address\" could NOT be found", err.getMessage());
         }
     }
 

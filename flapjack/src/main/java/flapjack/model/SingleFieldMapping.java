@@ -19,7 +19,7 @@ import java.util.Arrays;
 
 
 public class SingleFieldMapping extends AbstractFieldMapping {
-    private static final String NO_VALUE_CONVERTER = "Could not find a {0} in the TypeConverter";
+    private static final String NO_VALUE_CONVERTER = "Could not find a {0} registered! Are you sure you registered {0} in the TypeConverter?";
     private Class valueConverter;
 
     public SingleFieldMapping(String recordFieldName, String domainFieldName) {

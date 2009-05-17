@@ -25,7 +25,7 @@ import java.util.Map;
 
 public class BeanPathObjectMapper implements ObjectMapper {
     private static final String NO_FIELD_MAPPING = "Could not locate field mapping for field=\"{0}\"";
-    private static final String NO_FIELD_ON_OBJECT = "Could not map {0} to {1} on {2}, \"{1}\" could NOT be found";
+    private static final String NO_FIELD_ON_OBJECT = "Could not map \"{0}\" to \"{1}\" on {2}, \"{1}\" could NOT be found";
     private static final String NO_OBJECT_MAPPING = "Could not locate object mapping for class={0}";
     private static final String FIELD_NOT_FOUND_IN_RECORD = "\"{0}\" was not found in record, field mapping for \"{1}\" on {2}";
     private static final FieldNameMassager MASSAGER = new FieldNameMassager();
