@@ -47,7 +47,7 @@ public class RecordBuilder {
                 while (it.hasNext()) {
                     FieldDefinition fieldDefinition = (FieldDefinition) it.next();
                     FieldMapping fieldMapping = locateFieldMapping(domain, objectMapping, fieldDefinition);
-                    String fieldValue = getField(fieldMapping.getDomainFieldName(), domain);
+                    Object fieldValue = getField(fieldMapping.getDomainFieldName(), domain);
                     writer.write(fieldMapping.getBinaryFieldFactory().build(fieldValue, typeConverter));
                 }
             }
@@ -83,12 +83,12 @@ public class RecordBuilder {
         return objectMapping;
     }
 
-    private String getField(String fieldName, Object domain) {
+    private Object getField(String fieldName, Object domain) {
         // TODO - needs to be pulled out to another class!!
         try {
             Field field = domain.getClass().getDeclaredField(fieldName);
             field.setAccessible(true);
-            return (String) field.get(domain);
+            return field.get(domain);
         } catch (NoSuchFieldException e) {
             // TODO - needs coverage
         } catch (IllegalAccessException e) {
