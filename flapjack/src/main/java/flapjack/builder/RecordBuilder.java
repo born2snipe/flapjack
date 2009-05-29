@@ -34,17 +34,20 @@ public class RecordBuilder {
     private ObjectMappingStore objectMappingStore;
 
 
-    public void build(List domainObject, OutputStream output) {
-        Object domain = domainObject.get(0);
-        List recordLayouts = locateRecordLayouts(domain);
-        ObjectMapping objectMapping = locateObjectMapping(domain);
-        Iterator it = ((RecordLayout) recordLayouts.get(0)).getFieldDefinitions().iterator();
+    public void build(List domainObjects, OutputStream output) {
         try {
-            while (it.hasNext()) {
-                FieldDefinition fieldDefinition = (FieldDefinition) it.next();
-                FieldMapping fieldMapping = getFieldMapping(domain, objectMapping, fieldDefinition);
-                output.write(getField(fieldMapping.getDomainFieldName(), domain).getBytes());
-                output.flush();
+            Iterator domainObjectIterator = domainObjects.iterator();
+            while (domainObjectIterator.hasNext()) {
+                Object domain = domainObjectIterator.next();
+                List recordLayouts = locateRecordLayouts(domain);
+                ObjectMapping objectMapping = locateObjectMapping(domain);
+                Iterator it = ((RecordLayout) recordLayouts.get(0)).getFieldDefinitions().iterator();
+                while (it.hasNext()) {
+                    FieldDefinition fieldDefinition = (FieldDefinition) it.next();
+                    FieldMapping fieldMapping = locateFieldMapping(domain, objectMapping, fieldDefinition);
+                    output.write(getField(fieldMapping.getDomainFieldName(), domain).getBytes());
+                    output.flush();
+                }
             }
         } catch (IOException err) {
             throw new BuilderException("A problem occured while building file", err);
@@ -58,7 +61,7 @@ public class RecordBuilder {
 
     }
 
-    private FieldMapping getFieldMapping(Object domain, ObjectMapping objectMapping, FieldDefinition fieldDefinition) {
+    private FieldMapping locateFieldMapping(Object domain, ObjectMapping objectMapping, FieldDefinition fieldDefinition) {
         FieldMapping fieldMapping = objectMapping.findRecordField(fieldDefinition.getName());
         if (fieldMapping == null) {
             throw new BuilderException(MessageFormat.format(NO_FIELD_MAPPING, new Object[]{fieldDefinition.getName(), domain.getClass().getName()}));

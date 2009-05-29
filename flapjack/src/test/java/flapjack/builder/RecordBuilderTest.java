@@ -111,6 +111,28 @@ public class RecordBuilderTest extends MockObjectTestCase {
         }
     }
 
+    public void test_build_MultipleDomainObjectsOfTheSameType() throws IOException {
+        ObjectMapping personMapping = new ObjectMapping(Person.class);
+        personMapping.field("First Name", "firstName");
+        personMapping.field("Last Name", "lastName");
+
+        objectMappingStore.add(personMapping);
+
+        Person person = new Person("Joe", "Smith");
+        Person person2 = new Person("Tim", "Roger");
+
+        SimpleRecordLayout recordLayout = new SimpleRecordLayout("person");
+        recordLayout.field("First Name", 3);
+        recordLayout.field("Last Name", 5);
+
+        recordLayoutResolver.expects(once()).method("resolve").with(eq(person)).will(returnValue(Arrays.asList(new Object[]{recordLayout})));
+        recordLayoutResolver.expects(once()).method("resolve").with(eq(person2)).will(returnValue(Arrays.asList(new Object[]{recordLayout})));
+
+        builder.build(Arrays.asList(new Object[]{person, person2}), output);
+
+        assertOutput("JoeSmithTimRoger".getBytes(), 4);
+    }
+
     public void test_build_SingleDomainObject() throws IOException {
         ObjectMapping personMapping = new ObjectMapping(Person.class);
         personMapping.field("First Name", "firstName");
