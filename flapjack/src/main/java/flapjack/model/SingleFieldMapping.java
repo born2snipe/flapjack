@@ -13,6 +13,7 @@
 package flapjack.model;
 
 import flapjack.util.TypeConverter;
+import flapjack.util.ValueConverter;
 
 import java.text.MessageFormat;
 import java.util.Arrays;
@@ -35,14 +36,7 @@ public class SingleFieldMapping extends AbstractFieldMapping {
     public DomainFieldFactory getDomainFieldFactory() {
         return new DomainFieldFactory() {
             public Object build(ListMap fields, Class domainFieldType, TypeConverter typeConverter) {
-                if (valueConverter != null) {
-                    if (!typeConverter.isRegistered(valueConverter)) {
-                        throw new IllegalArgumentException(MessageFormat.format(NO_VALUE_CONVERTER, new String[]{valueConverter.getName()}));
-                    }
-                    return typeConverter.find(valueConverter).toDomain((byte[]) fields.get(0));
-                } else {
-                    return typeConverter.convert(domainFieldType, (byte[]) fields.get(0));
-                }
+                return findValueConverter(domainFieldType, typeConverter).toDomain((byte[]) fields.get(0));
             }
         };
     }
@@ -50,15 +44,19 @@ public class SingleFieldMapping extends AbstractFieldMapping {
     public BinaryFieldFactory getBinaryFieldFactory() {
         return new BinaryFieldFactory() {
             public byte[] build(Object domain, TypeConverter typeConverter) {
-                if (valueConverter != null) {
-                    if (!typeConverter.isRegistered(valueConverter)) {
-                        throw new IllegalArgumentException(MessageFormat.format(NO_VALUE_CONVERTER, new String[]{valueConverter.getName()}));
-                    }
-                    return typeConverter.find(valueConverter).toBytes(domain);
-                } else {
-                    return typeConverter.type(domain.getClass()).toBytes(domain);
-                }
+                return findValueConverter(domain.getClass(), typeConverter).toBytes(domain);
             }
         };
+    }
+
+    private ValueConverter findValueConverter(Class domainType, TypeConverter typeConverter) {
+        if (valueConverter != null) {
+            if (!typeConverter.isRegistered(valueConverter)) {
+                throw new IllegalArgumentException(MessageFormat.format(NO_VALUE_CONVERTER, new String[]{valueConverter.getName()}));
+            }
+            return typeConverter.find(valueConverter);
+        } else {
+            return typeConverter.type(domainType);
+        }
     }
 }
