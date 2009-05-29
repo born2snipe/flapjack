@@ -17,6 +17,7 @@ import flapjack.layout.RecordLayout;
 import flapjack.model.FieldMapping;
 import flapjack.model.ObjectMapping;
 import flapjack.model.ObjectMappingStore;
+import flapjack.util.TypeConverter;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -32,6 +33,7 @@ public class RecordBuilder {
     private static final String NO_OBJECT_MAPPING = "Could not find an ObjectMapping for {0}";
     private RecordLayoutResolver recordLayoutResolver;
     private ObjectMappingStore objectMappingStore;
+    private TypeConverter typeConverter;
 
 
     public void build(List domainObjects, OutputStream output) {
@@ -45,7 +47,8 @@ public class RecordBuilder {
                 while (it.hasNext()) {
                     FieldDefinition fieldDefinition = (FieldDefinition) it.next();
                     FieldMapping fieldMapping = locateFieldMapping(domain, objectMapping, fieldDefinition);
-                    output.write(getField(fieldMapping.getDomainFieldName(), domain).getBytes());
+                    String fieldValue = getField(fieldMapping.getDomainFieldName(), domain);
+                    output.write(fieldMapping.getBinaryFieldFactory().build(fieldValue, typeConverter));
                     output.flush();
                 }
             }
@@ -105,5 +108,9 @@ public class RecordBuilder {
 
     public void setObjectMappingStore(ObjectMappingStore objectMappingStore) {
         this.objectMappingStore = objectMappingStore;
+    }
+
+    public void setTypeConverter(TypeConverter typeConverter) {
+        this.typeConverter = typeConverter;
     }
 }

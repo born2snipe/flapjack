@@ -18,7 +18,7 @@ public class LongTextValueConverter extends AbstractTextValueConverter implement
         return new Class[]{long.class, Long.class};
     }
 
-    protected Object fromText(String text) {
+    protected Object fromTextToDomain(String text) {
         return Long.valueOf(text);
     }
 }

@@ -18,7 +18,7 @@ public class DoubleTextValueConverter extends AbstractTextValueConverter impleme
         return new Class[]{double.class, Double.class};
     }
 
-    protected Object fromText(String text) {
+    protected Object fromTextToDomain(String text) {
         return Double.valueOf(text);
     }
 }

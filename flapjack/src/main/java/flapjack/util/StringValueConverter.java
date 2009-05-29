@@ -18,7 +18,7 @@ public class StringValueConverter extends AbstractTextValueConverter implements 
         return new Class[]{String.class};
     }
 
-    protected Object fromText(String text) {
+    protected Object fromTextToDomain(String text) {
         return text;
     }
 }

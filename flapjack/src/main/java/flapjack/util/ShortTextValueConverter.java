@@ -14,7 +14,7 @@ package flapjack.util;
 
 
 public class ShortTextValueConverter extends AbstractTextValueConverter implements ValueConverter {
-    protected Object fromText(String text) {
+    protected Object fromTextToDomain(String text) {
         return Short.valueOf(text);
     }
 

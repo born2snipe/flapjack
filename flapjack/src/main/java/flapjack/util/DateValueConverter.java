@@ -32,7 +32,7 @@ public class DateValueConverter extends AbstractTextValueConverter implements Va
         return new Class[]{Date.class};
     }
 
-    protected Object fromText(String text) {
+    protected Object fromTextToDomain(String text) {
         for (int i = 0; i < patterns.length; i++) {
             SimpleDateFormat formatter = new SimpleDateFormat(patterns[i]);
             try {

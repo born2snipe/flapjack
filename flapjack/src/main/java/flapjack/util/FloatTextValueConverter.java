@@ -18,7 +18,7 @@ public class FloatTextValueConverter extends AbstractTextValueConverter implemen
         return new Class[]{float.class, Float.class};
     }
 
-    protected Object fromText(String text) {
+    protected Object fromTextToDomain(String text) {
         return Float.valueOf(text);
     }
 }

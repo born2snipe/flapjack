@@ -21,4 +21,6 @@ public interface FieldMapping {
     List getRecordFields();
 
     DomainFieldFactory getFactory();
+
+    BinaryFieldFactory getBinaryFieldFactory();
 }

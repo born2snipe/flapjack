@@ -16,6 +16,8 @@ import flapjack.io.MockOutputStream;
 import flapjack.layout.SimpleRecordLayout;
 import flapjack.model.ObjectMapping;
 import flapjack.model.ObjectMappingStore;
+import flapjack.util.AbstractTextValueConverter;
+import flapjack.util.TypeConverter;
 import org.jmock.Mock;
 import org.jmock.MockObjectTestCase;
 
@@ -29,16 +31,19 @@ public class RecordBuilderTest extends MockObjectTestCase {
     private ObjectMappingStore objectMappingStore;
     private RecordBuilder builder;
     private MockOutputStream output;
+    private TypeConverter typeConverter;
 
     protected void setUp() throws Exception {
         super.setUp();
         recordLayoutResolver = mock(RecordLayoutResolver.class);
         objectMappingStore = new ObjectMappingStore();
+        typeConverter = new TypeConverter();
+        output = new MockOutputStream();
 
         builder = new RecordBuilder();
         builder.setRecordLayoutResolver((RecordLayoutResolver) recordLayoutResolver.proxy());
         builder.setObjectMappingStore(objectMappingStore);
-        output = new MockOutputStream();
+        builder.setTypeConverter(typeConverter);
     }
 
     public void test_build_CouldNotFindFieldMapping() {
@@ -153,12 +158,46 @@ public class RecordBuilderTest extends MockObjectTestCase {
         assertOutput("JoeSmith".getBytes(), 2);
     }
 
+    public void test_build_CustomValueConverter() throws IOException {
+        ObjectMapping personMapping = new ObjectMapping(Person.class);
+        personMapping.field("First Name", "firstName", ReverseValueConverter.class);
+
+        objectMappingStore.add(personMapping);
+
+        Person person = new Person("Joe", "Smith");
+
+        SimpleRecordLayout recordLayout = new SimpleRecordLayout("person");
+        recordLayout.field("First Name", 3);
+
+        recordLayoutResolver.expects(once()).method("resolve").with(eq(person)).will(returnValue(Arrays.asList(new Object[]{recordLayout})));
+
+        typeConverter.registerConverter(new ReverseValueConverter());
+
+        builder.build(Arrays.asList(new Object[]{person}), output);
+
+        assertOutput("eoJ".getBytes(), 1);
+    }
+
     private void assertOutput(byte[] expectedOutput, int expectedFlushCount) {
-        assertTrue(Arrays.equals(expectedOutput, output.getBytes()));
+        assertTrue("Expected was \"" + new String(expectedOutput) + "\", but actual was \"" + new String(output.getBytes()) + "\"", Arrays.equals(expectedOutput, output.getBytes()));
         assertTrue(output.isClosed());
         assertEquals(expectedFlushCount, output.getFlushCount());
     }
 
+    private static class ReverseValueConverter extends AbstractTextValueConverter {
+        protected Object fromTextToDomain(String text) {
+            return null;
+        }
+
+        protected String fromDomainToText(Object domain) {
+            String text = (String) domain;
+            StringBuffer builder = new StringBuffer();
+            for (int i = text.length() - 1; i >= 0; i--) {
+                builder.append(text.charAt(i));
+            }
+            return builder.toString();
+        }
+    }
 
     private static class Person {
         private String firstName;

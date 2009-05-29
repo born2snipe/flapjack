@@ -20,7 +20,7 @@ public class BigDecimalTextValueConverter extends AbstractTextValueConverter imp
         return new Class[]{BigDecimal.class};
     }
 
-    protected Object fromText(String text) {
+    protected Object fromTextToDomain(String text) {
         return new BigDecimal(text);
     }
 }

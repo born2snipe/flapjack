@@ -18,7 +18,7 @@ import java.text.MessageFormat;
 public class CharTextValueConverter extends AbstractTextValueConverter implements ValueConverter {
     private static final String TOO_MANY_CHARACTERS = "To many bytes was given length={0}, was expecting a single byte";
 
-    protected Object fromText(String text) {
+    protected Object fromTextToDomain(String text) {
         if (text.length() > 1) {
             throw new IllegalArgumentException(MessageFormat.format(TOO_MANY_CHARACTERS, new Object[]{new Integer(text.length())}));
         }

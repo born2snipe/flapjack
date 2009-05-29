@@ -10,15 +10,11 @@
  * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and limitations under the License. 
  */
-package flapjack.util;
+package flapjack.model;
+
+import flapjack.util.TypeConverter;
 
 
-public class IntegerTextValueConverter extends AbstractTextValueConverter implements TypedValueConverter {
-    public Class[] types() {
-        return new Class[]{Integer.class, int.class};
-    }
-
-    protected Object fromTextToDomain(String text) {
-        return Integer.valueOf(text);
-    }
+public interface BinaryFieldFactory {
+    byte[] build(Object domain, TypeConverter typeConverter);
 }

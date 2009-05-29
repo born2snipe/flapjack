@@ -20,7 +20,7 @@ public class BigIntegerTextValueConverter extends AbstractTextValueConverter imp
         return new Class[]{BigInteger.class};
     }
 
-    protected Object fromText(String text) {
+    protected Object fromTextToDomain(String text) {
         return new BigInteger(text);
     }
 }

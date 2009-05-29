@@ -20,18 +20,18 @@ public abstract class AbstractTextValueConverter implements ValueConverter {
         String text = new String(bytes);
         if (text.length() == 0)
             return null;
-        return fromText(text);
+        return fromTextToDomain(text);
     }
 
     public final byte[] toBytes(Object domain) {
         if (domain == null)
             return null;
-        return toText(domain).getBytes();
+        return fromDomainToText(domain).getBytes();
     }
 
-    protected abstract Object fromText(String text);
+    protected abstract Object fromTextToDomain(String text);
 
-    protected String toText(Object domain) {
+    protected String fromDomainToText(Object domain) {
         return domain.toString();
     }
 }

@@ -46,4 +46,19 @@ public class SingleFieldMapping extends AbstractFieldMapping {
             }
         };
     }
+
+    public BinaryFieldFactory getBinaryFieldFactory() {
+        return new BinaryFieldFactory() {
+            public byte[] build(Object domain, TypeConverter typeConverter) {
+                if (valueConverter != null) {
+                    if (!typeConverter.isRegistered(valueConverter)) {
+                        throw new IllegalArgumentException(MessageFormat.format(NO_VALUE_CONVERTER, new String[]{valueConverter.getName()}));
+                    }
+                    return typeConverter.find(valueConverter).toBytes(domain);
+                } else {
+                    return typeConverter.type(domain.getClass()).toBytes(domain);
+                }
+            }
+        };
+    }
 }

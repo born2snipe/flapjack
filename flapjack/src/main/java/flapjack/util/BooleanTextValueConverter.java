@@ -18,7 +18,7 @@ public class BooleanTextValueConverter extends AbstractTextValueConverter implem
         return new Class[]{boolean.class, Boolean.class};
     }
 
-    protected Object fromText(String text) {
+    protected Object fromTextToDomain(String text) {
         return Boolean.valueOf(text);
     }
 }

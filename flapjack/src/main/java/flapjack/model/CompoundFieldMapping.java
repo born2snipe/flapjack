@@ -17,6 +17,7 @@ import java.util.List;
 
 public class CompoundFieldMapping extends AbstractFieldMapping {
     private DomainFieldFactory factory;
+    private BinaryFieldFactory binaryFieldFactory;
 
     public CompoundFieldMapping(List recordFields, String domainFieldName, DomainFieldFactory factory) {
         super(recordFields, domainFieldName);
@@ -25,5 +26,9 @@ public class CompoundFieldMapping extends AbstractFieldMapping {
 
     public DomainFieldFactory getFactory() {
         return factory;
+    }
+
+    public BinaryFieldFactory getBinaryFieldFactory() {
+        return null;
     }
 }
