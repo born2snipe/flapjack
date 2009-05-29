@@ -19,20 +19,20 @@ public class SimpleFieldDefinition implements FieldDefinition {
     private int position;
     private int length;
     private String name;
-    private Padding padding;
+    private PaddingDescriptor paddingDescriptor;
 
     public SimpleFieldDefinition() {
     }
 
     public SimpleFieldDefinition(String name, int position, int length) {
-        this(name, position, length, Padding.NONE);
+        this(name, position, length, null);
     }
 
-    public SimpleFieldDefinition(String name, int position, int length, Padding padding) {
+    public SimpleFieldDefinition(String name, int position, int length, PaddingDescriptor paddingDescriptor) {
         setPosition(position);
         setLength(length);
         setName(name);
-        setPadding(padding);
+        setPaddingDescriptor(paddingDescriptor);
     }
 
     public int getPosition() {
@@ -59,15 +59,15 @@ public class SimpleFieldDefinition implements FieldDefinition {
         return name;
     }
 
-    public Padding getPadding() {
-        return padding;
+    public PaddingDescriptor getPaddingDescriptor() {
+        return paddingDescriptor;
     }
 
-    public void setPadding(Padding padding) {
-        this.padding = padding;
+    public void setPaddingDescriptor(PaddingDescriptor padding) {
+        this.paddingDescriptor = padding;
     }
 
     public String toString() {
-        return getName() + ", position=" + getPosition() + ",length=" + getLength() + ",padding=" + padding;
+        return getName() + ", position=" + getPosition() + ",length=" + getLength() + ",paddingDescriptor=" + paddingDescriptor;
     }
 }

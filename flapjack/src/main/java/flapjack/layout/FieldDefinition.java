@@ -41,6 +41,6 @@ public interface FieldDefinition {
      *
      * @return
      */
-    Padding getPadding();
+    PaddingDescriptor getPaddingDescriptor();
 
 }
