@@ -40,10 +40,22 @@ public class RecordBuilderTest extends MockObjectTestCase {
         output = new MockOutputStream();
     }
 
+    public void test_build_CouldNotResolveRecordLayout() {
+        Person person = new Person("Joe", "Smith");
+
+        recordLayoutResolver.expects(once()).method("resolve").with(eq(person)).will(returnValue(null));
+
+        try {
+            builder.build(Arrays.asList(new Object[]{person}), output);
+            fail();
+        } catch (BuilderException err) {
+            assertEquals("Could not resolve RecordLayout for " + Person.class.getName(), err.getMessage());
+        }
+    }
+
     public void test_build_ThrowExceptionWriting() {
         ObjectMapping personMapping = new ObjectMapping(Person.class);
         personMapping.field("First Name", "firstName");
-        personMapping.field("Last Name", "lastName");
 
         objectMappingStore.add(personMapping);
 
@@ -51,7 +63,6 @@ public class RecordBuilderTest extends MockObjectTestCase {
 
         SimpleRecordLayout recordLayout = new SimpleRecordLayout("person");
         recordLayout.field("First Name", 3);
-        recordLayout.field("Last Name", 5);
 
         recordLayoutResolver.expects(once()).method("resolve").with(eq(person)).will(returnValue(recordLayout));
 

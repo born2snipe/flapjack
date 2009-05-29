@@ -21,11 +21,14 @@ import flapjack.model.ObjectMappingStore;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.reflect.Field;
+import java.text.MessageFormat;
 import java.util.Iterator;
 import java.util.List;
 
 
 public class RecordBuilder {
+    private static final String NO_RECORD_LAYOUT = "Could not resolve RecordLayout for {0}";
+
     private RecordLayoutResolver recordLayoutResolver;
     private ObjectMappingStore objectMappingStore;
 
@@ -33,6 +36,9 @@ public class RecordBuilder {
     public void build(List domainObject, OutputStream output) {
         Object domain = domainObject.get(0);
         RecordLayout recordLayout = recordLayoutResolver.resolve(domain);
+        if (recordLayout == null) {
+            throw new BuilderException(MessageFormat.format(NO_RECORD_LAYOUT, new Object[]{domain.getClass().getName()}));
+        }
         ObjectMapping objectMapping = objectMappingStore.find(domain.getClass());
         Iterator it = recordLayout.getFieldDefinitions().iterator();
         try {
