@@ -40,6 +40,19 @@ public class RecordBuilderTest extends MockObjectTestCase {
         output = new MockOutputStream();
     }
 
+    public void test_build_CouldNotFindObjectMapping() {
+        Person person = new Person("Joe", "Smith");
+
+        recordLayoutResolver.expects(once()).method("resolve").with(eq(person)).will(returnValue(new SimpleRecordLayout("person")));
+
+        try {
+            builder.build(Arrays.asList(new Object[]{person}), output);
+            fail();
+        } catch (BuilderException err) {
+            assertEquals("Could not find an ObjectMapping for " + Person.class.getName(), err.getMessage());
+        }
+    }
+
     public void test_build_CouldNotResolveRecordLayout() {
         Person person = new Person("Joe", "Smith");
 

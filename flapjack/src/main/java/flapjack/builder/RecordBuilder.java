@@ -28,6 +28,7 @@ import java.util.List;
 
 public class RecordBuilder {
     private static final String NO_RECORD_LAYOUT = "Could not resolve RecordLayout for {0}";
+    private static final String NO_OBJECT_MAPPING = "Could not find an ObjectMapping for {0}";
 
     private RecordLayoutResolver recordLayoutResolver;
     private ObjectMappingStore objectMappingStore;
@@ -35,11 +36,8 @@ public class RecordBuilder {
 
     public void build(List domainObject, OutputStream output) {
         Object domain = domainObject.get(0);
-        RecordLayout recordLayout = recordLayoutResolver.resolve(domain);
-        if (recordLayout == null) {
-            throw new BuilderException(MessageFormat.format(NO_RECORD_LAYOUT, new Object[]{domain.getClass().getName()}));
-        }
-        ObjectMapping objectMapping = objectMappingStore.find(domain.getClass());
+        RecordLayout recordLayout = locateRecordLayout(domain);
+        ObjectMapping objectMapping = locateObjectMapping(domain);
         Iterator it = recordLayout.getFieldDefinitions().iterator();
         try {
             while (it.hasNext()) {
@@ -58,6 +56,22 @@ public class RecordBuilder {
             }
         }
 
+    }
+
+    private RecordLayout locateRecordLayout(Object domain) {
+        RecordLayout recordLayout = recordLayoutResolver.resolve(domain);
+        if (recordLayout == null) {
+            throw new BuilderException(MessageFormat.format(NO_RECORD_LAYOUT, new Object[]{domain.getClass().getName()}));
+        }
+        return recordLayout;
+    }
+
+    private ObjectMapping locateObjectMapping(Object domain) {
+        ObjectMapping objectMapping = objectMappingStore.find(domain.getClass());
+        if (objectMapping == null) {
+            throw new BuilderException(MessageFormat.format(NO_OBJECT_MAPPING, new Object[]{domain.getClass().getName()}));
+        }
+        return objectMapping;
     }
 
     private String getField(String fieldName, Object domain) {
