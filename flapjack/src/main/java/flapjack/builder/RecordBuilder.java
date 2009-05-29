@@ -31,7 +31,7 @@ public class RecordBuilder {
     private static final String NO_RECORD_LAYOUT = "Could not resolve RecordLayout(s) for {0}";
     private static final String NO_FIELD_MAPPING = "Could not find a FieldMapping for field=\"{0}\" on class {1}";
     private static final String NO_OBJECT_MAPPING = "Could not find an ObjectMapping for {0}";
-    private RecordLayoutResolver recordLayoutResolver;
+    private BuilderRecordLayoutResolver builderRecordLayoutResolver;
     private ObjectMappingStore objectMappingStore;
     private TypeConverter typeConverter;
 
@@ -68,7 +68,7 @@ public class RecordBuilder {
     }
 
     private List locateRecordLayouts(Object domain) {
-        List recordLayouts = recordLayoutResolver.resolve(domain);
+        List recordLayouts = builderRecordLayoutResolver.resolve(domain);
         if (recordLayouts.size() == 0) {
             throw new BuilderException(MessageFormat.format(NO_RECORD_LAYOUT, new Object[]{domain.getClass().getName()}));
         }
@@ -97,8 +97,8 @@ public class RecordBuilder {
         return null;
     }
 
-    public void setRecordLayoutResolver(RecordLayoutResolver recordLayoutResolver) {
-        this.recordLayoutResolver = recordLayoutResolver;
+    public void setBuilderRecordLayoutResolver(BuilderRecordLayoutResolver recordLayoutResolver) {
+        this.builderRecordLayoutResolver = recordLayoutResolver;
     }
 
     public void setObjectMappingStore(ObjectMappingStore objectMappingStore) {

@@ -35,13 +35,13 @@ public class RecordBuilderTest extends MockObjectTestCase {
 
     protected void setUp() throws Exception {
         super.setUp();
-        recordLayoutResolver = mock(RecordLayoutResolver.class);
+        recordLayoutResolver = mock(BuilderRecordLayoutResolver.class);
         objectMappingStore = new ObjectMappingStore();
         typeConverter = new TypeConverter();
         writer = mock(RecordWriter.class);
 
         builder = new RecordBuilder();
-        builder.setRecordLayoutResolver((RecordLayoutResolver) recordLayoutResolver.proxy());
+        builder.setBuilderRecordLayoutResolver((BuilderRecordLayoutResolver) recordLayoutResolver.proxy());
         builder.setObjectMappingStore(objectMappingStore);
         builder.setTypeConverter(typeConverter);
     }

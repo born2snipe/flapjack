@@ -15,6 +15,6 @@ package flapjack.builder;
 import java.util.List;
 
 
-public interface RecordLayoutResolver {
+public interface BuilderRecordLayoutResolver {
     List resolve(Object domain);
 }
