@@ -12,10 +12,12 @@
  */
 package flapjack.cobol.layout;
 
+import flapjack.layout.Padding;
+
 public class IntegerFieldDefinition extends AbstractCobolFieldDefinition {
 
     public IntegerFieldDefinition(String name, int position, String pattern) {
-        super(name, position, -1, pattern);
+        super(name, position, -1, pattern, Padding.LEFT);
         setLength(parseLength(pattern.trim()));
     }
 

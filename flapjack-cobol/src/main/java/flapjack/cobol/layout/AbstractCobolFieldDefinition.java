@@ -12,6 +12,7 @@
  */
 package flapjack.cobol.layout;
 
+import flapjack.layout.Padding;
 import flapjack.layout.SimpleFieldDefinition;
 
 import java.util.regex.Matcher;
@@ -22,8 +23,8 @@ public class AbstractCobolFieldDefinition extends SimpleFieldDefinition implemen
     private static final Pattern MULTIPLIER_PATTERN = Pattern.compile(".\\(([0-9]+)\\)", Pattern.CASE_INSENSITIVE);
     private String pattern;
 
-    public AbstractCobolFieldDefinition(String name, int position, int length, String pattern) {
-        super(name, position, length);
+    protected AbstractCobolFieldDefinition(String name, int position, int length, String pattern, Padding padding) {
+        super(name, position, length, padding);
         this.pattern = pattern.trim().toUpperCase();
     }
 

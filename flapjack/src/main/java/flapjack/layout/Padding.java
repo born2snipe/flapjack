@@ -10,15 +10,24 @@
  * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and limitations under the License. 
  */
-package flapjack.cobol.layout;
+package flapjack.layout;
 
-import flapjack.layout.Padding;
 
-public class AlphaNumericFieldDefinition extends AbstractCobolFieldDefinition {
+public final class Padding {
+    public static final Padding LEFT = new Padding();
+    public static final Padding RIGHT = new Padding();
+    public static final Padding NONE = new Padding();
 
-    public AlphaNumericFieldDefinition(String name, int position, String pattern) {
-        super(name, position, -1, pattern, Padding.RIGHT);
-        setLength(parseLength(pattern));
+    private Padding() {
     }
 
+    public String toString() {
+        if (this == LEFT) {
+            return "LEFT";
+        } else if (this == RIGHT) {
+            return "RIGHT";
+        } else {
+            return "NONE";
+        }
+    }
 }

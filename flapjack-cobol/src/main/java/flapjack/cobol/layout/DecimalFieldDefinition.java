@@ -12,10 +12,12 @@
  */
 package flapjack.cobol.layout;
 
+import flapjack.layout.Padding;
+
 public class DecimalFieldDefinition extends AbstractCobolFieldDefinition {
 
     public DecimalFieldDefinition(String name, int position, String pattern) {
-        super(name, position, -1, pattern);
+        super(name, position, -1, pattern, Padding.LEFT);
         String[] parts = pattern.split("v|V");
         setLength(parseLength(parts[0]) + parseLength(parts[1]));
     }
