@@ -62,7 +62,7 @@ public class RecordBuilderTest extends MockObjectTestCase {
             builder.build(Arrays.asList(new Object[]{person}), (RecordWriter) writer.proxy());
             fail();
         } catch (BuilderException err) {
-            assertEquals("Not enough data given! Did you forget the padding? Expected 4, but was 3, for field=\"First Name\" on layout=" + recordLayout.getId(), err.getMessage());
+            assertEquals("Not enough data given! Did you forget the padding? Expected 4, but was 3, for field=\"First Name\" on layout=\"" + recordLayout.getId() + "\"", err.getMessage());
         }
     }
 
