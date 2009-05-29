@@ -54,7 +54,7 @@ public class RecordBuilder {
                     FieldDefinition fieldDefinition = (FieldDefinition) it.next();
                     FieldMapping fieldMapping = locateFieldMapping(domain, objectMapping, fieldDefinition);
                     Object fieldValue = getField(fieldMapping.getDomainFieldName(), domain);
-                    byte[] bytes = fieldMapping.getBinaryFieldFactory().build(fieldValue, typeConverter);
+                    byte[] bytes = fieldMapping.getBinaryFieldFactory().build(fieldValue, typeConverter, fieldDefinition);
                     if (bytes.length < fieldDefinition.getLength()) {
                         Integer expected = new Integer(fieldDefinition.getLength());
                         Integer actual = new Integer(bytes.length);

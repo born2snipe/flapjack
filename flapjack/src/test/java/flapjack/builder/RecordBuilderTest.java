@@ -13,6 +13,7 @@
 package flapjack.builder;
 
 import flapjack.io.RecordWriter;
+import flapjack.layout.PaddingDescriptor;
 import flapjack.layout.SimpleRecordLayout;
 import flapjack.model.ObjectMapping;
 import flapjack.model.ObjectMappingStore;
@@ -44,6 +45,22 @@ public class RecordBuilderTest extends MockObjectTestCase {
         builder.setBuilderRecordLayoutResolver((BuilderRecordLayoutResolver) recordLayoutResolver.proxy());
         builder.setObjectMappingStore(objectMappingStore);
         builder.setTypeConverter(typeConverter);
+    }
+
+    public void test_build_NotEnoughDataForPaddedField() {
+        Person person = new Person("Joe", "Smith");
+        ObjectMapping objectMapping = new ObjectMapping(Person.class);
+        objectMapping.field("First Name", "firstName");
+        objectMappingStore.add(objectMapping);
+
+        SimpleRecordLayout recordLayout = new SimpleRecordLayout("person");
+        recordLayout.field("First Name", 4, PaddingDescriptor.Padding.RIGHT, ' ');
+
+        recordLayoutResolver.expects(once()).method("resolve").with(eq(person)).will(returnValue(Arrays.asList(new Object[]{recordLayout})));
+        writer.expects(once()).method("write").with(eq("Joe ".getBytes()));
+        writer.expects(once()).method("close");
+
+        builder.build(Arrays.asList(new Object[]{person}), (RecordWriter) writer.proxy());
     }
 
     public void test_build_NotEnoughDataForUnpaddedField() {

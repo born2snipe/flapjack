@@ -22,6 +22,22 @@ public class SimpleRecordLayoutTest extends TestCase {
         layout = new SimpleRecordLayout("123");
     }
 
+    public void test_FieldWithPadding_NoOffset() {
+        layout.field("", 2, PaddingDescriptor.Padding.LEFT, ' ');
+
+        FieldDefinition fieldDef = (FieldDefinition) layout.getFieldDefinitions().get(0);
+        assertEquals(' ', fieldDef.getPaddingDescriptor().paddingCharacter);
+        assertEquals(PaddingDescriptor.Padding.LEFT, fieldDef.getPaddingDescriptor().padding);
+    }
+
+    public void test_FieldWithPadding_WithOffset() {
+        layout.field("", 0, 2, PaddingDescriptor.Padding.LEFT, ' ');
+
+        FieldDefinition fieldDef = (FieldDefinition) layout.getFieldDefinitions().get(0);
+        assertEquals(' ', fieldDef.getPaddingDescriptor().paddingCharacter);
+        assertEquals(PaddingDescriptor.Padding.LEFT, fieldDef.getPaddingDescriptor().padding);
+    }
+
     public void test_OneFieldDefinition() {
         layout.addFieldDefinition(new SimpleFieldDefinition("", 0, 2));
 
@@ -49,6 +65,8 @@ public class SimpleRecordLayoutTest extends TestCase {
 
         assertEquals(4, layout.getLength());
         assertEquals(1, layout.getFieldDefinitions().size());
+        FieldDefinition fieldDefinition = (FieldDefinition) layout.getFieldDefinitions().get(0);
+        assertNull(fieldDefinition.getPaddingDescriptor());
     }
 
     public void test_field_TwoFieldDefinition_DoesNotStartFromBeginning() {

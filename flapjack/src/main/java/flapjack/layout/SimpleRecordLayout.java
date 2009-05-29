@@ -22,15 +22,28 @@ public class SimpleRecordLayout extends AbstractRecordLayout {
         super(id);
     }
 
+    public void field(String name, int position, int length, PaddingDescriptor.Padding padding, char paddingCharacter) {
+        PaddingDescriptor paddingDescriptor = null;
+        if (padding != null) {
+            paddingDescriptor = new PaddingDescriptor(padding, paddingCharacter);
+        }
+        addFieldDefinition(new SimpleFieldDefinition(name, position, length, paddingDescriptor));
+        if (offset != position) {
+            offset = position;
+        }
+        offset += length;
+    }
+
+
     public void field(String name, int length) {
         field(name, offset, length);
     }
 
     public void field(String name, int position, int length) {
-        addFieldDefinition(new SimpleFieldDefinition(name, position, length));
-        if (offset != position) {
-            offset = position;
-        }
-        offset += length;
+        field(name, position, length, null, ' ');
+    }
+
+    public void field(String name, int length, PaddingDescriptor.Padding padding, char paddingCharacter) {
+        field(name, offset, length, padding, paddingCharacter);
     }
 }

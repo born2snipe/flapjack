@@ -12,9 +12,10 @@
  */
 package flapjack.model;
 
+import flapjack.layout.FieldDefinition;
 import flapjack.util.TypeConverter;
 
 
 public interface BinaryFieldFactory {
-    byte[] build(Object domain, TypeConverter typeConverter);
+    byte[] build(Object domain, TypeConverter typeConverter, FieldDefinition fieldDefinition);
 }
