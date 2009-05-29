@@ -46,6 +46,26 @@ public class RecordBuilderTest extends MockObjectTestCase {
         builder.setTypeConverter(typeConverter);
     }
 
+    public void test_build_NotEnoughDataForUnpaddedField() {
+        Person person = new Person("Joe", "Smith");
+        ObjectMapping objectMapping = new ObjectMapping(Person.class);
+        objectMapping.field("First Name", "firstName");
+        objectMappingStore.add(objectMapping);
+
+        SimpleRecordLayout recordLayout = new SimpleRecordLayout("person");
+        recordLayout.field("First Name", 4);
+
+        recordLayoutResolver.expects(once()).method("resolve").with(eq(person)).will(returnValue(Arrays.asList(new Object[]{recordLayout})));
+        writer.expects(once()).method("close");
+
+        try {
+            builder.build(Arrays.asList(new Object[]{person}), (RecordWriter) writer.proxy());
+            fail();
+        } catch (BuilderException err) {
+            assertEquals("Not enough data given! Did you forget the padding? Expected 4, but was 3, for field=\"First Name\" on layout=" + recordLayout.getId(), err.getMessage());
+        }
+    }
+
     public void test_build_CouldNotFindFieldMapping() {
         Person person = new Person("Joe", "Smith");
         objectMappingStore.add(new ObjectMapping(Person.class));

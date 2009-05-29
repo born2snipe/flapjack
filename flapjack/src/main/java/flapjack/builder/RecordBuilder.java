@@ -32,6 +32,7 @@ public class RecordBuilder {
     private static final String NO_RECORD_LAYOUT = "Could not resolve RecordLayout(s) for {0}";
     private static final String NO_FIELD_MAPPING = "Could not find a FieldMapping for field=\"{0}\" on class {1}";
     private static final String NO_OBJECT_MAPPING = "Could not find an ObjectMapping for {0}";
+    private static final String NOT_ENOUGH_DATA = "Not enough data given! Did you forget the padding? Expected {0}, but was {1}, for field=\"{2}\" on layout={3}";
     private BuilderRecordLayoutResolver builderRecordLayoutResolver;
     private ObjectMappingStore objectMappingStore;
     private TypeConverter typeConverter;
@@ -47,12 +48,22 @@ public class RecordBuilder {
                 Object domain = domainObjectIterator.next();
                 List recordLayouts = locateRecordLayouts(domain);
                 ObjectMapping objectMapping = locateObjectMapping(domain);
-                Iterator it = ((RecordLayout) recordLayouts.get(0)).getFieldDefinitions().iterator();
+                RecordLayout recordLayout = (RecordLayout) recordLayouts.get(0);
+                Iterator it = recordLayout.getFieldDefinitions().iterator();
                 while (it.hasNext()) {
                     FieldDefinition fieldDefinition = (FieldDefinition) it.next();
                     FieldMapping fieldMapping = locateFieldMapping(domain, objectMapping, fieldDefinition);
                     Object fieldValue = getField(fieldMapping.getDomainFieldName(), domain);
-                    writer.write(fieldMapping.getBinaryFieldFactory().build(fieldValue, typeConverter));
+                    byte[] bytes = fieldMapping.getBinaryFieldFactory().build(fieldValue, typeConverter);
+                    if (bytes.length == fieldDefinition.getLength()) {
+                        writer.write(bytes);
+                    } else {
+                        Integer expected = new Integer(fieldDefinition.getLength());
+                        Integer actual = new Integer(bytes.length);
+                        String fieldName = fieldDefinition.getName();
+                        String layoutId = recordLayout.getId();
+                        throw new BuilderException(MessageFormat.format(NOT_ENOUGH_DATA, new Object[]{expected, actual, fieldName, layoutId}));
+                    }
                 }
             }
         } catch (IOException err) {
