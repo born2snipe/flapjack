@@ -49,7 +49,6 @@ public class RecordBuilder {
                     FieldMapping fieldMapping = locateFieldMapping(domain, objectMapping, fieldDefinition);
                     String fieldValue = getField(fieldMapping.getDomainFieldName(), domain);
                     writer.write(fieldMapping.getBinaryFieldFactory().build(fieldValue, typeConverter));
-//                    writer.flush();
                 }
             }
         } catch (IOException err) {
