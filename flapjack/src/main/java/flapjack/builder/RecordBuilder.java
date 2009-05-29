@@ -12,6 +12,7 @@
  */
 package flapjack.builder;
 
+import flapjack.io.RecordWriter;
 import flapjack.layout.FieldDefinition;
 import flapjack.layout.RecordLayout;
 import flapjack.model.FieldMapping;
@@ -20,7 +21,6 @@ import flapjack.model.ObjectMappingStore;
 import flapjack.util.TypeConverter;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.lang.reflect.Field;
 import java.text.MessageFormat;
 import java.util.Iterator;
@@ -36,7 +36,7 @@ public class RecordBuilder {
     private TypeConverter typeConverter;
 
 
-    public void build(List domainObjects, OutputStream output) {
+    public void build(List domainObjects, RecordWriter writer) {
         try {
             Iterator domainObjectIterator = domainObjects.iterator();
             while (domainObjectIterator.hasNext()) {
@@ -48,18 +48,14 @@ public class RecordBuilder {
                     FieldDefinition fieldDefinition = (FieldDefinition) it.next();
                     FieldMapping fieldMapping = locateFieldMapping(domain, objectMapping, fieldDefinition);
                     String fieldValue = getField(fieldMapping.getDomainFieldName(), domain);
-                    output.write(fieldMapping.getBinaryFieldFactory().build(fieldValue, typeConverter));
-                    output.flush();
+                    writer.write(fieldMapping.getBinaryFieldFactory().build(fieldValue, typeConverter));
+//                    writer.flush();
                 }
             }
         } catch (IOException err) {
             throw new BuilderException("A problem occured while building file", err);
         } finally {
-            try {
-                output.close();
-            } catch (IOException e) {
-
-            }
+            writer.close();
         }
 
     }

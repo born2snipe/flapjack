@@ -12,7 +12,7 @@
  */
 package flapjack.builder;
 
-import flapjack.io.MockOutputStream;
+import flapjack.io.RecordWriter;
 import flapjack.layout.SimpleRecordLayout;
 import flapjack.model.ObjectMapping;
 import flapjack.model.ObjectMappingStore;
@@ -30,15 +30,15 @@ public class RecordBuilderTest extends MockObjectTestCase {
     private Mock recordLayoutResolver;
     private ObjectMappingStore objectMappingStore;
     private RecordBuilder builder;
-    private MockOutputStream output;
     private TypeConverter typeConverter;
+    private Mock writer;
 
     protected void setUp() throws Exception {
         super.setUp();
         recordLayoutResolver = mock(RecordLayoutResolver.class);
         objectMappingStore = new ObjectMappingStore();
         typeConverter = new TypeConverter();
-        output = new MockOutputStream();
+        writer = mock(RecordWriter.class);
 
         builder = new RecordBuilder();
         builder.setRecordLayoutResolver((RecordLayoutResolver) recordLayoutResolver.proxy());
@@ -54,9 +54,10 @@ public class RecordBuilderTest extends MockObjectTestCase {
         recordLayout.field("First Name", 3);
 
         recordLayoutResolver.expects(once()).method("resolve").with(eq(person)).will(returnValue(Arrays.asList(new Object[]{recordLayout})));
+        writer.expects(once()).method("close");
 
         try {
-            builder.build(Arrays.asList(new Object[]{person}), output);
+            builder.build(Arrays.asList(new Object[]{person}), (RecordWriter) writer.proxy());
             fail();
         } catch (BuilderException err) {
             assertEquals("Could not find a FieldMapping for field=\"First Name\" on class " + Person.class.getName(), err.getMessage());
@@ -67,9 +68,10 @@ public class RecordBuilderTest extends MockObjectTestCase {
         Person person = new Person("Joe", "Smith");
 
         recordLayoutResolver.expects(once()).method("resolve").with(eq(person)).will(returnValue(Arrays.asList(new Object[]{new SimpleRecordLayout("person")})));
+        writer.expects(once()).method("close");
 
         try {
-            builder.build(Arrays.asList(new Object[]{person}), output);
+            builder.build(Arrays.asList(new Object[]{person}), (RecordWriter) writer.proxy());
             fail();
         } catch (BuilderException err) {
             assertEquals("Could not find an ObjectMapping for " + Person.class.getName(), err.getMessage());
@@ -80,9 +82,10 @@ public class RecordBuilderTest extends MockObjectTestCase {
         Person person = new Person("Joe", "Smith");
 
         recordLayoutResolver.expects(once()).method("resolve").with(eq(person)).will(returnValue(new ArrayList()));
+        writer.expects(once()).method("close");
 
         try {
-            builder.build(Arrays.asList(new Object[]{person}), output);
+            builder.build(Arrays.asList(new Object[]{person}), (RecordWriter) writer.proxy());
             fail();
         } catch (BuilderException err) {
             assertEquals("Could not resolve RecordLayout(s) for " + Person.class.getName(), err.getMessage());
@@ -105,14 +108,14 @@ public class RecordBuilderTest extends MockObjectTestCase {
         IOException error = new IOException();
 
         try {
-            output.willThrowException(error);
+            writer.expects(once()).method("write").with(eq("Joe".getBytes())).will(throwException(error));
+            writer.expects(once()).method("close");
 
-            builder.build(Arrays.asList(new Object[]{person}), output);
+            builder.build(Arrays.asList(new Object[]{person}), (RecordWriter) writer.proxy());
             fail();
         } catch (BuilderException err) {
             assertEquals("A problem occured while building file", err.getMessage());
             assertSame(error, err.getCause());
-            assertTrue(output.isClosed());
         }
     }
 
@@ -133,9 +136,13 @@ public class RecordBuilderTest extends MockObjectTestCase {
         recordLayoutResolver.expects(once()).method("resolve").with(eq(person)).will(returnValue(Arrays.asList(new Object[]{recordLayout})));
         recordLayoutResolver.expects(once()).method("resolve").with(eq(person2)).will(returnValue(Arrays.asList(new Object[]{recordLayout})));
 
-        builder.build(Arrays.asList(new Object[]{person, person2}), output);
+        writer.expects(once()).method("write").with(eq("Joe".getBytes()));
+        writer.expects(once()).method("write").with(eq("Smith".getBytes()));
+        writer.expects(once()).method("write").with(eq("Tim".getBytes()));
+        writer.expects(once()).method("write").with(eq("Roger".getBytes()));
+        writer.expects(once()).method("close");
 
-        assertOutput("JoeSmithTimRoger".getBytes(), 4);
+        builder.build(Arrays.asList(new Object[]{person, person2}), (RecordWriter) writer.proxy());
     }
 
     public void test_build_SingleDomainObject() throws IOException {
@@ -153,9 +160,11 @@ public class RecordBuilderTest extends MockObjectTestCase {
 
         recordLayoutResolver.expects(once()).method("resolve").with(eq(person)).will(returnValue(Arrays.asList(new Object[]{recordLayout})));
 
-        builder.build(Arrays.asList(new Object[]{person}), output);
+        writer.expects(once()).method("write").with(eq("Joe".getBytes()));
+        writer.expects(once()).method("write").with(eq("Smith".getBytes()));
+        writer.expects(once()).method("close");
 
-        assertOutput("JoeSmith".getBytes(), 2);
+        builder.build(Arrays.asList(new Object[]{person}), (RecordWriter) writer.proxy());
     }
 
     public void test_build_CustomValueConverter() throws IOException {
@@ -173,15 +182,10 @@ public class RecordBuilderTest extends MockObjectTestCase {
 
         typeConverter.registerConverter(new ReverseValueConverter());
 
-        builder.build(Arrays.asList(new Object[]{person}), output);
+        writer.expects(once()).method("write").with(eq("eoJ".getBytes()));
+        writer.expects(once()).method("close");
 
-        assertOutput("eoJ".getBytes(), 1);
-    }
-
-    private void assertOutput(byte[] expectedOutput, int expectedFlushCount) {
-        assertTrue("Expected was \"" + new String(expectedOutput) + "\", but actual was \"" + new String(output.getBytes()) + "\"", Arrays.equals(expectedOutput, output.getBytes()));
-        assertTrue(output.isClosed());
-        assertEquals(expectedFlushCount, output.getFlushCount());
+        builder.build(Arrays.asList(new Object[]{person}), (RecordWriter) writer.proxy());
     }
 
     private static class ReverseValueConverter extends AbstractTextValueConverter {
