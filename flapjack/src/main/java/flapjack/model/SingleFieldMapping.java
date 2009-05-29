@@ -32,7 +32,7 @@ public class SingleFieldMapping extends AbstractFieldMapping {
     }
 
 
-    public DomainFieldFactory getFactory() {
+    public DomainFieldFactory getDomainFieldFactory() {
         return new DomainFieldFactory() {
             public Object build(ListMap fields, Class domainFieldType, TypeConverter typeConverter) {
                 if (valueConverter != null) {

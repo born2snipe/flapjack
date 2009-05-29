@@ -65,7 +65,7 @@ public class ObjectMappingTest extends TestCase {
         ListMap listMap = new ListMap();
         listMap.put("field", "1".getBytes());
 
-        DomainFieldFactory factory = fieldMapping.getFactory();
+        DomainFieldFactory factory = fieldMapping.getDomainFieldFactory();
         assertEquals(new Integer(1), factory.build(listMap, Integer.class, new TypeConverter()));
     }
 

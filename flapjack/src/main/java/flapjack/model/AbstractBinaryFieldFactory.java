@@ -12,15 +12,18 @@
  */
 package flapjack.model;
 
-import java.util.List;
+import flapjack.util.TypeConverter;
+
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStream;
 
 
-public interface FieldMapping {
-    String getDomainFieldName();
+public abstract class AbstractBinaryFieldFactory implements BinaryFieldFactory {
+    public byte[] build(Object domain, TypeConverter typeConverter) {
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        buid(output, domain, typeConverter);
+        return output.toByteArray();
+    }
 
-    List getRecordFields();
-
-    DomainFieldFactory getDomainFieldFactory();
-
-    BinaryFieldFactory getBinaryFieldFactory();
+    protected abstract void buid(OutputStream output, Object domain, TypeConverter typeConverter);
 }

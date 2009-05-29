@@ -16,19 +16,19 @@ import java.util.List;
 
 
 public class CompoundFieldMapping extends AbstractFieldMapping {
-    private DomainFieldFactory factory;
+    private DomainFieldFactory domainFieldFactory;
     private BinaryFieldFactory binaryFieldFactory;
 
-    public CompoundFieldMapping(List recordFields, String domainFieldName, DomainFieldFactory factory) {
+    public CompoundFieldMapping(List recordFields, String domainFieldName, DomainFieldFactory domainFieldFactory) {
         super(recordFields, domainFieldName);
-        this.factory = factory;
+        this.domainFieldFactory = domainFieldFactory;
     }
 
-    public DomainFieldFactory getFactory() {
-        return factory;
+    public DomainFieldFactory getDomainFieldFactory() {
+        return domainFieldFactory;
     }
 
     public BinaryFieldFactory getBinaryFieldFactory() {
-        return null;
+        return binaryFieldFactory;
     }
 }

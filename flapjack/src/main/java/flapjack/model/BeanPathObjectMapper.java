@@ -48,7 +48,7 @@ public class BeanPathObjectMapper implements ObjectMapper {
                 FieldMapping fieldMapping = objectMapping.findRecordField(recordFieldId);
                 String beanPath = fieldMapping.getDomainFieldName();
                 Field field = locateDomainField(domain, recordFieldId, beanPath);
-                DomainFieldFactory domainFieldFactory = fieldMapping.getFactory();
+                DomainFieldFactory domainFieldFactory = fieldMapping.getDomainFieldFactory();
                 ListMap recordData = grabRecordDataForField(fields, fieldMapping.getRecordFields());
                 verifyAllRecordFieldsHaveData(recordData, beanPath, domainClass);
                 ClassUtil.setBean(domain, beanPath, domainFieldFactory.build(recordData, field.getType(), typeConverter));
