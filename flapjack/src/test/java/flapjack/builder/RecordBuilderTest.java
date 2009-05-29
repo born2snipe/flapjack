@@ -164,7 +164,7 @@ public class RecordBuilderTest extends MockObjectTestCase {
         writer.expects(once()).method("write").with(eq("Smith".getBytes()));
         writer.expects(once()).method("close");
 
-        builder.build(Arrays.asList(new Object[]{person}), (RecordWriter) writer.proxy());
+        builder.build(person, (RecordWriter) writer.proxy());
     }
 
     public void test_build_CustomValueConverter() throws IOException {

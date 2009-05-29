@@ -23,6 +23,7 @@ import flapjack.util.TypeConverter;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.text.MessageFormat;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -35,6 +36,9 @@ public class RecordBuilder {
     private ObjectMappingStore objectMappingStore;
     private TypeConverter typeConverter;
 
+    public void build(Object domainObject, RecordWriter writer) {
+        build(Arrays.asList(new Object[]{domainObject}), writer);
+    }
 
     public void build(List domainObjects, RecordWriter writer) {
         try {
