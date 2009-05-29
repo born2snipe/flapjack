@@ -173,10 +173,8 @@ public class RecordBuilderTest extends MockObjectTestCase {
         recordLayoutResolver.expects(once()).method("resolve").with(eq(person)).will(returnValue(Arrays.asList(new Object[]{recordLayout})));
         recordLayoutResolver.expects(once()).method("resolve").with(eq(person2)).will(returnValue(Arrays.asList(new Object[]{recordLayout})));
 
-        writer.expects(once()).method("write").with(eq("Joe".getBytes()));
-        writer.expects(once()).method("write").with(eq("Smith".getBytes()));
-        writer.expects(once()).method("write").with(eq("Tim".getBytes()));
-        writer.expects(once()).method("write").with(eq("Roger".getBytes()));
+        writer.expects(once()).method("write").with(eq("JoeSmith".getBytes()));
+        writer.expects(once()).method("write").with(eq("TimRoger".getBytes()));
         writer.expects(once()).method("close");
 
         builder.build(Arrays.asList(new Object[]{person, person2}), (RecordWriter) writer.proxy());
@@ -197,8 +195,7 @@ public class RecordBuilderTest extends MockObjectTestCase {
 
         recordLayoutResolver.expects(once()).method("resolve").with(eq(person)).will(returnValue(Arrays.asList(new Object[]{recordLayout})));
 
-        writer.expects(once()).method("write").with(eq("Joe".getBytes()));
-        writer.expects(once()).method("write").with(eq("Smith".getBytes()));
+        writer.expects(once()).method("write").with(eq("JoeSmith".getBytes()));
         writer.expects(once()).method("close");
 
         builder.build(person, (RecordWriter) writer.proxy());

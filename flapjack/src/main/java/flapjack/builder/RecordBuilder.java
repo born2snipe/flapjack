@@ -20,6 +20,7 @@ import flapjack.model.ObjectMapping;
 import flapjack.model.ObjectMappingStore;
 import flapjack.util.TypeConverter;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.text.MessageFormat;
@@ -43,6 +44,7 @@ public class RecordBuilder {
 
     public void build(List domainObjects, RecordWriter writer) {
         try {
+            ByteArrayOutputStream output = new ByteArrayOutputStream();
             Iterator domainObjectIterator = domainObjects.iterator();
             while (domainObjectIterator.hasNext()) {
                 Object domain = domainObjectIterator.next();
@@ -62,9 +64,11 @@ public class RecordBuilder {
                         String layoutId = recordLayout.getId();
                         throw new BuilderException(MessageFormat.format(NOT_ENOUGH_DATA, new Object[]{expected, actual, fieldName, layoutId}));
                     } else {
-                        writer.write(bytes);
+                        output.write(bytes);
                     }
                 }
+                writer.write(output.toByteArray());
+                output.reset();
             }
         } catch (IOException err) {
             throw new BuilderException("A problem occured while building file", err);
