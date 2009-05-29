@@ -23,7 +23,7 @@ public class PaddingDescriptor {
     }
 
     public String toString() {
-        return "justified=" + padding + ", character=" + paddingCharacter;
+        return "padding=" + padding + ", character=" + paddingCharacter;
     }
 
     public boolean equals(Object o) {
