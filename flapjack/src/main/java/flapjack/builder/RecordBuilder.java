@@ -36,9 +36,9 @@ public class RecordBuilder {
 
     public void build(List domainObject, OutputStream output) {
         Object domain = domainObject.get(0);
-        RecordLayout recordLayout = locateRecordLayout(domain);
+        List recordLayouts = locateRecordLayouts(domain);
         ObjectMapping objectMapping = locateObjectMapping(domain);
-        Iterator it = recordLayout.getFieldDefinitions().iterator();
+        Iterator it = ((RecordLayout) recordLayouts.get(0)).getFieldDefinitions().iterator();
         try {
             while (it.hasNext()) {
                 FieldDefinition fieldDefinition = (FieldDefinition) it.next();
@@ -58,12 +58,12 @@ public class RecordBuilder {
 
     }
 
-    private RecordLayout locateRecordLayout(Object domain) {
-        RecordLayout recordLayout = recordLayoutResolver.resolve(domain);
-        if (recordLayout == null) {
+    private List locateRecordLayouts(Object domain) {
+        List recordLayouts = recordLayoutResolver.resolve(domain);
+        if (recordLayouts.size() == 0) {
             throw new BuilderException(MessageFormat.format(NO_RECORD_LAYOUT, new Object[]{domain.getClass().getName()}));
         }
-        return recordLayout;
+        return recordLayouts;
     }
 
     private ObjectMapping locateObjectMapping(Object domain) {

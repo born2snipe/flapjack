@@ -12,9 +12,9 @@
  */
 package flapjack.builder;
 
-import flapjack.layout.RecordLayout;
+import java.util.List;
 
 
 public interface RecordLayoutResolver {
-    RecordLayout resolve(Object domain);
+    List resolve(Object domain);
 }

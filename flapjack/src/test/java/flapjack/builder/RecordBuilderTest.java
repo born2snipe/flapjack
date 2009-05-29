@@ -20,6 +20,7 @@ import org.jmock.Mock;
 import org.jmock.MockObjectTestCase;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 
@@ -43,7 +44,7 @@ public class RecordBuilderTest extends MockObjectTestCase {
     public void test_build_CouldNotFindObjectMapping() {
         Person person = new Person("Joe", "Smith");
 
-        recordLayoutResolver.expects(once()).method("resolve").with(eq(person)).will(returnValue(new SimpleRecordLayout("person")));
+        recordLayoutResolver.expects(once()).method("resolve").with(eq(person)).will(returnValue(Arrays.asList(new Object[]{new SimpleRecordLayout("person")})));
 
         try {
             builder.build(Arrays.asList(new Object[]{person}), output);
@@ -56,7 +57,7 @@ public class RecordBuilderTest extends MockObjectTestCase {
     public void test_build_CouldNotResolveRecordLayout() {
         Person person = new Person("Joe", "Smith");
 
-        recordLayoutResolver.expects(once()).method("resolve").with(eq(person)).will(returnValue(null));
+        recordLayoutResolver.expects(once()).method("resolve").with(eq(person)).will(returnValue(new ArrayList()));
 
         try {
             builder.build(Arrays.asList(new Object[]{person}), output);
@@ -77,7 +78,7 @@ public class RecordBuilderTest extends MockObjectTestCase {
         SimpleRecordLayout recordLayout = new SimpleRecordLayout("person");
         recordLayout.field("First Name", 3);
 
-        recordLayoutResolver.expects(once()).method("resolve").with(eq(person)).will(returnValue(recordLayout));
+        recordLayoutResolver.expects(once()).method("resolve").with(eq(person)).will(returnValue(Arrays.asList(new Object[]{recordLayout})));
 
         IOException error = new IOException();
 
@@ -106,7 +107,7 @@ public class RecordBuilderTest extends MockObjectTestCase {
         recordLayout.field("First Name", 3);
         recordLayout.field("Last Name", 5);
 
-        recordLayoutResolver.expects(once()).method("resolve").with(eq(person)).will(returnValue(recordLayout));
+        recordLayoutResolver.expects(once()).method("resolve").with(eq(person)).will(returnValue(Arrays.asList(new Object[]{recordLayout})));
 
         builder.build(Arrays.asList(new Object[]{person}), output);
 
