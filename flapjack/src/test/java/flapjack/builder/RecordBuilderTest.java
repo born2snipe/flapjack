@@ -41,6 +41,23 @@ public class RecordBuilderTest extends MockObjectTestCase {
         output = new MockOutputStream();
     }
 
+    public void test_build_CouldNotFindFieldMapping() {
+        Person person = new Person("Joe", "Smith");
+        objectMappingStore.add(new ObjectMapping(Person.class));
+
+        SimpleRecordLayout recordLayout = new SimpleRecordLayout("person");
+        recordLayout.field("First Name", 3);
+
+        recordLayoutResolver.expects(once()).method("resolve").with(eq(person)).will(returnValue(Arrays.asList(new Object[]{recordLayout})));
+
+        try {
+            builder.build(Arrays.asList(new Object[]{person}), output);
+            fail();
+        } catch (BuilderException err) {
+            assertEquals("Could not find a FieldMapping for field=\"First Name\" on class " + Person.class.getName(), err.getMessage());
+        }
+    }
+
     public void test_build_CouldNotFindObjectMapping() {
         Person person = new Person("Joe", "Smith");
 
@@ -63,7 +80,7 @@ public class RecordBuilderTest extends MockObjectTestCase {
             builder.build(Arrays.asList(new Object[]{person}), output);
             fail();
         } catch (BuilderException err) {
-            assertEquals("Could not resolve RecordLayout for " + Person.class.getName(), err.getMessage());
+            assertEquals("Could not resolve RecordLayout(s) for " + Person.class.getName(), err.getMessage());
         }
     }
 

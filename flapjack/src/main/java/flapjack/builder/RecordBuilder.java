@@ -27,9 +27,9 @@ import java.util.List;
 
 
 public class RecordBuilder {
-    private static final String NO_RECORD_LAYOUT = "Could not resolve RecordLayout for {0}";
+    private static final String NO_RECORD_LAYOUT = "Could not resolve RecordLayout(s) for {0}";
+    private static final String NO_FIELD_MAPPING = "Could not find a FieldMapping for field=\"{0}\" on class {1}";
     private static final String NO_OBJECT_MAPPING = "Could not find an ObjectMapping for {0}";
-
     private RecordLayoutResolver recordLayoutResolver;
     private ObjectMappingStore objectMappingStore;
 
@@ -42,7 +42,7 @@ public class RecordBuilder {
         try {
             while (it.hasNext()) {
                 FieldDefinition fieldDefinition = (FieldDefinition) it.next();
-                FieldMapping fieldMapping = objectMapping.findRecordField(fieldDefinition.getName());
+                FieldMapping fieldMapping = getFieldMapping(domain, objectMapping, fieldDefinition);
                 output.write(getField(fieldMapping.getDomainFieldName(), domain).getBytes());
                 output.flush();
             }
@@ -56,6 +56,14 @@ public class RecordBuilder {
             }
         }
 
+    }
+
+    private FieldMapping getFieldMapping(Object domain, ObjectMapping objectMapping, FieldDefinition fieldDefinition) {
+        FieldMapping fieldMapping = objectMapping.findRecordField(fieldDefinition.getName());
+        if (fieldMapping == null) {
+            throw new BuilderException(MessageFormat.format(NO_FIELD_MAPPING, new Object[]{fieldDefinition.getName(), domain.getClass().getName()}));
+        }
+        return fieldMapping;
     }
 
     private List locateRecordLayouts(Object domain) {
