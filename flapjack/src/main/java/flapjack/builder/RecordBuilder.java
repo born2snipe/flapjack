@@ -57,7 +57,7 @@ public class RecordBuilder {
                     FieldMapping fieldMapping = locateFieldMapping(domain, objectMapping, fieldDefinition);
                     Object fieldValue = getField(fieldMapping.getDomainFieldName(), domain);
                     byte[] bytes = fieldMapping.getBinaryFieldFactory().build(fieldValue, typeConverter, fieldDefinition);
-                    if (bytes.length < fieldDefinition.getLength()) {
+                    if (notEnoughDataForField(fieldDefinition, bytes)) {
                         Integer expected = new Integer(fieldDefinition.getLength());
                         Integer actual = new Integer(bytes.length);
                         String fieldName = fieldDefinition.getName();
@@ -76,6 +76,10 @@ public class RecordBuilder {
             writer.close();
         }
 
+    }
+
+    private boolean notEnoughDataForField(FieldDefinition fieldDefinition, byte[] bytes) {
+        return bytes.length < fieldDefinition.getLength();
     }
 
     private FieldMapping locateFieldMapping(Object domain, ObjectMapping objectMapping, FieldDefinition fieldDefinition) {
