@@ -17,7 +17,7 @@ import flapjack.layout.PaddingDescriptor;
 import flapjack.layout.SimpleRecordLayout;
 import flapjack.model.ObjectMapping;
 import flapjack.model.ObjectMappingStore;
-import flapjack.util.AbstractTextValueConverter;
+import flapjack.util.ReverseValueConverter;
 import flapjack.util.TypeConverter;
 import org.jmock.Mock;
 import org.jmock.MockObjectTestCase;
@@ -220,21 +220,6 @@ public class RecordBuilderTest extends MockObjectTestCase {
         writer.expects(once()).method("close");
 
         builder.build(Arrays.asList(new Object[]{person}), (RecordWriter) writer.proxy());
-    }
-
-    private static class ReverseValueConverter extends AbstractTextValueConverter {
-        protected Object fromTextToDomain(String text) {
-            return null;
-        }
-
-        protected String fromDomainToText(Object domain) {
-            String text = (String) domain;
-            StringBuffer builder = new StringBuffer();
-            for (int i = text.length() - 1; i >= 0; i--) {
-                builder.append(text.charAt(i));
-            }
-            return builder.toString();
-        }
     }
 
     private static class Person {
