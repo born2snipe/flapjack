@@ -29,19 +29,22 @@ public class SingleFieldMappingTest extends TestCase {
         super.setUp();
         typeConverter = new TypeConverter();
         typeConverter.registerConverter(new ReverseValueConverter());
-        mapping = new SingleFieldMapping("1", "2");
-        binaryFactory = mapping.getBinaryFieldFactory();
-        domainFactory = mapping.getDomainFieldFactory();
+        initializeMapping(null);
     }
 
     public void test_domainFieldFactory_CustomValueConverter() {
-        mapping = new SingleFieldMapping("1", "2", ReverseValueConverter.class);
-        domainFactory = mapping.getDomainFieldFactory();
+        initializeMapping(ReverseValueConverter.class);
 
         ListMap listMap = new ListMap();
         listMap.put("1", "value".getBytes());
 
         assertEquals("eulav", domainFactory.build(listMap, String.class, typeConverter));
+    }
+
+    private void initializeMapping(Class valueConverterClass) {
+        mapping = new SingleFieldMapping("1", "2", valueConverterClass);
+        domainFactory = mapping.getDomainFieldFactory();
+        binaryFactory = mapping.getBinaryFieldFactory();
     }
 
     public void test_domainFieldFactory() {
@@ -58,24 +61,21 @@ public class SingleFieldMappingTest extends TestCase {
     }
 
     public void test_binaryFieldFactory_NoPadding_CustomValueConverter() {
-        mapping = new SingleFieldMapping("1", "2", ReverseValueConverter.class);
-        binaryFactory = mapping.getBinaryFieldFactory();
+        initializeMapping(ReverseValueConverter.class);
         SimpleFieldDefinition fieldDefinition = new SimpleFieldDefinition("id", 0, 0);
 
         assertEquals("eulav", new String(binaryFactory.build("value", typeConverter, fieldDefinition)));
     }
 
     public void test_binaryFieldFactory_LeftPadding_CustomValueConverter() {
-        mapping = new SingleFieldMapping("1", "2", ReverseValueConverter.class);
-        binaryFactory = mapping.getBinaryFieldFactory();
+        initializeMapping(ReverseValueConverter.class);
         SimpleFieldDefinition fieldDefinition = new SimpleFieldDefinition("id", 0, 10, new PaddingDescriptor(PaddingDescriptor.Padding.LEFT, ' '));
 
         assertEquals("     eulav", new String(binaryFactory.build("value", typeConverter, fieldDefinition)));
     }
 
     public void test_binaryFieldFactory_RightPadding_CustomValueConverter() {
-        mapping = new SingleFieldMapping("1", "2", ReverseValueConverter.class);
-        binaryFactory = mapping.getBinaryFieldFactory();
+        initializeMapping(ReverseValueConverter.class);
         SimpleFieldDefinition fieldDefinition = new SimpleFieldDefinition("id", 0, 10, new PaddingDescriptor(PaddingDescriptor.Padding.RIGHT, ' '));
 
         assertEquals("eulav     ", new String(binaryFactory.build("value", typeConverter, fieldDefinition)));
