@@ -54,7 +54,7 @@ public class RecordBuilderTest extends MockObjectTestCase {
         objectMappingStore.add(objectMapping);
 
         SimpleRecordLayout recordLayout = new SimpleRecordLayout("person");
-        recordLayout.field("First Name", 4, TextPaddingDescriptor.Padding.RIGHT, ' ');
+        recordLayout.field("First Name", 4, new TextPaddingDescriptor(TextPaddingDescriptor.Padding.RIGHT, ' '));
 
         recordLayoutResolver.expects(once()).method("resolve").with(eq(person)).will(returnValue(Arrays.asList(new Object[]{recordLayout})));
         writer.expects(once()).method("write").with(eq("Joe ".getBytes()));
