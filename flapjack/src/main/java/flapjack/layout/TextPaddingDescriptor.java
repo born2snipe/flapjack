@@ -16,8 +16,8 @@ import flapjack.util.StringUtil;
 
 
 public class TextPaddingDescriptor implements PaddingDescriptor {
-    public final Padding padding;
-    public final char paddingCharacter;
+    private Padding padding;
+    private char paddingCharacter;
 
     public TextPaddingDescriptor(Padding padding, char paddingCharacter) {
         this.padding = padding;
@@ -26,24 +26,6 @@ public class TextPaddingDescriptor implements PaddingDescriptor {
 
     public String toString() {
         return "padding=" + padding + ", character=" + paddingCharacter;
-    }
-
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        TextPaddingDescriptor that = (TextPaddingDescriptor) o;
-
-        if (paddingCharacter != that.paddingCharacter) return false;
-        if (padding != null ? !padding.equals(that.padding) : that.padding != null) return false;
-
-        return true;
-    }
-
-    public int hashCode() {
-        int result = padding != null ? padding.hashCode() : 0;
-        result = 31 * result + (int) paddingCharacter;
-        return result;
     }
 
     public byte[] applyPadding(byte[] data, int length) {
