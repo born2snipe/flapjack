@@ -22,9 +22,9 @@ import java.io.OutputStream;
 public abstract class AbstractBinaryFieldFactory implements BinaryFieldFactory {
     public byte[] build(Object domain, TypeConverter typeConverter, FieldDefinition fieldDefinition) {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
-        buid(output, domain, typeConverter);
+        buid(output, domain, typeConverter, fieldDefinition);
         return output.toByteArray();
     }
 
-    protected abstract void buid(OutputStream output, Object domain, TypeConverter typeConverter);
+    protected abstract void buid(OutputStream output, Object domain, TypeConverter typeConverter, FieldDefinition fieldDefinition);
 }
