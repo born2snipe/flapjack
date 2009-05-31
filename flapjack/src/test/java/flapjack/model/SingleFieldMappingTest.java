@@ -12,8 +12,8 @@
  */
 package flapjack.model;
 
-import flapjack.layout.PaddingDescriptor;
 import flapjack.layout.SimpleFieldDefinition;
+import flapjack.layout.TextPaddingDescriptor;
 import flapjack.util.ReverseValueConverter;
 import flapjack.util.TypeConverter;
 import junit.framework.TestCase;
@@ -69,32 +69,32 @@ public class SingleFieldMappingTest extends TestCase {
 
     public void test_binaryFieldFactory_LeftPadding_CustomValueConverter() {
         initializeMapping(ReverseValueConverter.class);
-        SimpleFieldDefinition fieldDefinition = new SimpleFieldDefinition("id", 0, 10, new PaddingDescriptor(PaddingDescriptor.Padding.LEFT, ' '));
+        SimpleFieldDefinition fieldDefinition = new SimpleFieldDefinition("id", 0, 10, new TextPaddingDescriptor(TextPaddingDescriptor.Padding.LEFT, ' '));
 
         assertEquals("     eulav", new String(binaryFactory.build("value", typeConverter, fieldDefinition)));
     }
 
     public void test_binaryFieldFactory_RightPadding_CustomValueConverter() {
         initializeMapping(ReverseValueConverter.class);
-        SimpleFieldDefinition fieldDefinition = new SimpleFieldDefinition("id", 0, 10, new PaddingDescriptor(PaddingDescriptor.Padding.RIGHT, ' '));
+        SimpleFieldDefinition fieldDefinition = new SimpleFieldDefinition("id", 0, 10, new TextPaddingDescriptor(TextPaddingDescriptor.Padding.RIGHT, ' '));
 
         assertEquals("eulav     ", new String(binaryFactory.build("value", typeConverter, fieldDefinition)));
     }
 
     public void test_binaryFieldFactory_NonePadding() {
-        SimpleFieldDefinition fieldDefinition = new SimpleFieldDefinition("id", 0, 10, new PaddingDescriptor(PaddingDescriptor.Padding.NONE, 'A'));
+        SimpleFieldDefinition fieldDefinition = new SimpleFieldDefinition("id", 0, 10, new TextPaddingDescriptor(TextPaddingDescriptor.Padding.NONE, 'A'));
 
         assertEquals("value", new String(binaryFactory.build("value", typeConverter, fieldDefinition)));
     }
 
     public void test_binaryFieldFactory_LeftPadding() {
-        SimpleFieldDefinition fieldDefinition = new SimpleFieldDefinition("id", 0, 10, new PaddingDescriptor(PaddingDescriptor.Padding.LEFT, ' '));
+        SimpleFieldDefinition fieldDefinition = new SimpleFieldDefinition("id", 0, 10, new TextPaddingDescriptor(TextPaddingDescriptor.Padding.LEFT, ' '));
 
         assertEquals("     value", new String(binaryFactory.build("value", typeConverter, fieldDefinition)));
     }
 
     public void test_binaryFieldFactory_RightPadding() {
-        SimpleFieldDefinition fieldDefinition = new SimpleFieldDefinition("id", 0, 10, new PaddingDescriptor(PaddingDescriptor.Padding.RIGHT, ' '));
+        SimpleFieldDefinition fieldDefinition = new SimpleFieldDefinition("id", 0, 10, new TextPaddingDescriptor(TextPaddingDescriptor.Padding.RIGHT, ' '));
 
         assertEquals("value     ", new String(binaryFactory.build("value", typeConverter, fieldDefinition)));
     }

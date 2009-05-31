@@ -23,19 +23,17 @@ public class SimpleRecordLayoutTest extends TestCase {
     }
 
     public void test_FieldWithPadding_NoOffset() {
-        layout.field("", 2, PaddingDescriptor.Padding.LEFT, ' ');
+        layout.field("", 2, TextPaddingDescriptor.Padding.LEFT, ' ');
 
         FieldDefinition fieldDef = (FieldDefinition) layout.getFieldDefinitions().get(0);
-        assertEquals(' ', fieldDef.getPaddingDescriptor().paddingCharacter);
-        assertEquals(PaddingDescriptor.Padding.LEFT, fieldDef.getPaddingDescriptor().padding);
+        assertNotNull(fieldDef.getPaddingDescriptor());
     }
 
     public void test_FieldWithPadding_WithOffset() {
-        layout.field("", 0, 2, PaddingDescriptor.Padding.LEFT, ' ');
+        layout.field("", 0, 2, TextPaddingDescriptor.Padding.LEFT, ' ');
 
         FieldDefinition fieldDef = (FieldDefinition) layout.getFieldDefinitions().get(0);
-        assertEquals(' ', fieldDef.getPaddingDescriptor().paddingCharacter);
-        assertEquals(PaddingDescriptor.Padding.LEFT, fieldDef.getPaddingDescriptor().padding);
+        assertNotNull(fieldDef.getPaddingDescriptor());
     }
 
     public void test_OneFieldDefinition() {

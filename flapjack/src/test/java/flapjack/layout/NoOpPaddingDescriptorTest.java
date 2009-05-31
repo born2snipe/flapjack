@@ -10,20 +10,14 @@
  * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and limitations under the License. 
  */
-package flapjack.cobol.layout;
+package flapjack.layout;
 
-import flapjack.layout.NoOpPaddingDescriptor;
-import flapjack.layout.PaddingDescriptor;
+import junit.framework.TestCase;
 
-public class IntegerFieldDefinition extends AbstractCobolFieldDefinition {
 
-    public IntegerFieldDefinition(String name, int position, String pattern) {
-        this(name, position, pattern, new NoOpPaddingDescriptor());
+public class NoOpPaddingDescriptorTest extends TestCase {
+    public void test_applyPadding() {
+        byte[] data = new byte[0];
+        assertSame(data, new NoOpPaddingDescriptor().applyPadding(data, 10));
     }
-
-    public IntegerFieldDefinition(String name, int position, String pattern, PaddingDescriptor paddingDescriptor) {
-        super(name, position, -1, pattern, paddingDescriptor);
-        setLength(parseLength(pattern.trim()));
-    }
-
 }

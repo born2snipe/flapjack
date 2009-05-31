@@ -12,12 +12,17 @@
  */
 package flapjack.cobol.layout;
 
+import flapjack.layout.NoOpPaddingDescriptor;
 import flapjack.layout.PaddingDescriptor;
 
 public class AlphaNumericFieldDefinition extends AbstractCobolFieldDefinition {
 
     public AlphaNumericFieldDefinition(String name, int position, String pattern) {
-        super(name, position, -1, pattern, new PaddingDescriptor(PaddingDescriptor.Padding.RIGHT, ' '));
+        this(name, position, pattern, new NoOpPaddingDescriptor());
+    }
+
+    public AlphaNumericFieldDefinition(String name, int position, String pattern, PaddingDescriptor paddingDescriptor) {
+        super(name, position, -1, pattern, paddingDescriptor);
         setLength(parseLength(pattern));
     }
 

@@ -14,7 +14,6 @@ package flapjack.model;
 
 import flapjack.layout.FieldDefinition;
 import flapjack.layout.PaddingDescriptor;
-import flapjack.util.StringUtil;
 import flapjack.util.TypeConverter;
 import flapjack.util.ValueConverter;
 
@@ -50,11 +49,7 @@ public class SingleFieldMapping extends AbstractFieldMapping {
                 byte[] bytes = findValueConverter(domain.getClass(), typeConverter).toBytes(domain);
                 PaddingDescriptor paddingDescriptor = fieldDefinition.getPaddingDescriptor();
                 if (paddingDescriptor != null) {
-                    if (paddingDescriptor.padding == PaddingDescriptor.Padding.RIGHT) {
-                        bytes = StringUtil.rightPad(new String(bytes), fieldDefinition.getLength(), paddingDescriptor.paddingCharacter).getBytes();
-                    } else if (paddingDescriptor.padding == PaddingDescriptor.Padding.LEFT) {
-                        bytes = StringUtil.leftPad(new String(bytes), fieldDefinition.getLength(), paddingDescriptor.paddingCharacter).getBytes();
-                    }
+                    bytes = paddingDescriptor.applyPadding(bytes, fieldDefinition.getLength());
                 }
                 return bytes;
             }

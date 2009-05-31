@@ -13,8 +13,8 @@
 package flapjack.builder;
 
 import flapjack.io.RecordWriter;
-import flapjack.layout.PaddingDescriptor;
 import flapjack.layout.SimpleRecordLayout;
+import flapjack.layout.TextPaddingDescriptor;
 import flapjack.model.ObjectMapping;
 import flapjack.model.ObjectMappingStore;
 import flapjack.util.ReverseValueConverter;
@@ -54,7 +54,7 @@ public class RecordBuilderTest extends MockObjectTestCase {
         objectMappingStore.add(objectMapping);
 
         SimpleRecordLayout recordLayout = new SimpleRecordLayout("person");
-        recordLayout.field("First Name", 4, PaddingDescriptor.Padding.RIGHT, ' ');
+        recordLayout.field("First Name", 4, TextPaddingDescriptor.Padding.RIGHT, ' ');
 
         recordLayoutResolver.expects(once()).method("resolve").with(eq(person)).will(returnValue(Arrays.asList(new Object[]{recordLayout})));
         writer.expects(once()).method("write").with(eq("Joe ".getBytes()));

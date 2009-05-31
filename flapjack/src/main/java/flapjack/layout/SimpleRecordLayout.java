@@ -22,10 +22,10 @@ public class SimpleRecordLayout extends AbstractRecordLayout {
         super(id);
     }
 
-    public void field(String name, int position, int length, PaddingDescriptor.Padding padding, char paddingCharacter) {
-        PaddingDescriptor paddingDescriptor = null;
+    public void field(String name, int position, int length, TextPaddingDescriptor.Padding padding, char paddingCharacter) {
+        TextPaddingDescriptor paddingDescriptor = null;
         if (padding != null) {
-            paddingDescriptor = new PaddingDescriptor(padding, paddingCharacter);
+            paddingDescriptor = new TextPaddingDescriptor(padding, paddingCharacter);
         }
         addFieldDefinition(new SimpleFieldDefinition(name, position, length, paddingDescriptor));
         if (offset != position) {
@@ -43,7 +43,7 @@ public class SimpleRecordLayout extends AbstractRecordLayout {
         field(name, position, length, null, ' ');
     }
 
-    public void field(String name, int length, PaddingDescriptor.Padding padding, char paddingCharacter) {
+    public void field(String name, int length, TextPaddingDescriptor.Padding padding, char paddingCharacter) {
         field(name, offset, length, padding, paddingCharacter);
     }
 }

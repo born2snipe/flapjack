@@ -12,7 +12,6 @@
  */
 package flapjack.cobol.layout;
 
-import flapjack.layout.PaddingDescriptor;
 import junit.framework.TestCase;
 
 
@@ -22,6 +21,6 @@ public class IntegerFieldDefinitionTest extends TestCase {
         assertEquals(1, new IntegerFieldDefinition("name", 0, " 9 ").getLength());
         assertEquals(2, new IntegerFieldDefinition("name", 0, "9(2)").getLength());
         assertEquals(22, new IntegerFieldDefinition("name", 0, "9(22)").getLength());
-        assertEquals(new PaddingDescriptor(PaddingDescriptor.Padding.LEFT, '0'), new IntegerFieldDefinition("name", 0, "9").getPaddingDescriptor());
+        assertNotNull(new IntegerFieldDefinition("name", 0, "9").getPaddingDescriptor());
     }
 }

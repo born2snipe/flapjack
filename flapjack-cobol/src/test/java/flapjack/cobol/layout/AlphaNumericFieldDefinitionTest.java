@@ -12,7 +12,6 @@
  */
 package flapjack.cobol.layout;
 
-import flapjack.layout.PaddingDescriptor;
 import junit.framework.TestCase;
 
 
@@ -24,7 +23,7 @@ public class AlphaNumericFieldDefinitionTest extends TestCase {
         assertEquals("name", fieldDef.getName());
         assertEquals(1, fieldDef.getLength());
         assertEquals("X", fieldDef.getPattern());
-        assertEquals(new PaddingDescriptor(PaddingDescriptor.Padding.RIGHT, ' '), fieldDef.getPaddingDescriptor());
+        assertNotNull(fieldDef.getPaddingDescriptor());
     }
 
     public void test_constructor_SinglePattern_WithSpaces() {

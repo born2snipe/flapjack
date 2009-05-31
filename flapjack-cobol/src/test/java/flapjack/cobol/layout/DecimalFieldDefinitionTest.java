@@ -12,7 +12,6 @@
  */
 package flapjack.cobol.layout;
 
-import flapjack.layout.PaddingDescriptor;
 import junit.framework.TestCase;
 
 
@@ -26,6 +25,6 @@ public class DecimalFieldDefinitionTest extends TestCase {
         assertEquals(3, new DecimalFieldDefinition("name", 0, "9v9(2)").getLength());
         assertEquals(11, new DecimalFieldDefinition("name", 0, "9v9(10)").getLength());
         assertEquals(20, new DecimalFieldDefinition("name", 0, "9(10)v9(10)").getLength());
-        assertEquals(new PaddingDescriptor(PaddingDescriptor.Padding.RIGHT, '0'), new DecimalFieldDefinition("name", 0, "9(10)v9(10)").getPaddingDescriptor());
+        assertNotNull(new DecimalFieldDefinition("name", 0, "9(10)v9(10)").getPaddingDescriptor());
     }
 }
