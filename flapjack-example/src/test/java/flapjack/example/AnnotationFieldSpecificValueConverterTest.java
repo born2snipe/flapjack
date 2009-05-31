@@ -17,6 +17,7 @@ import flapjack.annotation.Field;
 import flapjack.annotation.Record;
 import flapjack.annotation.model.AnnotatedObjectMappingStore;
 import flapjack.io.LineRecordReader;
+import flapjack.layout.RecordLayout;
 import flapjack.layout.SimpleRecordLayout;
 import flapjack.model.RecordFactory;
 import flapjack.model.SameRecordFactoryResolver;
@@ -94,7 +95,7 @@ public class AnnotationFieldSpecificValueConverterTest extends TestCase {
      * This class is responsible for creating the POJO that represents the given record.
      */
     private static class PersonFactory implements RecordFactory {
-        public Object build() {
+        public Object build(RecordLayout recordLayout) {
             return new Person();
         }
     }

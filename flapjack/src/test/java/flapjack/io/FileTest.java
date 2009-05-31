@@ -14,6 +14,7 @@ package flapjack.io;
 
 import flapjack.builder.RecordBuilder;
 import flapjack.builder.SameBuilderRecordLayoutResolver;
+import flapjack.layout.RecordLayout;
 import flapjack.layout.SimpleFieldDefinition;
 import flapjack.layout.SimpleRecordLayout;
 import flapjack.model.ObjectMapping;
@@ -119,7 +120,7 @@ public class FileTest extends TestCase {
     }
 
     private static class DummyFactory implements RecordFactory {
-        public Object build() {
+        public Object build(RecordLayout recordLayout) {
             return new Record("");
         }
     }

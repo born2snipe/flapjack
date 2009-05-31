@@ -13,6 +13,7 @@
 package flapjack.example;
 
 import flapjack.io.LineRecordReader;
+import flapjack.layout.RecordLayout;
 import flapjack.layout.SimpleRecordLayout;
 import flapjack.model.ObjectMapping;
 import flapjack.model.ObjectMappingStore;
@@ -96,7 +97,7 @@ public class BeanFieldSpecificValueConverterTest extends TestCase {
      * This class is responsible for creating the POJO that represents the given record.
      */
     private static class PersonFactory implements RecordFactory {
-        public Object build() {
+        public Object build(RecordLayout recordLayout) {
             return new Person();
         }
     }

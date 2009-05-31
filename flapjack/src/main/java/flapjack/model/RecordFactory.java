@@ -12,12 +12,15 @@
  */
 package flapjack.model;
 
+import flapjack.layout.RecordLayout;
+
 public interface RecordFactory {
 
     /**
      * Creates the domain object the represents the record that contains the fields given
      *
+     * @param recordLayout
      * @return the domain object that represent the record
      */
-    Object build();
+    Object build(RecordLayout recordLayout);
 }

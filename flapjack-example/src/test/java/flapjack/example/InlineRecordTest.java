@@ -169,13 +169,13 @@ public class InlineRecordTest extends TestCase {
      * This class is responsible for creating the POJO that represents the given record.
      */
     private static class UserRecordFactory implements RecordFactory {
-        public Object build() {
+        public Object build(RecordLayout recordLayout) {
             return new User();
         }
     }
 
     private static class AddressRecordFactory implements RecordFactory {
-        public Object build() {
+        public Object build(RecordLayout recordLayout) {
             return new Address();
         }
     }

@@ -14,6 +14,7 @@ package flapjack.example;
 
 import flapjack.example.model.Address;
 import flapjack.io.LineRecordReader;
+import flapjack.layout.RecordLayout;
 import flapjack.layout.SimpleRecordLayout;
 import flapjack.model.*;
 import flapjack.parser.ParseResult;
@@ -93,7 +94,7 @@ public class CompoundFieldTest extends TestCase {
     }
 
     private static class PersonFactory implements RecordFactory {
-        public Object build() {
+        public Object build(RecordLayout recordLayout) {
             return new Person();
         }
     }

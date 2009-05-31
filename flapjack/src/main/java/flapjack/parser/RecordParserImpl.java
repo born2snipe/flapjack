@@ -50,7 +50,7 @@ public class RecordParserImpl implements RecordParser {
                     } else {
                         try {
                             Object fields = recordFieldParser.parse(record, recordLayout);
-                            Object domain = recordFactory.build();
+                            Object domain = recordFactory.build(recordLayout);
                             objectMapper.mapOnTo(fields, domain);
                             result.addRecord(domain);
                         } catch (ParseException e) {

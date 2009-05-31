@@ -14,6 +14,7 @@ package flapjack.example;
 
 import flapjack.example.model.User;
 import flapjack.io.LineRecordReader;
+import flapjack.layout.RecordLayout;
 import flapjack.layout.SimpleRecordLayout;
 import flapjack.model.ObjectMapping;
 import flapjack.model.ObjectMappingStore;
@@ -96,7 +97,7 @@ public class SameRecordTypeTest extends TestCase {
      * This class is responsible for creating the POJO that represents the given record.
      */
     private static class UserRecordFactory implements RecordFactory {
-        public Object build() {
+        public Object build(RecordLayout recordLayout) {
             return new User();
         }
     }

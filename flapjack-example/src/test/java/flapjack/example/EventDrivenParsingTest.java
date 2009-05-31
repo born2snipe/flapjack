@@ -14,12 +14,16 @@ package flapjack.example;
 
 import flapjack.example.model.User;
 import flapjack.io.LineRecordReader;
+import flapjack.layout.RecordLayout;
 import flapjack.layout.SimpleRecordLayout;
-import flapjack.model.RecordFactory;
-import flapjack.model.SameRecordFactoryResolver;
 import flapjack.model.ObjectMapping;
 import flapjack.model.ObjectMappingStore;
-import flapjack.parser.*;
+import flapjack.model.RecordFactory;
+import flapjack.model.SameRecordFactoryResolver;
+import flapjack.parser.BadRecord;
+import flapjack.parser.NotifyingParseResultFactory;
+import flapjack.parser.RecordParserImpl;
+import flapjack.parser.SameRecordLayoutResolver;
 import junit.framework.TestCase;
 
 import java.io.ByteArrayInputStream;
@@ -117,7 +121,7 @@ public class EventDrivenParsingTest extends TestCase {
      * This class is responsible for creating the POJO that represents the given record.
      */
     private static class UserRecordFactory implements RecordFactory {
-        public Object build() {
+        public Object build(RecordLayout recordLayout) {
             return new User();
         }
     }
