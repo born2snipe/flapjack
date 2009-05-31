@@ -89,7 +89,7 @@ public class RecordParserImpl implements RecordParser {
         this.recordFactoryResolver = recordFactoryResolver;
     }
 
-    protected void setObjectMapper(ObjectMapper objectMapper) {
+    public void setObjectMapper(ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
     }
 
