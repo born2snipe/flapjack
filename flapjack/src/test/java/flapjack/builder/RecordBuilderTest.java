@@ -156,6 +156,37 @@ public class RecordBuilderTest extends MockObjectTestCase {
         }
     }
 
+    public void test_build_MultipleDomainObjectsOfDifferentType() throws IOException {
+        ObjectMapping personMapping = new ObjectMapping(Person.class);
+        personMapping.field("First Name", "firstName");
+        personMapping.field("Last Name", "lastName");
+
+        ObjectMapping addressMapping = new ObjectMapping(Address.class);
+        addressMapping.field("Line 1", "line1");
+
+        objectMappingStore.add(personMapping);
+        objectMappingStore.add(addressMapping);
+
+        Person person = new Person("Joe", "Smith");
+        Address address = new Address("123 Easy Street");
+
+        SimpleRecordLayout personRecordLayout = new SimpleRecordLayout("person");
+        personRecordLayout.field("First Name", 3);
+        personRecordLayout.field("Last Name", 5);
+
+        SimpleRecordLayout addressRecordLayout = new SimpleRecordLayout("address");
+        addressRecordLayout.field("Line 1", 10);
+
+        recordLayoutResolver.expects(once()).method("resolve").with(eq(person)).will(returnValue(Arrays.asList(new Object[]{personRecordLayout})));
+        recordLayoutResolver.expects(once()).method("resolve").with(eq(address)).will(returnValue(Arrays.asList(new Object[]{addressRecordLayout})));
+
+        writer.expects(once()).method("write").with(eq("JoeSmith".getBytes()));
+        writer.expects(once()).method("write").with(eq("123 Easy Street".getBytes()));
+        writer.expects(once()).method("close");
+
+        builder.build(Arrays.asList(new Object[]{person, address}), (RecordWriter) writer.proxy());
+    }
+
     public void test_build_MultipleDomainObjectsOfTheSameType() throws IOException {
         ObjectMapping personMapping = new ObjectMapping(Person.class);
         personMapping.field("First Name", "firstName");
@@ -229,6 +260,14 @@ public class RecordBuilderTest extends MockObjectTestCase {
         public Person(String firstName, String lastName) {
             this.firstName = firstName;
             this.lastName = lastName;
+        }
+    }
+
+    private static class Address {
+        private String line1;
+
+        private Address(String line1) {
+            this.line1 = line1;
         }
     }
 }
