@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://code.google.com/p/flapjack/object-mapping.xsd"
+	xmlns="http://code.google.com/p/flapjack/object-mapping.xsd"
+	elementFormDefault="qualified">
+
+	<xs:element name="object-mapping">
+		<xs:complexType>
+			<xs:complexContent>
+			      <xs:restriction base="xs:string">
+					<xs:attribute name="class" type="xs:string" use="required" />
+			      </xs:restriction>
+			    </xs:complexContent>
+				<xs:sequence>
+					<xs:element ref="field"/>
+				</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="field">
+		<xs:complexType>
+			<xs:complexContent>
+			      <xs:restriction base="xs:string">
+					<xs:attribute name="id" type="xs:string" use="required" />
+					<xs:attribute name="bean" type="xs:string" use="required" />
+			      </xs:restriction>
+			    </xs:complexContent>
+		</xs:complexType>
+		
+	</xs:element>
+
+</xs:schema>
