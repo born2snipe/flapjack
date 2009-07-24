@@ -20,6 +20,9 @@ public class StreamRecordWriter implements RecordWriter {
     private OutputStream output;
 
     public StreamRecordWriter(OutputStream output) {
+        if (output == null) {
+            throw new IllegalArgumentException("Null stream given");
+        }
         this.output = output;
     }
 

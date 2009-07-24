@@ -28,6 +28,15 @@ public class StreamRecordWriterTest extends TestCase {
         writer = new StreamRecordWriter(output);
     }
 
+    public void test_NullStream() {
+        try {
+            new StreamRecordWriter(null);
+            fail();
+        } catch (IllegalArgumentException err) {
+            assertEquals("Null stream given", err.getMessage());
+        }
+    }
+    
     public void test_close() {
         writer.close();
 
