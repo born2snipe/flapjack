@@ -39,7 +39,7 @@ public class CharTextValueConverterTest extends ValueConverterTestCase {
             converter.toDomain(binary("12"));
             fail();
         } catch (IllegalArgumentException err) {
-            assertEquals("To many bytes was given length=2, was expecting a single byte", err.getMessage());
+            assertEquals("To many characters were given!! Number of characters given (2), but was expecting a single character", err.getMessage());
         }
     }
 
