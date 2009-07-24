@@ -17,7 +17,7 @@ public class DoubleTextValueConverterTest extends ValueConverterTestCase {
 
     public void test_toBytes() {
         assertEquals(binary("2.0"), converter.toBytes(new Double(2)));
-        assertNull(converter.toBytes(null));
+        assertEquals(new byte[0], converter.toBytes(null));
     }
 
     public void test_toDomain() {

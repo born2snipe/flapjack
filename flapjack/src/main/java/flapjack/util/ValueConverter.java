@@ -27,6 +27,8 @@ public interface ValueConverter {
 
     /**
      * Attempts to convert the given domain object to a byte array
+     * <p/>
+     * An empty array of bytes should be returned if the given domain object is null.
      *
      * @param domain - the domain object to be serialized to bytes
      * @return the binary data representing the domain object

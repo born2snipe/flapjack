@@ -41,7 +41,7 @@ public abstract class AbstractBinaryValueConverter implements ValueConverter {
 
     public final byte[] toBytes(Object domain) {
         if (domain == null) {
-            return null;
+            return new byte[0];
         }
         ByteArrayOutputStream baos = new ByteArrayOutputStream(requiredNumberOfBytes());
         DataOutputStream dataOutput = new DataOutputStream(baos);

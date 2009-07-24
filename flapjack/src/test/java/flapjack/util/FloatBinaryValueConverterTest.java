@@ -24,7 +24,7 @@ public class FloatBinaryValueConverterTest extends ValueConverterTestCase {
 
     public void test_toBytes() {
         assertEquals(binary(1.0f), converter.toBytes(new Float(1.0f)));
-        assertNull(converter.toBytes(null));
+        assertEquals(new byte[0], converter.toBytes(null));
     }
 
     public void test_toDomain() {

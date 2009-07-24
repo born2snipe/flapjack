@@ -24,7 +24,7 @@ public class LongBinaryValueConverterTest extends ValueConverterTestCase {
 
     public void test_toBytes() {
         assertEquals(binary(1l), converter.toBytes(new Long(1l)));
-        assertNull(converter.toBytes(null));
+        assertEquals(new byte[0], converter.toBytes(null));
     }
 
     public void test_toDomain() {

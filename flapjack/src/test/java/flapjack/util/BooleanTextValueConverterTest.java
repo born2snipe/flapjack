@@ -35,7 +35,7 @@ public class BooleanTextValueConverterTest extends ValueConverterTestCase {
     public void test_toBytes() {
         assertEquals(binary("true"), converter.toBytes(Boolean.TRUE));
         assertEquals(binary("false"), converter.toBytes(Boolean.FALSE));
-        assertNull(converter.toBytes(null));
+        assertEquals(new byte[0], converter.toBytes(null));
     }
 
     public void test_types() {

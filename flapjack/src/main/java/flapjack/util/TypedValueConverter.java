@@ -15,7 +15,7 @@ package flapjack.util;
 
 public interface TypedValueConverter extends ValueConverter {
     /**
-     * This is used to determine what class type should the text be converted to
+     * This is used to determine what class type should the bytes be converted to
      *
      * @return the resulting coversion class types
      */

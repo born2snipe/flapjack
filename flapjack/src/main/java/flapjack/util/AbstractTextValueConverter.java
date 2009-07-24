@@ -25,7 +25,7 @@ public abstract class AbstractTextValueConverter implements ValueConverter {
 
     public final byte[] toBytes(Object domain) {
         if (domain == null)
-            return null;
+            return new byte[0];
         return fromDomainToText(domain).getBytes();
     }
 

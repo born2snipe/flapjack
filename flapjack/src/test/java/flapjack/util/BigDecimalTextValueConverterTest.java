@@ -26,7 +26,7 @@ public class BigDecimalTextValueConverterTest extends ValueConverterTestCase {
         assertEquals(binary("1"), converter.toBytes(new BigDecimal("1")));
         assertEquals(binary("1.0"), converter.toBytes(new BigDecimal("1.0")));
         assertEquals(binary("1.0"), converter.toBytes(new BigDecimal("01.0")));
-        assertNull(converter.toBytes(null));
+        assertEquals(new byte[0], converter.toBytes(null));
     }
 
     public void test_toDomain() {

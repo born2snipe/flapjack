@@ -25,7 +25,7 @@ public class ShortBinaryValueConverterTest extends ValueConverterTestCase {
 
     public void test_toBytes() {
         assertEquals(binary((short) 1), converter.toBytes(new Short((short) 1)));
-        assertNull(converter.toBytes(null));
+        assertEquals(new byte[0], converter.toBytes(null));
     }
 
     public void test_toDomain() {
