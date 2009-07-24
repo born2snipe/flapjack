@@ -28,6 +28,36 @@ public class FileUtilImpl implements FileUtil {
         }
     }
 
+    public void close(OutputStream output) {
+        if (output != null) {
+            try {
+                output.close();
+            } catch (IOException err) {
+                throw new RuntimeException(err);
+            }
+        }
+    }
+
+    public void close(InputStream input) {
+        if (input != null) {
+            try {
+                input.close();
+            } catch (IOException err) {
+                throw new RuntimeException(err);
+            }
+        }
+    }
+
+    public void close(Reader input) {
+        if (input != null) {
+            try {
+                input.close();
+            } catch (IOException err) {
+                throw new RuntimeException(err);
+            }
+        }
+    }
+
     public void close(ReadableByteChannel channel) {
         if (channel != null) {
             try {

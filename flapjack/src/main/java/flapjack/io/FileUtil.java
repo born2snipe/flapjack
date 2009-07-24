@@ -13,6 +13,9 @@
 package flapjack.io;
 
 import java.io.File;
+import java.io.InputStream;
+import java.io.Reader;
+import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.ScatteringByteChannel;
@@ -51,4 +54,10 @@ public interface FileUtil {
      * @return the number of bytes
      */
     long length(File file);
+
+    void close(InputStream input);
+
+    void close(Reader input);
+
+    void close(OutputStream output);
 }

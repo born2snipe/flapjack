@@ -17,6 +17,7 @@ import java.io.OutputStream;
 
 
 public class StreamRecordWriter implements RecordWriter {
+    private FileUtil fileUtil = new FileUtilImpl();
     private OutputStream output;
 
     public StreamRecordWriter(OutputStream output) {
@@ -32,10 +33,6 @@ public class StreamRecordWriter implements RecordWriter {
     }
 
     public void close() {
-        try {
-            output.close();
-        } catch (IOException e) {
-
-        }
+        fileUtil.close(output);
     }
 }
