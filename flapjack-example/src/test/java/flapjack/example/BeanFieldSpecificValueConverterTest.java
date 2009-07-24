@@ -13,8 +13,11 @@
 package flapjack.example;
 
 import flapjack.io.LineRecordReader;
+import flapjack.io.LineRecordWriter;
+import flapjack.io.StreamRecordWriter;
 import flapjack.layout.RecordLayout;
 import flapjack.layout.SimpleRecordLayout;
+import flapjack.layout.TextPaddingDescriptor;
 import flapjack.model.ObjectMapping;
 import flapjack.model.ObjectMappingStore;
 import flapjack.model.RecordFactory;
@@ -24,14 +27,20 @@ import flapjack.parser.RecordParserImpl;
 import flapjack.parser.SameRecordLayoutResolver;
 import flapjack.util.TypeConverter;
 import flapjack.util.ValueConverter;
+import flapjack.util.AbstractTextValueConverter;
+import flapjack.builder.RecordBuilder;
+import flapjack.builder.SameBuilderRecordLayoutResolver;
 import junit.framework.TestCase;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 
 
 public class BeanFieldSpecificValueConverterTest extends TestCase {
-    public void test() throws Exception {
-        String records = "Joe        Schmoe     Y";
+    private ObjectMappingStore objectMappingStore;
+    private TypeConverter typeConverter;
+
+    public void setUp() {
 
         /**
          * Configure the ObjectMapping from the record data to the domain objects
@@ -41,14 +50,39 @@ public class BeanFieldSpecificValueConverterTest extends TestCase {
         userMapping.field("Last Name", "lastName");
         userMapping.field("Parent", "parent", YesNoValueConverter.class);
 
-        ObjectMappingStore objectMappingStore = new ObjectMappingStore();
+        objectMappingStore = new ObjectMappingStore();
         objectMappingStore.add(userMapping);
 
         /**
          * Create a TypeConverter with our custom ValueConverter
          */
-        TypeConverter typeConverter = new TypeConverter();
+        typeConverter = new TypeConverter();
         typeConverter.registerConverter(new YesNoValueConverter());
+    }
+
+    public void test_build() {
+
+        /**
+         * Initialize the RecordBuilder
+         */
+        RecordBuilder builder = new RecordBuilder();
+        builder.setObjectMappingStore(objectMappingStore);
+        builder.setTypeConverter(typeConverter);
+        builder.setBuilderRecordLayoutResolver(new SameBuilderRecordLayoutResolver(new PersonRecordLayout()));
+
+        Person person = new Person();
+        person.firstName = "Joe";
+        person.lastName = "Schmoe";
+        person.parent = false;
+
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        builder.build(person, new LineRecordWriter(new StreamRecordWriter(output), "\n"));
+
+        assertEquals("Joe        Schmoe     N\n", new String(output.toByteArray()));
+    }
+    
+    public void test_parser() throws Exception {
+        String records = "Joe        Schmoe     Y";
 
 
         /**
@@ -87,8 +121,8 @@ public class BeanFieldSpecificValueConverterTest extends TestCase {
     private static class PersonRecordLayout extends SimpleRecordLayout {
         private PersonRecordLayout() {
             super("person");
-            field("First Name", 11);
-            field("Last Name", 11);
+            field("First Name", 11, new TextPaddingDescriptor(TextPaddingDescriptor.Padding.RIGHT, ' '));
+            field("Last Name", 11, new TextPaddingDescriptor(TextPaddingDescriptor.Padding.RIGHT, ' '));
             field("Parent", 1);
         }
     }
@@ -105,17 +139,21 @@ public class BeanFieldSpecificValueConverterTest extends TestCase {
     /**
      * Custom ValueConverter to handle Y/N as a Boolean
      */
-    private static class YesNoValueConverter implements ValueConverter {
-        public Object toDomain(byte[] bytes) {
-            String value = new String(bytes);
-            if (value.equalsIgnoreCase("Y")) {
+    private static class YesNoValueConverter extends AbstractTextValueConverter {
+
+        protected Object fromTextToDomain(String text) {
+            if (text.equalsIgnoreCase("Y")) {
                 return Boolean.TRUE;
             }
             return Boolean.FALSE;
         }
 
-        public byte[] toBytes(Object domain) {
-            return null;
+        protected String fromDomainToText(Object domain) {
+            Boolean flag = (Boolean) domain;
+            if (flag) {
+                return "Y";
+            }
+            return "N";
         }
     }
 

@@ -31,15 +31,19 @@ import java.util.Arrays;
 
 
 public class CobolTest extends TestCase {
-    public void test() throws IOException {
-        String record = "123456789JOE A SCHMOE                  01500";
+    private AnnotatedObjectMappingStore objectMappingStore;
 
+    public void setUp() {
         /**
          * Initialize the AnnotatedObjctMappingStore with what packages need to be scanned for the domain classes
          * that contain the annotations.
          */
-        AnnotatedObjectMappingStore objectMappingStore = new AnnotatedObjectMappingStore();
+        objectMappingStore = new AnnotatedObjectMappingStore();
         objectMappingStore.setPackages(Arrays.asList("flapjack.example"));
+    }
+
+    public void test_parser() throws IOException {
+        String record = "123456789JOE A SCHMOE                  01500";
 
         /**
          * Initialize the RecordParser with our RecordLayoutResolver and RecordFactoryResolver
