@@ -47,12 +47,12 @@ public class RecordBuilder {
         try {
             ByteArrayOutputStream output = new ByteArrayOutputStream();
             Iterator domainObjectIterator = domainObjects.iterator();
+            List alreadyBuiltFields = new ArrayList();
             while (domainObjectIterator.hasNext()) {
                 Object domain = domainObjectIterator.next();
                 List recordLayouts = locateRecordLayouts(domain);
                 ObjectMapping objectMapping = locateObjectMapping(domain);
                 RecordLayout recordLayout = (RecordLayout) recordLayouts.get(0);
-                List alreadyBuiltFields = new ArrayList();
                 Iterator it = recordLayout.getFieldDefinitions().iterator();
                 while (it.hasNext()) {
                     FieldDefinition fieldDefinition = (FieldDefinition) it.next();
@@ -75,6 +75,7 @@ public class RecordBuilder {
                 }
                 writer.write(output.toByteArray());
                 output.reset();
+                alreadyBuiltFields.clear();
             }
         } catch (IOException err) {
             throw new BuilderException("A problem occured while building file", err);
