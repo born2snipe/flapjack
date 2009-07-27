@@ -24,6 +24,8 @@ import java.util.Arrays;
 public class SingleFieldMapping extends AbstractFieldMapping {
     private static final String NO_VALUE_CONVERTER = "Could not find a {0} registered! Are you sure you registered {0} in the TypeConverter?";
     private Class valueConverter;
+    private static DomainFieldFactory domainFieldFactory;
+    private static BinaryFieldFactory binaryFieldFactory;
 
     public SingleFieldMapping(String recordFieldName, String domainFieldName) {
         super(Arrays.asList(new String[]{recordFieldName}), domainFieldName);
@@ -36,24 +38,30 @@ public class SingleFieldMapping extends AbstractFieldMapping {
 
 
     public DomainFieldFactory getDomainFieldFactory() {
-        return new DomainFieldFactory() {
-            public Object build(ListMap fields, Class domainFieldType, TypeConverter typeConverter) {
-                return findValueConverter(domainFieldType, typeConverter).toDomain((byte[]) fields.get(0));
-            }
-        };
+        if (domainFieldFactory == null) {
+            domainFieldFactory = new DomainFieldFactory() {
+                public Object build(ListMap fields, Class domainFieldType, TypeConverter typeConverter) {
+                    return findValueConverter(domainFieldType, typeConverter).toDomain((byte[]) fields.get(0));
+                }
+            };
+        }
+        return domainFieldFactory;
     }
 
     public BinaryFieldFactory getBinaryFieldFactory() {
-        return new BinaryFieldFactory() {
-            public byte[] build(Object domain, TypeConverter typeConverter, FieldDefinition fieldDefinition) {
-                byte[] bytes = findValueConverter(domain.getClass(), typeConverter).toBytes(domain);
-                PaddingDescriptor paddingDescriptor = fieldDefinition.getPaddingDescriptor();
-                if (paddingDescriptor != null) {
-                    bytes = paddingDescriptor.applyPadding(bytes, fieldDefinition.getLength());
+        if (binaryFieldFactory == null) {
+            binaryFieldFactory = new BinaryFieldFactory() {
+                public byte[] build(Object domain, TypeConverter typeConverter, FieldDefinition fieldDefinition) {
+                    byte[] bytes = findValueConverter(domain.getClass(), typeConverter).toBytes(domain);
+                    PaddingDescriptor paddingDescriptor = fieldDefinition.getPaddingDescriptor();
+                    if (paddingDescriptor != null) {
+                        bytes = paddingDescriptor.applyPadding(bytes, fieldDefinition.getLength());
+                    }
+                    return bytes;
                 }
-                return bytes;
-            }
-        };
+            };
+        }
+        return binaryFieldFactory;
     }
 
     private ValueConverter findValueConverter(Class domainType, TypeConverter typeConverter) {
