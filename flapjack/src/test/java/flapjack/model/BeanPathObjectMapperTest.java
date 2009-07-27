@@ -43,7 +43,7 @@ public class BeanPathObjectMapperTest extends MockObjectTestCase {
     public void test_mapOnTo_EnsureCompoundFieldsAreOnlyMappedOnce() {
         Mock factory = mock(DomainFieldFactory.class);
 
-        objMapping.field(Arrays.asList(new String[]{"field1", "field2"}), "firstName", (DomainFieldFactory) factory.proxy());
+        objMapping.field(Arrays.asList(new String[]{"field1", "field2"}), "firstName", (DomainFieldFactory) factory.proxy(), null);
 
         fields.put("field1", "Jim".getBytes());
         fields.put("field2", "Smith".getBytes());
@@ -62,7 +62,7 @@ public class BeanPathObjectMapperTest extends MockObjectTestCase {
             }
         };
 
-        objMapping.field(Arrays.asList(new String[]{"field1", "field2"}), "firstName", factory);
+        objMapping.field(Arrays.asList(new String[]{"field1", "field2"}), "firstName", factory, null);
 
         fields.put("field1", "Jim".getBytes());
         fields.put("field3", "Smith".getBytes());
@@ -82,7 +82,7 @@ public class BeanPathObjectMapperTest extends MockObjectTestCase {
             }
         };
 
-        objMapping.field(Arrays.asList(new String[]{"field1", "field2"}), "firstName", factory);
+        objMapping.field(Arrays.asList(new String[]{"field1", "field2"}), "firstName", factory, null);
 
         fields.put("field1", "Jim".getBytes());
         fields.put("field2", "Smith".getBytes());
@@ -100,7 +100,7 @@ public class BeanPathObjectMapperTest extends MockObjectTestCase {
             }
         };
 
-        objMapping.field(Arrays.asList(new String[]{"field1", "field2"}), "firstName", factory);
+        objMapping.field(Arrays.asList(new String[]{"field1", "field2"}), "firstName", factory, null);
 
         fields.put("field1", "Jim".getBytes());
         fields.put("field2", "Smith".getBytes());

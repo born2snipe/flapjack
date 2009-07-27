@@ -48,7 +48,7 @@ public class CompoundFieldTest extends TestCase {
         ObjectMapping objectMapping = new ObjectMapping(Person.class);
         objectMapping.field("First Name", "firstName");
         objectMapping.field("Last Name", "lastName");
-        objectMapping.field(new String[]{"Address Line", "City", "State"}, "address", new AddressFactory());
+        objectMapping.field(new String[]{"Address Line", "City", "State"}, "address", new AddressFactory(), null);
 
         ObjectMappingStore objectMappingStore = new ObjectMappingStore();
         objectMappingStore.add(objectMapping);

@@ -28,13 +28,13 @@ public class ObjectMappingTest extends TestCase {
     }
 
     public void test_fieldWithAList_SingleField() {
-        mapping.field(Arrays.asList(new String[]{"field1"}), "domainField", null);
+        mapping.field(Arrays.asList(new String[]{"field1"}), "domainField", null, null);
 
         assertNotNull(mapping.findRecordField("field1"));
     }
 
     public void test_fieldWithAList_MultipleFields() {
-        mapping.field(Arrays.asList(new String[]{"field1", "field2"}), "domainField", null);
+        mapping.field(Arrays.asList(new String[]{"field1", "field2"}), "domainField", null, null);
 
         assertNotNull(mapping.findRecordField("field1"));
         assertNotNull(mapping.findRecordField("field2"));
@@ -46,7 +46,7 @@ public class ObjectMappingTest extends TestCase {
     }
 
     public void test_fieldWithAnArray_MultipleFields() {
-        mapping.field(new String[]{"field1", "field2"}, "domainField", null);
+        mapping.field(new String[]{"field1", "field2"}, "domainField", null, null);
 
         assertNotNull(mapping.findRecordField("field1"));
         assertNotNull(mapping.findRecordField("field2"));

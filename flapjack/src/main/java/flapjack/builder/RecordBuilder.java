@@ -24,6 +24,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
@@ -51,12 +52,17 @@ public class RecordBuilder {
                 List recordLayouts = locateRecordLayouts(domain);
                 ObjectMapping objectMapping = locateObjectMapping(domain);
                 RecordLayout recordLayout = (RecordLayout) recordLayouts.get(0);
+                List alreadyBuiltFields = new ArrayList();
                 Iterator it = recordLayout.getFieldDefinitions().iterator();
                 while (it.hasNext()) {
                     FieldDefinition fieldDefinition = (FieldDefinition) it.next();
+                    if (alreadyBuiltFields.contains(fieldDefinition.getName())) {
+                        continue;
+                    }
                     FieldMapping fieldMapping = locateFieldMapping(domain, objectMapping, fieldDefinition);
                     Object fieldValue = getField(fieldMapping.getDomainFieldName(), domain);
                     byte[] bytes = fieldMapping.getBinaryFieldFactory().build(fieldValue, typeConverter, fieldDefinition);
+                    alreadyBuiltFields.addAll(fieldMapping.getRecordFields());
                     if (notEnoughDataForField(fieldDefinition, bytes)) {
                         Integer expected = new Integer(fieldDefinition.getLength());
                         Integer actual = new Integer(bytes.length);

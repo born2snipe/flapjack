@@ -16,15 +16,21 @@ import flapjack.layout.FieldDefinition;
 import flapjack.util.TypeConverter;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 
 
 public abstract class AbstractBinaryFieldFactory implements BinaryFieldFactory {
     public byte[] build(Object domain, TypeConverter typeConverter, FieldDefinition fieldDefinition) {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
-        buid(output, domain, typeConverter, fieldDefinition);
+        try {
+            buid(output, domain, typeConverter, fieldDefinition);
+        } catch (IOException e) {
+            // TODO -revisit!?
+            throw new RuntimeException(e);
+        }
         return output.toByteArray();
     }
 
-    protected abstract void buid(OutputStream output, Object domain, TypeConverter typeConverter, FieldDefinition fieldDefinition);
+    protected abstract void buid(OutputStream output, Object domain, TypeConverter typeConverter, FieldDefinition fieldDefinition) throws IOException;
 }

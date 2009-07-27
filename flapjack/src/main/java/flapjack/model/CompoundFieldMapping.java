@@ -19,9 +19,10 @@ public class CompoundFieldMapping extends AbstractFieldMapping {
     private DomainFieldFactory domainFieldFactory;
     private BinaryFieldFactory binaryFieldFactory;
 
-    public CompoundFieldMapping(List recordFields, String domainFieldName, DomainFieldFactory domainFieldFactory) {
+    public CompoundFieldMapping(List recordFields, String domainFieldName, DomainFieldFactory domainFieldFactory, BinaryFieldFactory binaryFieldFactory) {
         super(recordFields, domainFieldName);
         this.domainFieldFactory = domainFieldFactory;
+        this.binaryFieldFactory = binaryFieldFactory;
     }
 
     public DomainFieldFactory getDomainFieldFactory() {

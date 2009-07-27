@@ -15,6 +15,7 @@ package flapjack.builder;
 import flapjack.io.RecordWriter;
 import flapjack.layout.SimpleRecordLayout;
 import flapjack.layout.TextPaddingDescriptor;
+import flapjack.model.BinaryFieldFactory;
 import flapjack.model.ObjectMapping;
 import flapjack.model.ObjectMappingStore;
 import flapjack.util.ReverseValueConverter;
@@ -25,6 +26,7 @@ import org.jmock.MockObjectTestCase;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 
 
 public class RecordBuilderTest extends MockObjectTestCase {
@@ -211,6 +213,32 @@ public class RecordBuilderTest extends MockObjectTestCase {
         builder.build(Arrays.asList(new Object[]{person, person2}), (RecordWriter) writer.proxy());
     }
 
+    public void test_build_SingleDomainObject_WithCompoundField() throws IOException {
+        Mock binaryFieldFactory = mock(BinaryFieldFactory.class);
+
+        ObjectMapping personMapping = new ObjectMapping(Person.class);
+        personMapping.field(new String[]{"dob month", "dob day", "dob year"}, "dob", null, (BinaryFieldFactory) binaryFieldFactory.proxy());
+
+        objectMappingStore.add(personMapping);
+
+        Person person = new Person("Joe", "Smith");
+        person.dob = new Date();
+
+        SimpleRecordLayout recordLayout = new SimpleRecordLayout("person");
+        recordLayout.field("dob month", 2);
+        recordLayout.field("dob day", 2);
+        recordLayout.field("dob year", 4);
+
+        byte[] data = new byte[]{1, 2, 3, 4};
+        binaryFieldFactory.expects(once()).method("build").with(eq(person.dob), eq(typeConverter), eq(recordLayout.getFieldDefinitions().get(0))).will(returnValue(data));
+        recordLayoutResolver.expects(once()).method("resolve").with(eq(person)).will(returnValue(Arrays.asList(new Object[]{recordLayout})));
+
+        writer.expects(once()).method("write").with(eq(data));
+        writer.expects(once()).method("close");
+
+        builder.build(person, (RecordWriter) writer.proxy());
+    }
+
     public void test_build_SingleDomainObject() throws IOException {
         ObjectMapping personMapping = new ObjectMapping(Person.class);
         personMapping.field("First Name", "firstName");
@@ -256,6 +284,7 @@ public class RecordBuilderTest extends MockObjectTestCase {
     private static class Person {
         private String firstName;
         private String lastName;
+        private Date dob;
 
         public Person(String firstName, String lastName) {
             this.firstName = firstName;

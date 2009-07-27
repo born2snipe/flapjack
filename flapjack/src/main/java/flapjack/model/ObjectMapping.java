@@ -26,12 +26,12 @@ public class ObjectMapping {
         this.clazz = domainClass;
     }
 
-    public void field(String[] recordFields, String domainFieldName, DomainFieldFactory domainFieldFactory) {
-        register(new CompoundFieldMapping(Arrays.asList(recordFields), domainFieldName, domainFieldFactory));
+    public void field(String[] recordFields, String domainFieldName, DomainFieldFactory domainFieldFactory, BinaryFieldFactory binaryFieldFactory) {
+        field(Arrays.asList(recordFields), domainFieldName, domainFieldFactory, binaryFieldFactory);
     }
 
-    public void field(List recordFields, String domainFieldName, DomainFieldFactory domainFieldFactory) {
-        register(new CompoundFieldMapping(recordFields, domainFieldName, domainFieldFactory));
+    public void field(List recordFields, String domainFieldName, DomainFieldFactory domainFieldFactory, BinaryFieldFactory binaryFieldFactory) {
+        register(new CompoundFieldMapping(recordFields, domainFieldName, domainFieldFactory, binaryFieldFactory));
     }
 
     /**
