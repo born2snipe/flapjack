@@ -37,7 +37,7 @@ public class RecordBuilder {
     private static final String NOT_ENOUGH_DATA = "Not enough data given! Did you forget the padding? Expected {0}, but was {1}, for field=\"{2}\" on layout=\"{3}\"";
     private BuilderRecordLayoutResolver builderRecordLayoutResolver;
     private ObjectMappingStore objectMappingStore;
-    private TypeConverter typeConverter;
+    private TypeConverter typeConverter = new TypeConverter();
 
     public void build(Object domainObject, RecordWriter writer) {
         build(Arrays.asList(new Object[]{domainObject}), writer);
