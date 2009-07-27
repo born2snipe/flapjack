@@ -12,92 +12,104 @@
  */
 package flapjack.model;
 
+import flapjack.layout.PaddingDescriptor;
 import flapjack.layout.SimpleFieldDefinition;
-import flapjack.layout.TextPaddingDescriptor;
 import flapjack.util.ReverseValueConverter;
 import flapjack.util.TypeConverter;
-import junit.framework.TestCase;
+import flapjack.util.ValueConverter;
+import org.jmock.Mock;
+import org.jmock.cglib.MockObjectTestCase;
 
 
-public class SingleFieldMappingTest extends TestCase {
-    private TypeConverter typeConverter;
+public class SingleFieldMappingTest extends MockObjectTestCase {
     private SingleFieldMapping mapping;
     private BinaryFieldFactory binaryFactory;
     private DomainFieldFactory domainFactory;
+    private Mock mockTypeConverter;
+    private Mock valueConverter;
+    private Mock paddingDescriptor;
 
     protected void setUp() throws Exception {
         super.setUp();
-        typeConverter = new TypeConverter();
-        typeConverter.registerConverter(new ReverseValueConverter());
-        initializeMapping(null);
+        mockTypeConverter = mock(TypeConverter.class);
+        mapping = new SingleFieldMapping("1", "2", null);
+        domainFactory = mapping.getDomainFieldFactory();
+        binaryFactory = mapping.getBinaryFieldFactory();
+        valueConverter = mock(ValueConverter.class);
+        paddingDescriptor = mock(PaddingDescriptor.class);
     }
 
     public void test_domainFieldFactory_CustomValueConverter() {
-        initializeMapping(ReverseValueConverter.class);
+        SingleFieldMapping mapping = new SingleFieldMapping("1", "2", ReverseValueConverter.class);
+        DomainFieldFactory domainFactory = mapping.getDomainFieldFactory();
 
         ListMap listMap = new ListMap();
         listMap.put("1", "value".getBytes());
 
-        assertEquals("eulav", domainFactory.build(listMap, String.class, typeConverter));
-    }
+        mockTypeConverter.expects(once()).method("isRegistered").with(eq(ReverseValueConverter.class)).will(returnValue(true));
+        mockTypeConverter.expects(once()).method("find").with(eq(ReverseValueConverter.class)).will(returnValue(valueConverter.proxy()));
+        valueConverter.expects(once()).method("toDomain").with(eq("value".getBytes())).will(returnValue("domain"));
 
-    private void initializeMapping(Class valueConverterClass) {
-        mapping = new SingleFieldMapping("1", "2", valueConverterClass);
-        domainFactory = mapping.getDomainFieldFactory();
-        binaryFactory = mapping.getBinaryFieldFactory();
+        assertEquals("domain", domainFactory.build(listMap, String.class, (TypeConverter) mockTypeConverter.proxy()));
     }
 
     public void test_domainFieldFactory() {
         ListMap listMap = new ListMap();
         listMap.put("1", "value".getBytes());
 
-        assertEquals("value", domainFactory.build(listMap, String.class, typeConverter));
+        mockTypeConverter.expects(once()).method("type").with(eq(String.class)).will(returnValue(valueConverter.proxy()));
+        valueConverter.expects(once()).method("toDomain").with(eq("value".getBytes())).will(returnValue("domain"));
+
+        assertEquals("domain", domainFactory.build(listMap, String.class, (TypeConverter) mockTypeConverter.proxy()));
     }
 
     public void test_binaryFieldFactory_NoPadding() {
         SimpleFieldDefinition fieldDefinition = new SimpleFieldDefinition("id", 0, 0);
 
-        assertEquals("value", new String(binaryFactory.build("value", typeConverter, fieldDefinition)));
+        mockTypeConverter.expects(once()).method("type").with(eq(String.class)).will(returnValue(valueConverter.proxy()));
+        valueConverter.expects(once()).method("toBytes").with(eq("value")).will(returnValue("binary".getBytes()));
+
+        assertEquals("binary", new String(binaryFactory.build("value", (TypeConverter) mockTypeConverter.proxy(), fieldDefinition)));
+    }
+
+    public void test_binaryFieldFactory_WithPadding() {
+        SimpleFieldDefinition fieldDefinition = new SimpleFieldDefinition("id", 0, 0, (PaddingDescriptor) paddingDescriptor.proxy());
+
+        mockTypeConverter.expects(once()).method("type").with(eq(String.class)).will(returnValue(valueConverter.proxy()));
+        byte[] data = "binary".getBytes();
+        valueConverter.expects(once()).method("toBytes").with(eq("value")).will(returnValue(data));
+        paddingDescriptor.expects(once()).method("applyPadding").with(eq(data), eq(fieldDefinition.getLength())).will(returnValue("padded".getBytes()));
+
+        assertEquals("padded", new String(binaryFactory.build("value", (TypeConverter) mockTypeConverter.proxy(), fieldDefinition)));
     }
 
     public void test_binaryFieldFactory_NoPadding_CustomValueConverter() {
-        initializeMapping(ReverseValueConverter.class);
+        mapping = new SingleFieldMapping("1", "2", ReverseValueConverter.class);
+        domainFactory = mapping.getDomainFieldFactory();
+        binaryFactory = mapping.getBinaryFieldFactory();
         SimpleFieldDefinition fieldDefinition = new SimpleFieldDefinition("id", 0, 0);
 
-        assertEquals("eulav", new String(binaryFactory.build("value", typeConverter, fieldDefinition)));
+        mockTypeConverter.expects(once()).method("isRegistered").with(eq(ReverseValueConverter.class)).will(returnValue(true));
+        mockTypeConverter.expects(once()).method("find").with(eq(ReverseValueConverter.class)).will(returnValue(valueConverter.proxy()));
+        valueConverter.expects(once()).method("toBytes").with(eq("value")).will(returnValue("binary".getBytes()));
+
+        assertEquals("binary", new String(binaryFactory.build("value", (TypeConverter) mockTypeConverter.proxy(), fieldDefinition)));
     }
 
-    public void test_binaryFieldFactory_LeftPadding_CustomValueConverter() {
-        initializeMapping(ReverseValueConverter.class);
-        SimpleFieldDefinition fieldDefinition = new SimpleFieldDefinition("id", 0, 10, new TextPaddingDescriptor(TextPaddingDescriptor.Padding.LEFT, ' '));
+    public void test_binaryFieldFactory_NoPadding_CustomValueConverterNotRegistered() {
+        mapping = new SingleFieldMapping("1", "2", ReverseValueConverter.class);
+        domainFactory = mapping.getDomainFieldFactory();
+        binaryFactory = mapping.getBinaryFieldFactory();
+        SimpleFieldDefinition fieldDefinition = new SimpleFieldDefinition("id", 0, 0);
 
-        assertEquals("     eulav", new String(binaryFactory.build("value", typeConverter, fieldDefinition)));
+        mockTypeConverter.expects(once()).method("isRegistered").with(eq(ReverseValueConverter.class)).will(returnValue(false));
+
+        try {
+            binaryFactory.build("value", (TypeConverter) mockTypeConverter.proxy(), fieldDefinition);
+            fail();
+        } catch (IllegalArgumentException err) {
+            assertEquals("Could not find a " + ReverseValueConverter.class.getName() + " registered! Are you sure you registered " + ReverseValueConverter.class.getName() + " in the TypeConverter?", err.getMessage());
+        }
     }
-
-    public void test_binaryFieldFactory_RightPadding_CustomValueConverter() {
-        initializeMapping(ReverseValueConverter.class);
-        SimpleFieldDefinition fieldDefinition = new SimpleFieldDefinition("id", 0, 10, new TextPaddingDescriptor(TextPaddingDescriptor.Padding.RIGHT, ' '));
-
-        assertEquals("eulav     ", new String(binaryFactory.build("value", typeConverter, fieldDefinition)));
-    }
-
-    public void test_binaryFieldFactory_NonePadding() {
-        SimpleFieldDefinition fieldDefinition = new SimpleFieldDefinition("id", 0, 10, new TextPaddingDescriptor(TextPaddingDescriptor.Padding.NONE, 'A'));
-
-        assertEquals("value", new String(binaryFactory.build("value", typeConverter, fieldDefinition)));
-    }
-
-    public void test_binaryFieldFactory_LeftPadding() {
-        SimpleFieldDefinition fieldDefinition = new SimpleFieldDefinition("id", 0, 10, new TextPaddingDescriptor(TextPaddingDescriptor.Padding.LEFT, ' '));
-
-        assertEquals("     value", new String(binaryFactory.build("value", typeConverter, fieldDefinition)));
-    }
-
-    public void test_binaryFieldFactory_RightPadding() {
-        SimpleFieldDefinition fieldDefinition = new SimpleFieldDefinition("id", 0, 10, new TextPaddingDescriptor(TextPaddingDescriptor.Padding.RIGHT, ' '));
-
-        assertEquals("value     ", new String(binaryFactory.build("value", typeConverter, fieldDefinition)));
-    }
-
 
 }

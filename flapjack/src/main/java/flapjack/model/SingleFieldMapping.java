@@ -24,16 +24,16 @@ import java.util.Arrays;
 public class SingleFieldMapping extends AbstractFieldMapping {
     private static final String NO_VALUE_CONVERTER = "Could not find a {0} registered! Are you sure you registered {0} in the TypeConverter?";
     private Class valueConverter;
-    private static DomainFieldFactory domainFieldFactory;
-    private static BinaryFieldFactory binaryFieldFactory;
+    private DomainFieldFactory domainFieldFactory;
+    private BinaryFieldFactory binaryFieldFactory;
 
     public SingleFieldMapping(String recordFieldName, String domainFieldName) {
         super(Arrays.asList(new String[]{recordFieldName}), domainFieldName);
     }
 
-    public SingleFieldMapping(String recordFieldName, String domainFieldName, Class valuevalueConverter) {
+    public SingleFieldMapping(String recordFieldName, String domainFieldName, Class valueConverter) {
         super(Arrays.asList(new String[]{recordFieldName}), domainFieldName);
-        this.valueConverter = valuevalueConverter;
+        this.valueConverter = valueConverter;
     }
 
 

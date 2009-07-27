@@ -17,11 +17,19 @@ import java.util.*;
 
 public class ListMap {
     private Map map = new LinkedHashMap();
-    private List list = new ArrayList();
+    private List values = new ArrayList();
+    private List keys = new ArrayList();
 
     public void put(String key, Object value) {
+        if (map.containsKey(key)) {
+            int index = keys.indexOf(key);
+            values.remove(index);
+            values.add(index, value);
+        } else {
+            keys.add(key);
+            values.add(value);
+        }
         map.put(key, value);
-        list.add(value);
     }
 
     public int size() {
@@ -33,11 +41,11 @@ public class ListMap {
     }
 
     public Object get(int index) {
-        return list.get(index);
+        return values.get(index);
     }
 
     public Iterator iterator() {
-        return list.iterator();
+        return values.iterator();
     }
 
     public Set keys() {
