@@ -63,6 +63,20 @@ public class SingleFieldMappingTest extends MockObjectTestCase {
         assertEquals("domain", domainFactory.build(listMap, String.class, (TypeConverter) mockTypeConverter.proxy()));
     }
 
+    public void test_binaryFieldFactory_NoPadding_Null() {
+        SimpleFieldDefinition fieldDefinition = new SimpleFieldDefinition("id", 0, 0);
+
+        assertEquals("", new String(binaryFactory.build(null, (TypeConverter) mockTypeConverter.proxy(), fieldDefinition)));
+    }
+
+    public void test_binaryFieldFactory_WithPadding_Null() {
+        SimpleFieldDefinition fieldDefinition = new SimpleFieldDefinition("id", 0, 0, (PaddingDescriptor) paddingDescriptor.proxy());
+
+        paddingDescriptor.expects(once()).method("applyPadding").with(isA(byte[].class), eq(fieldDefinition.getLength())).will(returnValue("padded".getBytes()));
+
+        assertEquals("padded", new String(binaryFactory.build(null, (TypeConverter) mockTypeConverter.proxy(), fieldDefinition)));
+    }
+
     public void test_binaryFieldFactory_NoPadding() {
         SimpleFieldDefinition fieldDefinition = new SimpleFieldDefinition("id", 0, 0);
 

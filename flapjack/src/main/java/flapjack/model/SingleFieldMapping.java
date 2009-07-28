@@ -55,7 +55,10 @@ public class SingleFieldMapping extends AbstractFieldMapping {
         if (binaryFieldFactory == null) {
             binaryFieldFactory = new AbstractBinaryFieldFactory() {
                 protected void buid(OutputStream output, Object domain, TypeConverter typeConverter, List fieldDefinitions) throws IOException {
-                    byte[] bytes = findValueConverter(domain.getClass(), typeConverter).toBytes(domain);
+                    byte[] bytes = new byte[0];
+                    if (domain != null) {
+                        bytes = findValueConverter(domain.getClass(), typeConverter).toBytes(domain);
+                    }
                     FieldDefinition fieldDefinition = (FieldDefinition) fieldDefinitions.get(0);
                     PaddingDescriptor paddingDescriptor = fieldDefinition.getPaddingDescriptor();
                     if (paddingDescriptor != null) {
