@@ -17,8 +17,11 @@ import flapjack.layout.PaddingDescriptor;
 import flapjack.util.TypeConverter;
 import flapjack.util.ValueConverter;
 
+import java.io.IOException;
+import java.io.OutputStream;
 import java.text.MessageFormat;
 import java.util.Arrays;
+import java.util.List;
 
 
 public class SingleFieldMapping extends AbstractFieldMapping {
@@ -50,14 +53,15 @@ public class SingleFieldMapping extends AbstractFieldMapping {
 
     public BinaryFieldFactory getBinaryFieldFactory() {
         if (binaryFieldFactory == null) {
-            binaryFieldFactory = new BinaryFieldFactory() {
-                public byte[] build(Object domain, TypeConverter typeConverter, FieldDefinition fieldDefinition) {
+            binaryFieldFactory = new AbstractBinaryFieldFactory() {
+                protected void buid(OutputStream output, Object domain, TypeConverter typeConverter, List fieldDefinitions) throws IOException {
                     byte[] bytes = findValueConverter(domain.getClass(), typeConverter).toBytes(domain);
+                    FieldDefinition fieldDefinition = (FieldDefinition) fieldDefinitions.get(0);
                     PaddingDescriptor paddingDescriptor = fieldDefinition.getPaddingDescriptor();
                     if (paddingDescriptor != null) {
                         bytes = paddingDescriptor.applyPadding(bytes, fieldDefinition.getLength());
                     }
-                    return bytes;
+                    output.write(bytes);
                 }
             };
         }

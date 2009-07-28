@@ -15,7 +15,11 @@ package flapjack.model;
 import flapjack.layout.FieldDefinition;
 import flapjack.util.TypeConverter;
 
+import java.util.List;
+
 
 public interface BinaryFieldFactory {
+    byte[] build(Object domain, TypeConverter typeConverter, List fieldDefinitions);
+
     byte[] build(Object domain, TypeConverter typeConverter, FieldDefinition fieldDefinition);
 }
