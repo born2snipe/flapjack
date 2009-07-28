@@ -230,7 +230,7 @@ public class RecordBuilderTest extends MockObjectTestCase {
         recordLayout.field("dob year", 4);
 
         byte[] data = new byte[]{1, 2, 3, 4};
-        binaryFieldFactory.expects(once()).method("build").with(eq(person.dob), eq(typeConverter), eq(recordLayout.getFieldDefinitions().get(0))).will(returnValue(data));
+        binaryFieldFactory.expects(once()).method("build").with(eq(person.dob), eq(typeConverter), eq(recordLayout.getFieldDefinitions())).will(returnValue(data));
         recordLayoutResolver.expects(once()).method("resolve").with(eq(person)).will(returnValue(Arrays.asList(new Object[]{recordLayout})));
 
         writer.expects(once()).method("write").with(eq(data));

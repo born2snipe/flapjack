@@ -60,8 +60,9 @@ public class RecordBuilder {
                         continue;
                     }
                     FieldMapping fieldMapping = locateFieldMapping(domain, objectMapping, fieldDefinition);
+                    List fieldDefinitions = findFieldDefinitionsforMapping(fieldMapping, recordLayout);
                     Object fieldValue = getField(fieldMapping.getDomainFieldName(), domain);
-                    byte[] bytes = fieldMapping.getBinaryFieldFactory().build(fieldValue, typeConverter, fieldDefinition);
+                    byte[] bytes = fieldMapping.getBinaryFieldFactory().build(fieldValue, typeConverter, fieldDefinitions);
                     alreadyBuiltFields.addAll(fieldMapping.getRecordFields());
                     if (notEnoughDataForField(fieldDefinition, bytes)) {
                         Integer expected = new Integer(fieldDefinition.getLength());
@@ -83,6 +84,26 @@ public class RecordBuilder {
             writer.close();
         }
 
+    }
+
+    private List findFieldDefinitionsforMapping(FieldMapping fieldMapping, RecordLayout recordLayout) {
+        List fieldDefinitions = new ArrayList();
+        Iterator it = fieldMapping.getRecordFields().iterator();
+        while (it.hasNext()) {
+            fieldDefinitions.add(locateFieldDefinitionFor((String) it.next(), recordLayout));
+        }
+        return fieldDefinitions;
+    }
+
+    private FieldDefinition locateFieldDefinitionFor(String fieldName, RecordLayout recordLayout) {
+        Iterator it = recordLayout.getFieldDefinitions().iterator();
+        while (it.hasNext()) {
+            FieldDefinition fieldDef = (FieldDefinition) it.next();
+            if (fieldDef.getName().equalsIgnoreCase(fieldName)) {
+                return fieldDef;
+            }
+        }
+        return null;
     }
 
     private boolean notEnoughDataForField(FieldDefinition fieldDefinition, byte[] bytes) {
