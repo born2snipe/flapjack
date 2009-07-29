@@ -14,45 +14,77 @@ package flapjack.example;
 
 import flapjack.example.model.Address;
 import flapjack.io.LineRecordReader;
+import flapjack.io.StreamRecordWriter;
 import flapjack.layout.RecordLayout;
 import flapjack.layout.SimpleRecordLayout;
+import flapjack.layout.FieldDefinition;
+import flapjack.layout.TextPaddingDescriptor;
 import flapjack.model.*;
 import flapjack.parser.ParseResult;
 import flapjack.parser.RecordParserImpl;
 import flapjack.parser.SameRecordLayoutResolver;
 import flapjack.util.TypeConverter;
 import flapjack.util.ValueConverter;
+import flapjack.builder.RecordBuilder;
+import flapjack.builder.SameBuilderRecordLayoutResolver;
 import junit.framework.TestCase;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.ByteArrayOutputStream;
+import java.util.List;
 
 
 public class CompoundFieldTest extends TestCase {
-    public void test() throws IOException {
-        String record = "Joe  Smith     123 Easy St    City  IA";
+    private SimpleRecordLayout recordLayout;
+    private ObjectMapping objectMapping;
+    private ObjectMappingStore objectMappingStore;
 
+    public void setUp() {
         /**
          * Create the record layout
          */
-        SimpleRecordLayout recordLayout = new SimpleRecordLayout("user");
-        recordLayout.field("First Name", 5);
-        recordLayout.field("Last Name", 10);
-        recordLayout.field("Address Line", 15);
-        recordLayout.field("City", 6);
-        recordLayout.field("State", 2);
+        recordLayout = new SimpleRecordLayout("user");
+        recordLayout.field("First Name", 5, new TextPaddingDescriptor(TextPaddingDescriptor.Padding.RIGHT, ' '));
+        recordLayout.field("Last Name", 10, new TextPaddingDescriptor(TextPaddingDescriptor.Padding.RIGHT, ' '));
+        recordLayout.field("Address Line", 15, new TextPaddingDescriptor(TextPaddingDescriptor.Padding.RIGHT, ' '));
+        recordLayout.field("City", 6, new TextPaddingDescriptor(TextPaddingDescriptor.Padding.RIGHT, ' '));
+        recordLayout.field("State", 2, new TextPaddingDescriptor(TextPaddingDescriptor.Padding.RIGHT, ' '));
 
         /**
          * Create the ObjectMapping for the record
          */
-        ObjectMapping objectMapping = new ObjectMapping(Person.class);
+        objectMapping = new ObjectMapping(Person.class);
         objectMapping.field("First Name", "firstName");
         objectMapping.field("Last Name", "lastName");
-        objectMapping.field(new String[]{"Address Line", "City", "State"}, "address", new AddressFactory(), null);
+        objectMapping.field(new String[]{"Address Line", "City", "State"}, "address", new AddressFactory(), new AddressFactory());
 
-        ObjectMappingStore objectMappingStore = new ObjectMappingStore();
+        objectMappingStore = new ObjectMappingStore();
         objectMappingStore.add(objectMapping);
+    }
 
+    public void test_build() {
+        RecordBuilder builder = new RecordBuilder();
+        builder.setBuilderRecordLayoutResolver(new SameBuilderRecordLayoutResolver(recordLayout));
+        builder.setObjectMappingStore(objectMappingStore);
+
+        Person person = new Person();
+        person.firstName = "Joe";
+        person.lastName = "Smith";
+        person.address = new Address();
+        person.address.setCity("City");
+        person.address.setLine("123 Easy St");
+        person.address.setState("IA");
+
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        builder.build(person, new StreamRecordWriter(output));
+
+        assertEquals("Joe  Smith     123 Easy St    City  IA", new String(output.toByteArray()));
+    }
+    
+    public void test_parse() throws IOException {
+        String record = "Joe  Smith     123 Easy St    City  IA";
 
         RecordParserImpl recordParser = new RecordParserImpl();
         recordParser.setRecordLayoutResolver(new SameRecordLayoutResolver(recordLayout));
@@ -82,7 +114,7 @@ public class CompoundFieldTest extends TestCase {
     /**
      * Create the DomainFieldFactory for constructing the Address from the 3 fields
      */
-    private static class AddressFactory implements DomainFieldFactory {
+    private static class AddressFactory extends AbstractBinaryFieldFactory implements DomainFieldFactory {
         public Object build(ListMap fields, Class domainFieldType, TypeConverter typeConverter) {
             Address address = new Address();
             ValueConverter converter = typeConverter.type(String.class);
@@ -90,6 +122,21 @@ public class CompoundFieldTest extends TestCase {
             address.setCity((String) converter.toDomain((byte[]) fields.get(1)));
             address.setState((String) converter.toDomain((byte[]) fields.get(2)));
             return address;
+        }
+
+        protected void buid(OutputStream output, Object domain, TypeConverter typeConverter, List fieldDefinitions) throws IOException {
+            Address address = (Address) domain;
+            ValueConverter converter = typeConverter.type(String.class);
+            for (Object obj : fieldDefinitions) {
+                FieldDefinition definition = (FieldDefinition) obj;
+                if (definition.getName().equals("City")) {
+                    output.write(definition.getPaddingDescriptor().applyPadding(converter.toBytes(address.getCity()), definition.getLength()));
+                } else if (definition.getName().equals("State")) {
+                    output.write(definition.getPaddingDescriptor().applyPadding(converter.toBytes(address.getState()), definition.getLength()));
+                } else {
+                    output.write(definition.getPaddingDescriptor().applyPadding(converter.toBytes(address.getLine()), definition.getLength()));
+                }
+            }
         }
     }
 
