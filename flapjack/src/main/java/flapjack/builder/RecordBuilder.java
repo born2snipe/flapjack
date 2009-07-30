@@ -16,6 +16,7 @@ import flapjack.io.RecordWriter;
 import flapjack.layout.FieldDefinition;
 import flapjack.layout.PaddingDescriptor;
 import flapjack.layout.RecordLayout;
+import flapjack.model.FieldByteMap;
 import flapjack.model.FieldMapping;
 import flapjack.model.ObjectMapping;
 import flapjack.model.ObjectMappingStore;
@@ -70,7 +71,8 @@ public class RecordBuilder {
                     FieldMapping fieldMapping = locateFieldMapping(domain, objectMapping, fieldName);
                     List fieldDefinitions = findFieldDefinitionsforMapping(fieldMapping, recordLayout);
                     Object fieldValue = getField(fieldMapping.getDomainFieldName(), domain);
-                    byte[] bytes = fieldMapping.getBinaryFieldFactory().build(fieldValue, typeConverter, fieldDefinitions);
+                    FieldByteMap byteMap = fieldMapping.getBinaryFieldFactory().build(fieldValue, typeConverter, fieldDefinitions);
+                    byte[] bytes = byteMap.get(fieldDefinition);
                     if (shouldPaddingBeApplied(paddingDescriptor, bytes, fieldLength)) {
                         bytes = paddingDescriptor.applyPadding(bytes, fieldLength);
                     }

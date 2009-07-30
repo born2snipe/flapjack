@@ -12,6 +12,7 @@
  */
 package flapjack.model;
 
+import flapjack.layout.FieldDefinition;
 import flapjack.util.TypeConverter;
 import flapjack.util.ValueConverter;
 
@@ -51,13 +52,23 @@ public class SingleFieldMapping extends AbstractFieldMapping {
 
     public BinaryFieldFactory getBinaryFieldFactory() {
         if (binaryFieldFactory == null) {
-            binaryFieldFactory = new AbstractBinaryFieldFactory() {
+            binaryFieldFactory = new BinaryFieldFactory() {
                 protected void buid(OutputStream output, Object domain, TypeConverter typeConverter, List fieldDefinitions) throws IOException {
                     byte[] bytes = new byte[0];
                     if (domain != null) {
                         bytes = findValueConverter(domain.getClass(), typeConverter).toBytes(domain);
                     }
                     output.write(bytes);
+                }
+
+                public FieldByteMap build(Object domain, TypeConverter typeConverter, List fieldDefinitions) {
+                    FieldByteMap byteMap = new FieldByteMap();
+                    byte[] bytes = new byte[0];
+                    if (domain != null) {
+                        bytes = findValueConverter(domain.getClass(), typeConverter).toBytes(domain);
+                    }
+                    byteMap.put((FieldDefinition) fieldDefinitions.get(0), bytes);
+                    return byteMap;
                 }
             };
         }

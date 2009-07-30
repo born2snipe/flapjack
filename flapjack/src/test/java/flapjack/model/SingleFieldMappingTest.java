@@ -19,6 +19,8 @@ import flapjack.util.ValueConverter;
 import org.jmock.Mock;
 import org.jmock.cglib.MockObjectTestCase;
 
+import java.util.Arrays;
+
 
 public class SingleFieldMappingTest extends MockObjectTestCase {
     private SingleFieldMapping mapping;
@@ -63,7 +65,8 @@ public class SingleFieldMappingTest extends MockObjectTestCase {
     public void test_binaryFieldFactory_Null() {
         SimpleFieldDefinition fieldDefinition = new SimpleFieldDefinition("id", 0, 0);
 
-        assertEquals("", new String(binaryFactory.build(null, (TypeConverter) mockTypeConverter.proxy(), fieldDefinition)));
+        FieldByteMap byteMap = binaryFactory.build(null, (TypeConverter) mockTypeConverter.proxy(), Arrays.asList(new Object[]{fieldDefinition}));
+        assertEquals("", new String(byteMap.get(fieldDefinition)));
     }
 
     public void test_binaryFieldFactory() {
@@ -72,7 +75,8 @@ public class SingleFieldMappingTest extends MockObjectTestCase {
         mockTypeConverter.expects(once()).method("type").with(eq(String.class)).will(returnValue(valueConverter.proxy()));
         valueConverter.expects(once()).method("toBytes").with(eq("value")).will(returnValue("binary".getBytes()));
 
-        assertEquals("binary", new String(binaryFactory.build("value", (TypeConverter) mockTypeConverter.proxy(), fieldDefinition)));
+        FieldByteMap byteMap = binaryFactory.build("value", (TypeConverter) mockTypeConverter.proxy(), Arrays.asList(new Object[]{fieldDefinition}));
+        assertEquals("binary", new String(byteMap.get(fieldDefinition)));
     }
 
     public void test_binaryFieldFactory_CustomValueConverter() {
@@ -85,7 +89,8 @@ public class SingleFieldMappingTest extends MockObjectTestCase {
         mockTypeConverter.expects(once()).method("find").with(eq(ReverseValueConverter.class)).will(returnValue(valueConverter.proxy()));
         valueConverter.expects(once()).method("toBytes").with(eq("value")).will(returnValue("binary".getBytes()));
 
-        assertEquals("binary", new String(binaryFactory.build("value", (TypeConverter) mockTypeConverter.proxy(), fieldDefinition)));
+        FieldByteMap byteMap = binaryFactory.build("value", (TypeConverter) mockTypeConverter.proxy(), Arrays.asList(new Object[]{fieldDefinition}));
+        assertEquals("binary", new String(byteMap.get(fieldDefinition)));
     }
 
     public void test_binaryFieldFactory_CustomValueConverterNotRegistered() {
@@ -97,7 +102,7 @@ public class SingleFieldMappingTest extends MockObjectTestCase {
         mockTypeConverter.expects(once()).method("isRegistered").with(eq(ReverseValueConverter.class)).will(returnValue(false));
 
         try {
-            binaryFactory.build("value", (TypeConverter) mockTypeConverter.proxy(), fieldDefinition);
+            binaryFactory.build("value", (TypeConverter) mockTypeConverter.proxy(), Arrays.asList(new Object[]{fieldDefinition}));
             fail();
         } catch (IllegalArgumentException err) {
             assertEquals("Could not find a " + ReverseValueConverter.class.getName() + " registered! Are you sure you registered " + ReverseValueConverter.class.getName() + " in the TypeConverter?", err.getMessage());

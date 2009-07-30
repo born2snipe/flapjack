@@ -12,11 +12,29 @@
  */
 package flapjack.model;
 
-import flapjack.util.TypeConverter;
+import flapjack.layout.FieldDefinition;
 
-import java.util.List;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 
-public interface BinaryFieldFactory {
-    FieldByteMap build(Object domain, TypeConverter typeConverter, List fieldDefinitions);
+public class FieldByteMap {
+    private Map fieldBytes = new HashMap();
+
+    public void put(FieldDefinition fieldDefinition, byte[] data) {
+        fieldBytes.put(fieldDefinition, data);
+    }
+
+    public byte[] get(FieldDefinition fieldDefinition) {
+        return (byte[]) fieldBytes.get(fieldDefinition);
+    }
+
+    public int size() {
+        return fieldBytes.size();
+    }
+
+    public Map toMap() {
+        return Collections.unmodifiableMap(fieldBytes);
+    }
 }

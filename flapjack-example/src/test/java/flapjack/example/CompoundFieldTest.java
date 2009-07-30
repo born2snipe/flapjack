@@ -12,12 +12,14 @@
  */
 package flapjack.example;
 
+import flapjack.builder.RecordBuilder;
+import flapjack.builder.SameBuilderRecordLayoutResolver;
 import flapjack.example.model.Address;
 import flapjack.io.LineRecordReader;
 import flapjack.io.StreamRecordWriter;
+import flapjack.layout.FieldDefinition;
 import flapjack.layout.RecordLayout;
 import flapjack.layout.SimpleRecordLayout;
-import flapjack.layout.FieldDefinition;
 import flapjack.layout.TextPaddingDescriptor;
 import flapjack.model.*;
 import flapjack.parser.ParseResult;
@@ -25,14 +27,11 @@ import flapjack.parser.RecordParserImpl;
 import flapjack.parser.SameRecordLayoutResolver;
 import flapjack.util.TypeConverter;
 import flapjack.util.ValueConverter;
-import flapjack.builder.RecordBuilder;
-import flapjack.builder.SameBuilderRecordLayoutResolver;
 import junit.framework.TestCase;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.OutputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.List;
 
 
@@ -82,7 +81,7 @@ public class CompoundFieldTest extends TestCase {
 
         assertEquals("Joe  Smith     123 Easy St    City  IA", new String(output.toByteArray()));
     }
-    
+
     public void test_parse() throws IOException {
         String record = "Joe  Smith     123 Easy St    City  IA";
 
@@ -114,7 +113,7 @@ public class CompoundFieldTest extends TestCase {
     /**
      * Create the DomainFieldFactory for constructing the Address from the 3 fields
      */
-    private static class AddressFactory extends AbstractBinaryFieldFactory implements DomainFieldFactory {
+    private static class AddressFactory implements DomainFieldFactory, BinaryFieldFactory {
         public Object build(ListMap fields, Class domainFieldType, TypeConverter typeConverter) {
             Address address = new Address();
             ValueConverter converter = typeConverter.type(String.class);
@@ -124,19 +123,21 @@ public class CompoundFieldTest extends TestCase {
             return address;
         }
 
-        protected void buid(OutputStream output, Object domain, TypeConverter typeConverter, List fieldDefinitions) throws IOException {
+        public FieldByteMap build(Object domain, TypeConverter typeConverter, List fieldDefinitions) {
+            FieldByteMap byteMap = new FieldByteMap();
             Address address = (Address) domain;
             ValueConverter converter = typeConverter.type(String.class);
             for (Object obj : fieldDefinitions) {
                 FieldDefinition definition = (FieldDefinition) obj;
                 if (definition.getName().equals("City")) {
-                    output.write(definition.getPaddingDescriptor().applyPadding(converter.toBytes(address.getCity()), definition.getLength()));
+                    byteMap.put(definition, converter.toBytes(address.getCity()));
                 } else if (definition.getName().equals("State")) {
-                    output.write(definition.getPaddingDescriptor().applyPadding(converter.toBytes(address.getState()), definition.getLength()));
+                    byteMap.put(definition, converter.toBytes(address.getState()));
                 } else {
-                    output.write(definition.getPaddingDescriptor().applyPadding(converter.toBytes(address.getLine()), definition.getLength()));
+                    byteMap.put(definition, converter.toBytes(address.getLine()));
                 }
             }
+            return byteMap;
         }
     }
 
