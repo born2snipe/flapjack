@@ -12,7 +12,6 @@
  */
 package flapjack.model;
 
-import flapjack.layout.PaddingDescriptor;
 import flapjack.layout.SimpleFieldDefinition;
 import flapjack.util.ReverseValueConverter;
 import flapjack.util.TypeConverter;
@@ -27,7 +26,6 @@ public class SingleFieldMappingTest extends MockObjectTestCase {
     private DomainFieldFactory domainFactory;
     private Mock mockTypeConverter;
     private Mock valueConverter;
-    private Mock paddingDescriptor;
 
     protected void setUp() throws Exception {
         super.setUp();
@@ -36,7 +34,6 @@ public class SingleFieldMappingTest extends MockObjectTestCase {
         domainFactory = mapping.getDomainFieldFactory();
         binaryFactory = mapping.getBinaryFieldFactory();
         valueConverter = mock(ValueConverter.class);
-        paddingDescriptor = mock(PaddingDescriptor.class);
     }
 
     public void test_domainFieldFactory_CustomValueConverter() {
@@ -63,21 +60,13 @@ public class SingleFieldMappingTest extends MockObjectTestCase {
         assertEquals("domain", domainFactory.build(listMap, String.class, (TypeConverter) mockTypeConverter.proxy()));
     }
 
-    public void test_binaryFieldFactory_NoPadding_Null() {
+    public void test_binaryFieldFactory_Null() {
         SimpleFieldDefinition fieldDefinition = new SimpleFieldDefinition("id", 0, 0);
 
         assertEquals("", new String(binaryFactory.build(null, (TypeConverter) mockTypeConverter.proxy(), fieldDefinition)));
     }
 
-    public void test_binaryFieldFactory_WithPadding_Null() {
-        SimpleFieldDefinition fieldDefinition = new SimpleFieldDefinition("id", 0, 0, (PaddingDescriptor) paddingDescriptor.proxy());
-
-        paddingDescriptor.expects(once()).method("applyPadding").with(isA(byte[].class), eq(fieldDefinition.getLength())).will(returnValue("padded".getBytes()));
-
-        assertEquals("padded", new String(binaryFactory.build(null, (TypeConverter) mockTypeConverter.proxy(), fieldDefinition)));
-    }
-
-    public void test_binaryFieldFactory_NoPadding() {
+    public void test_binaryFieldFactory() {
         SimpleFieldDefinition fieldDefinition = new SimpleFieldDefinition("id", 0, 0);
 
         mockTypeConverter.expects(once()).method("type").with(eq(String.class)).will(returnValue(valueConverter.proxy()));
@@ -86,18 +75,7 @@ public class SingleFieldMappingTest extends MockObjectTestCase {
         assertEquals("binary", new String(binaryFactory.build("value", (TypeConverter) mockTypeConverter.proxy(), fieldDefinition)));
     }
 
-    public void test_binaryFieldFactory_WithPadding() {
-        SimpleFieldDefinition fieldDefinition = new SimpleFieldDefinition("id", 0, 0, (PaddingDescriptor) paddingDescriptor.proxy());
-
-        mockTypeConverter.expects(once()).method("type").with(eq(String.class)).will(returnValue(valueConverter.proxy()));
-        byte[] data = "binary".getBytes();
-        valueConverter.expects(once()).method("toBytes").with(eq("value")).will(returnValue(data));
-        paddingDescriptor.expects(once()).method("applyPadding").with(eq(data), eq(fieldDefinition.getLength())).will(returnValue("padded".getBytes()));
-
-        assertEquals("padded", new String(binaryFactory.build("value", (TypeConverter) mockTypeConverter.proxy(), fieldDefinition)));
-    }
-
-    public void test_binaryFieldFactory_NoPadding_CustomValueConverter() {
+    public void test_binaryFieldFactory_CustomValueConverter() {
         mapping = new SingleFieldMapping("1", "2", ReverseValueConverter.class);
         domainFactory = mapping.getDomainFieldFactory();
         binaryFactory = mapping.getBinaryFieldFactory();
@@ -110,7 +88,7 @@ public class SingleFieldMappingTest extends MockObjectTestCase {
         assertEquals("binary", new String(binaryFactory.build("value", (TypeConverter) mockTypeConverter.proxy(), fieldDefinition)));
     }
 
-    public void test_binaryFieldFactory_NoPadding_CustomValueConverterNotRegistered() {
+    public void test_binaryFieldFactory_CustomValueConverterNotRegistered() {
         mapping = new SingleFieldMapping("1", "2", ReverseValueConverter.class);
         domainFactory = mapping.getDomainFieldFactory();
         binaryFactory = mapping.getBinaryFieldFactory();

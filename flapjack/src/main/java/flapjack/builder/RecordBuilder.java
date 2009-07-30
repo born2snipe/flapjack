@@ -14,6 +14,7 @@ package flapjack.builder;
 
 import flapjack.io.RecordWriter;
 import flapjack.layout.FieldDefinition;
+import flapjack.layout.PaddingDescriptor;
 import flapjack.layout.RecordLayout;
 import flapjack.model.FieldMapping;
 import flapjack.model.ObjectMapping;
@@ -31,7 +32,6 @@ import java.util.List;
 
 /**
  * TODO - Should be able to map what you want, not everything all the time
- * TODO - padding should be applied in the builder not the binary field factory
  */
 public class RecordBuilder {
     private static final String NO_RECORD_LAYOUT = "Could not resolve RecordLayout(s) for {0}";
@@ -63,10 +63,14 @@ public class RecordBuilder {
                     if (alreadyBuiltFields.contains(fieldDefinition.getName())) {
                         continue;
                     }
+                    PaddingDescriptor paddingDescriptor = fieldDefinition.getPaddingDescriptor();
                     FieldMapping fieldMapping = locateFieldMapping(domain, objectMapping, fieldDefinition);
                     List fieldDefinitions = findFieldDefinitionsforMapping(fieldMapping, recordLayout);
                     Object fieldValue = getField(fieldMapping.getDomainFieldName(), domain);
                     byte[] bytes = fieldMapping.getBinaryFieldFactory().build(fieldValue, typeConverter, fieldDefinitions);
+                    if (paddingDescriptor != null && fieldDefinition.getLength() > bytes.length) {
+                        bytes = paddingDescriptor.applyPadding(bytes, fieldDefinition.getLength());
+                    }
                     alreadyBuiltFields.addAll(fieldMapping.getRecordFields());
                     if (notEnoughDataForField(fieldDefinition, bytes)) {
                         Integer expected = new Integer(fieldDefinition.getLength());

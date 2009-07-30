@@ -13,10 +13,7 @@
 package flapjack.builder;
 
 import flapjack.io.RecordWriter;
-import flapjack.layout.FieldDefinition;
-import flapjack.layout.RecordLayout;
-import flapjack.layout.SimpleRecordLayout;
-import flapjack.layout.TextPaddingDescriptor;
+import flapjack.layout.*;
 import flapjack.model.*;
 import flapjack.util.ReverseValueConverter;
 import flapjack.util.TypeConverter;
@@ -35,10 +32,27 @@ public class RecordBuilderTest extends MockObjectTestCase {
     private RecordBuilder builder;
     private TypeConverter typeConverter;
     private Mock writer;
+    private Mock mockObjectMappingStore;
+    private Mock mockRecordLayout;
+    private Mock mockFieldDefinition;
+    private Mock mockObjectMapping;
+    private Mock mockFieldMapping;
+    private Mock mockBinaryFieldFactory;
+    private Mock mockTypeConverter;
+    private Mock mockPaddingDescriptor;
 
     protected void setUp() throws Exception {
         super.setUp();
         recordLayoutResolver = mock(BuilderRecordLayoutResolver.class);
+        mockObjectMappingStore = mock(ObjectMappingStore.class);
+        mockRecordLayout = mock(RecordLayout.class);
+        mockFieldDefinition = mock(FieldDefinition.class);
+        mockObjectMapping = mock(MockableObjectMapping.class);
+        mockFieldMapping = mock(FieldMapping.class);
+        mockBinaryFieldFactory = mock(BinaryFieldFactory.class);
+        mockTypeConverter = mock(TypeConverter.class);
+        mockPaddingDescriptor = mock(PaddingDescriptor.class);
+
         objectMappingStore = new ObjectMappingStore();
         typeConverter = new TypeConverter();
         writer = mock(RecordWriter.class);
@@ -49,17 +63,92 @@ public class RecordBuilderTest extends MockObjectTestCase {
         builder.setTypeConverter(typeConverter);
     }
 
-    public void test_build_TooMuchData_UnpaddedField() {
+    public void test_build_OnlyApplyPaddingWhenNeeded_ByteLengthMatchesFieldLength() {
+        Person person = new Person("Joe ", "Smith");
+        byte[] data = {1, 2, 3, 4};
+
+        builder.setObjectMappingStore((ObjectMappingStore) mockObjectMappingStore.proxy());
+        builder.setTypeConverter((TypeConverter) mockTypeConverter.proxy());
+
+        recordLayoutResolver.expects(once()).method("resolve").with(eq(person)).will(returnValue(Arrays.asList(new Object[]{mockRecordLayout.proxy()})));
+        mockObjectMappingStore.expects(once()).method("find").with(eq(Person.class)).will(returnValue(mockObjectMapping.proxy()));
+        mockRecordLayout.expects(exactly(2)).method("getFieldDefinitions").will(returnValue(Arrays.asList(new Object[]{mockFieldDefinition.proxy()})));
+        mockFieldDefinition.expects(exactly(3)).method("getName").will(returnValue("field-1"));
+        mockFieldDefinition.expects(exactly(3)).method("getLength").will(returnValue(4));
+        mockFieldDefinition.expects(once()).method("getPaddingDescriptor").will(returnValue(mockPaddingDescriptor.proxy()));
+        mockObjectMapping.expects(once()).method("findRecordField").with(eq("field-1")).will(returnValue(mockFieldMapping.proxy()));
+        mockFieldMapping.expects(exactly(2)).method("getRecordFields").will(returnValue(Arrays.asList(new String[]{"field-1"})));
+        mockFieldMapping.expects(once()).method("getDomainFieldName").will(returnValue("firstName"));
+        mockFieldMapping.expects(once()).method("getBinaryFieldFactory").will(returnValue(mockBinaryFieldFactory.proxy()));
+        mockBinaryFieldFactory.expects(once()).method("build").with(eq(person.firstName), eq(mockTypeConverter.proxy()), eq(Arrays.asList(new Object[]{mockFieldDefinition.proxy()}))).will(returnValue(data));
+        writer.expects(once()).method("close");
+        writer.expects(once()).method("write").with(eq(data));
+
+        builder.build(Arrays.asList(new Object[]{person}), (RecordWriter) writer.proxy());
+    }
+
+    public void test_build_TooMuchData_PaddedField_AfterPadding() {
         Person person = new Person("Joe", "Smith");
         byte[] data = {1, 2, 3, 4};
 
-        Mock mockObjectMappingStore = mock(ObjectMappingStore.class);
-        Mock mockRecordLayout = mock(RecordLayout.class);
-        Mock mockFieldDefinition = mock(FieldDefinition.class);
-        Mock mockObjectMapping = mock(MockableObjectMapping.class);
-        Mock mockFieldMapping = mock(FieldMapping.class);
-        Mock mockBinaryFieldFactory = mock(BinaryFieldFactory.class);
-        Mock mockTypeConverter = mock(TypeConverter.class);
+        builder.setObjectMappingStore((ObjectMappingStore) mockObjectMappingStore.proxy());
+        builder.setTypeConverter((TypeConverter) mockTypeConverter.proxy());
+
+        recordLayoutResolver.expects(once()).method("resolve").with(eq(person)).will(returnValue(Arrays.asList(new Object[]{mockRecordLayout.proxy()})));
+        mockObjectMappingStore.expects(once()).method("find").with(eq(Person.class)).will(returnValue(mockObjectMapping.proxy()));
+        mockRecordLayout.expects(exactly(2)).method("getFieldDefinitions").will(returnValue(Arrays.asList(new Object[]{mockFieldDefinition.proxy()})));
+        mockRecordLayout.expects(once()).method("getId").will(returnValue("record-layout-id"));
+        mockFieldDefinition.expects(exactly(4)).method("getName").will(returnValue("field-1"));
+        mockFieldDefinition.expects(exactly(5)).method("getLength").will(returnValue(5));
+        mockFieldDefinition.expects(once()).method("getPaddingDescriptor").will(returnValue(mockPaddingDescriptor.proxy()));
+        mockObjectMapping.expects(once()).method("findRecordField").with(eq("field-1")).will(returnValue(mockFieldMapping.proxy()));
+        mockFieldMapping.expects(exactly(2)).method("getRecordFields").will(returnValue(Arrays.asList(new String[]{"field-1"})));
+        mockFieldMapping.expects(once()).method("getDomainFieldName").will(returnValue("firstName"));
+        mockFieldMapping.expects(once()).method("getBinaryFieldFactory").will(returnValue(mockBinaryFieldFactory.proxy()));
+        mockBinaryFieldFactory.expects(once()).method("build").with(eq(person.firstName), eq(mockTypeConverter.proxy()), eq(Arrays.asList(new Object[]{mockFieldDefinition.proxy()}))).will(returnValue(data));
+        mockPaddingDescriptor.expects(once()).method("applyPadding").with(eq(data), eq(5)).will(returnValue("padded".getBytes()));
+        writer.expects(once()).method("close");
+
+        try {
+            builder.build(Arrays.asList(new Object[]{person}), (RecordWriter) writer.proxy());
+            fail();
+        } catch (BuilderException err) {
+            assertEquals("Too much data given! Expected 5, but was 6, for field=\"field-1\" on layout=\"record-layout-id\"", err.getMessage());
+        }
+    }
+
+    public void test_build_TooMuchData_PaddedField_BeforePadding() {
+        Person person = new Person("Joe", "Smith");
+        byte[] data = {1, 2, 3, 4};
+
+        builder.setObjectMappingStore((ObjectMappingStore) mockObjectMappingStore.proxy());
+        builder.setTypeConverter((TypeConverter) mockTypeConverter.proxy());
+
+        recordLayoutResolver.expects(once()).method("resolve").with(eq(person)).will(returnValue(Arrays.asList(new Object[]{mockRecordLayout.proxy()})));
+        mockObjectMappingStore.expects(once()).method("find").with(eq(Person.class)).will(returnValue(mockObjectMapping.proxy()));
+        mockRecordLayout.expects(exactly(2)).method("getFieldDefinitions").will(returnValue(Arrays.asList(new Object[]{mockFieldDefinition.proxy()})));
+        mockRecordLayout.expects(once()).method("getId").will(returnValue("record-layout-id"));
+        mockFieldDefinition.expects(exactly(4)).method("getName").will(returnValue("field-1"));
+        mockFieldDefinition.expects(exactly(4)).method("getLength").will(returnValue(1));
+        mockFieldDefinition.expects(once()).method("getPaddingDescriptor").will(returnValue(mockPaddingDescriptor.proxy()));
+        mockObjectMapping.expects(once()).method("findRecordField").with(eq("field-1")).will(returnValue(mockFieldMapping.proxy()));
+        mockFieldMapping.expects(exactly(2)).method("getRecordFields").will(returnValue(Arrays.asList(new String[]{"field-1"})));
+        mockFieldMapping.expects(once()).method("getDomainFieldName").will(returnValue("firstName"));
+        mockFieldMapping.expects(once()).method("getBinaryFieldFactory").will(returnValue(mockBinaryFieldFactory.proxy()));
+        mockBinaryFieldFactory.expects(once()).method("build").with(eq(person.firstName), eq(mockTypeConverter.proxy()), eq(Arrays.asList(new Object[]{mockFieldDefinition.proxy()}))).will(returnValue(data));
+        writer.expects(once()).method("close");
+
+        try {
+            builder.build(Arrays.asList(new Object[]{person}), (RecordWriter) writer.proxy());
+            fail();
+        } catch (BuilderException err) {
+            assertEquals("Too much data given! Expected 1, but was 4, for field=\"field-1\" on layout=\"record-layout-id\"", err.getMessage());
+        }
+    }
+
+    public void test_build_TooMuchData_UnpaddedField() {
+        Person person = new Person("Joe", "Smith");
+        byte[] data = {1, 2, 3, 4};
 
         builder.setObjectMappingStore((ObjectMappingStore) mockObjectMappingStore.proxy());
         builder.setTypeConverter((TypeConverter) mockTypeConverter.proxy());
@@ -70,6 +159,7 @@ public class RecordBuilderTest extends MockObjectTestCase {
         mockRecordLayout.expects(once()).method("getId").will(returnValue("record-layout-id"));
         mockFieldDefinition.expects(exactly(4)).method("getName").will(returnValue("field-1"));
         mockFieldDefinition.expects(exactly(3)).method("getLength").will(returnValue(1));
+        mockFieldDefinition.expects(once()).method("getPaddingDescriptor").will(returnValue(null));
         mockObjectMapping.expects(once()).method("findRecordField").with(eq("field-1")).will(returnValue(mockFieldMapping.proxy()));
         mockFieldMapping.expects(exactly(2)).method("getRecordFields").will(returnValue(Arrays.asList(new String[]{"field-1"})));
         mockFieldMapping.expects(once()).method("getDomainFieldName").will(returnValue("firstName"));
