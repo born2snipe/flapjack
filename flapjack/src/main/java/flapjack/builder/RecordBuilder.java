@@ -14,6 +14,7 @@ package flapjack.builder;
 
 import flapjack.io.RecordWriter;
 import flapjack.layout.FieldDefinition;
+import flapjack.layout.NoOpPaddingDescriptor;
 import flapjack.layout.PaddingDescriptor;
 import flapjack.layout.RecordLayout;
 import flapjack.model.FieldByteMap;
@@ -36,6 +37,7 @@ import java.util.List;
  * TODO - Handle if the bytes given from the BinaryFieldFactory is Null
  */
 public class RecordBuilder {
+    private static final NoOpPaddingDescriptor NO_OP_PADDING_DESCRIPTOR = new NoOpPaddingDescriptor();
     private static final String NO_RECORD_LAYOUT = "Could not resolve RecordLayout(s) for {0}";
     private static final String NO_FIELD_MAPPING = "Could not find a FieldMapping for field=\"{0}\" on class {1}";
     private static final String NO_OBJECT_MAPPING = "Could not find an ObjectMapping for {0}";
@@ -67,13 +69,13 @@ public class RecordBuilder {
                     if (alreadyBuiltFields.contains(fieldName)) {
                         continue;
                     }
-                    PaddingDescriptor paddingDescriptor = fieldDefinition.getPaddingDescriptor();
+                    PaddingDescriptor paddingDescriptor = getPaddingDescriptor(fieldDefinition);
                     FieldMapping fieldMapping = locateFieldMapping(domain, objectMapping, fieldName);
                     List fieldDefinitions = findFieldDefinitionsforMapping(fieldMapping, recordLayout);
                     Object fieldValue = getField(fieldMapping.getDomainFieldName(), domain);
                     FieldByteMap byteMap = fieldMapping.getBinaryFieldFactory().build(fieldValue, typeConverter, fieldDefinitions);
                     byte[] bytes = byteMap.get(fieldDefinition);
-                    if (shouldPaddingBeApplied(paddingDescriptor, bytes, fieldLength)) {
+                    if (shouldPaddingBeApplied(bytes, fieldLength)) {
                         bytes = paddingDescriptor.applyPadding(bytes, fieldLength);
                     }
                     alreadyBuiltFields.addAll(fieldMapping.getRecordFields());
@@ -103,8 +105,16 @@ public class RecordBuilder {
 
     }
 
-    private boolean shouldPaddingBeApplied(PaddingDescriptor paddingDescriptor, byte[] bytes, int fieldLength) {
-        return paddingDescriptor != null && fieldLength > bytes.length;
+    private PaddingDescriptor getPaddingDescriptor(FieldDefinition fieldDefinition) {
+        PaddingDescriptor descriptor = fieldDefinition.getPaddingDescriptor();
+        if (descriptor == null) {
+            return NO_OP_PADDING_DESCRIPTOR;
+        }
+        return descriptor;
+    }
+
+    private boolean shouldPaddingBeApplied(byte[] bytes, int fieldLength) {
+        return fieldLength > bytes.length;
     }
 
     private boolean tooMuchDataForField(byte[] bytes, int fieldLength) {
