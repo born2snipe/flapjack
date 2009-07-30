@@ -29,7 +29,10 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
-
+/**
+ * TODO - Should be able to map what you want, not everything all the time
+ * TODO - padding should be applied in the builder not the binary field factory
+ */
 public class RecordBuilder {
     private static final String NO_RECORD_LAYOUT = "Could not resolve RecordLayout(s) for {0}";
     private static final String NO_FIELD_MAPPING = "Could not find a FieldMapping for field=\"{0}\" on class {1}";
