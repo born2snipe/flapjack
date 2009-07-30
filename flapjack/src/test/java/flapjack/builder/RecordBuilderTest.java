@@ -13,15 +13,15 @@
 package flapjack.builder;
 
 import flapjack.io.RecordWriter;
+import flapjack.layout.FieldDefinition;
+import flapjack.layout.RecordLayout;
 import flapjack.layout.SimpleRecordLayout;
 import flapjack.layout.TextPaddingDescriptor;
-import flapjack.model.BinaryFieldFactory;
-import flapjack.model.ObjectMapping;
-import flapjack.model.ObjectMappingStore;
+import flapjack.model.*;
 import flapjack.util.ReverseValueConverter;
 import flapjack.util.TypeConverter;
 import org.jmock.Mock;
-import org.jmock.MockObjectTestCase;
+import org.jmock.cglib.MockObjectTestCase;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -47,6 +47,42 @@ public class RecordBuilderTest extends MockObjectTestCase {
         builder.setBuilderRecordLayoutResolver((BuilderRecordLayoutResolver) recordLayoutResolver.proxy());
         builder.setObjectMappingStore(objectMappingStore);
         builder.setTypeConverter(typeConverter);
+    }
+
+    public void test_build_TooMuchData_UnpaddedField() {
+        Person person = new Person("Joe", "Smith");
+        byte[] data = {1, 2, 3, 4};
+
+        Mock mockObjectMappingStore = mock(ObjectMappingStore.class);
+        Mock mockRecordLayout = mock(RecordLayout.class);
+        Mock mockFieldDefinition = mock(FieldDefinition.class);
+        Mock mockObjectMapping = mock(MockableObjectMapping.class);
+        Mock mockFieldMapping = mock(FieldMapping.class);
+        Mock mockBinaryFieldFactory = mock(BinaryFieldFactory.class);
+        Mock mockTypeConverter = mock(TypeConverter.class);
+
+        builder.setObjectMappingStore((ObjectMappingStore) mockObjectMappingStore.proxy());
+        builder.setTypeConverter((TypeConverter) mockTypeConverter.proxy());
+
+        recordLayoutResolver.expects(once()).method("resolve").with(eq(person)).will(returnValue(Arrays.asList(new Object[]{mockRecordLayout.proxy()})));
+        mockObjectMappingStore.expects(once()).method("find").with(eq(Person.class)).will(returnValue(mockObjectMapping.proxy()));
+        mockRecordLayout.expects(exactly(2)).method("getFieldDefinitions").will(returnValue(Arrays.asList(new Object[]{mockFieldDefinition.proxy()})));
+        mockRecordLayout.expects(once()).method("getId").will(returnValue("record-layout-id"));
+        mockFieldDefinition.expects(exactly(4)).method("getName").will(returnValue("field-1"));
+        mockFieldDefinition.expects(exactly(3)).method("getLength").will(returnValue(1));
+        mockObjectMapping.expects(once()).method("findRecordField").with(eq("field-1")).will(returnValue(mockFieldMapping.proxy()));
+        mockFieldMapping.expects(exactly(2)).method("getRecordFields").will(returnValue(Arrays.asList(new String[]{"field-1"})));
+        mockFieldMapping.expects(once()).method("getDomainFieldName").will(returnValue("firstName"));
+        mockFieldMapping.expects(once()).method("getBinaryFieldFactory").will(returnValue(mockBinaryFieldFactory.proxy()));
+        mockBinaryFieldFactory.expects(once()).method("build").with(eq(person.firstName), eq(mockTypeConverter.proxy()), eq(Arrays.asList(new Object[]{mockFieldDefinition.proxy()}))).will(returnValue(data));
+        writer.expects(once()).method("close");
+
+        try {
+            builder.build(Arrays.asList(new Object[]{person}), (RecordWriter) writer.proxy());
+            fail();
+        } catch (BuilderException err) {
+            assertEquals("Too much data given! Expected 1, but was 4, for field=\"field-1\" on layout=\"record-layout-id\"", err.getMessage());
+        }
     }
 
     public void test_build_NotEnoughDataForPaddedField() {
@@ -170,7 +206,7 @@ public class RecordBuilderTest extends MockObjectTestCase {
         objectMappingStore.add(addressMapping);
 
         Person person = new Person("Joe", "Smith");
-        Address address = new Address("123 Easy Street");
+        Address address = new Address("12 Easy St");
 
         SimpleRecordLayout personRecordLayout = new SimpleRecordLayout("person");
         personRecordLayout.field("First Name", 3);
@@ -183,7 +219,7 @@ public class RecordBuilderTest extends MockObjectTestCase {
         recordLayoutResolver.expects(once()).method("resolve").with(eq(address)).will(returnValue(Arrays.asList(new Object[]{addressRecordLayout})));
 
         writer.expects(once()).method("write").with(eq("JoeSmith".getBytes()));
-        writer.expects(once()).method("write").with(eq("123 Easy Street".getBytes()));
+        writer.expects(once()).method("write").with(eq(address.line1.getBytes()));
         writer.expects(once()).method("close");
 
         builder.build(Arrays.asList(new Object[]{person, address}), (RecordWriter) writer.proxy());
@@ -229,7 +265,7 @@ public class RecordBuilderTest extends MockObjectTestCase {
         recordLayout.field("dob day", 2);
         recordLayout.field("dob year", 4);
 
-        byte[] data = new byte[]{1, 2, 3, 4};
+        byte[] data = new byte[]{1, 2};
         binaryFieldFactory.expects(once()).method("build").with(eq(person.dob), eq(typeConverter), eq(recordLayout.getFieldDefinitions())).will(returnValue(data));
         recordLayoutResolver.expects(once()).method("resolve").with(eq(person)).will(returnValue(Arrays.asList(new Object[]{recordLayout})));
 

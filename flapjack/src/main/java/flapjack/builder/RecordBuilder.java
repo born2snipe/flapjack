@@ -35,6 +35,7 @@ public class RecordBuilder {
     private static final String NO_FIELD_MAPPING = "Could not find a FieldMapping for field=\"{0}\" on class {1}";
     private static final String NO_OBJECT_MAPPING = "Could not find an ObjectMapping for {0}";
     private static final String NOT_ENOUGH_DATA = "Not enough data given! Did you forget the padding? Expected {0}, but was {1}, for field=\"{2}\" on layout=\"{3}\"";
+    private static final String TOO_MUCH_DATA = "Too much data given! Expected {0}, but was {1}, for field=\"{2}\" on layout=\"{3}\"";
     private BuilderRecordLayoutResolver builderRecordLayoutResolver;
     private ObjectMappingStore objectMappingStore;
     private TypeConverter typeConverter = new TypeConverter();
@@ -70,6 +71,12 @@ public class RecordBuilder {
                         String fieldName = fieldDefinition.getName();
                         String layoutId = recordLayout.getId();
                         throw new BuilderException(MessageFormat.format(NOT_ENOUGH_DATA, new Object[]{expected, actual, fieldName, layoutId}));
+                    } else if (tooMuchDataForField(fieldDefinition, bytes)) {
+                        Integer expected = new Integer(fieldDefinition.getLength());
+                        Integer actual = new Integer(bytes.length);
+                        String fieldName = fieldDefinition.getName();
+                        String layoutId = recordLayout.getId();
+                        throw new BuilderException(MessageFormat.format(TOO_MUCH_DATA, new Object[]{expected, actual, fieldName, layoutId}));
                     } else {
                         output.write(bytes);
                     }
@@ -84,6 +91,10 @@ public class RecordBuilder {
             writer.close();
         }
 
+    }
+
+    private boolean tooMuchDataForField(FieldDefinition fieldDefinition, byte[] bytes) {
+        return fieldDefinition.getLength() < bytes.length;
     }
 
     private List findFieldDefinitionsforMapping(FieldMapping fieldMapping, RecordLayout recordLayout) {
