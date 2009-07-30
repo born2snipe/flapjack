@@ -32,6 +32,7 @@ import java.util.List;
 
 /**
  * TODO - Should be able to map what you want, not everything all the time
+ * TODO - Handle if the bytes given from the BinaryFieldFactory is Null
  */
 public class RecordBuilder {
     private static final String NO_RECORD_LAYOUT = "Could not resolve RecordLayout(s) for {0}";
@@ -60,28 +61,28 @@ public class RecordBuilder {
                 Iterator it = recordLayout.getFieldDefinitions().iterator();
                 while (it.hasNext()) {
                     FieldDefinition fieldDefinition = (FieldDefinition) it.next();
-                    if (alreadyBuiltFields.contains(fieldDefinition.getName())) {
+                    String fieldName = fieldDefinition.getName();
+                    int fieldLength = fieldDefinition.getLength();
+                    if (alreadyBuiltFields.contains(fieldName)) {
                         continue;
                     }
                     PaddingDescriptor paddingDescriptor = fieldDefinition.getPaddingDescriptor();
-                    FieldMapping fieldMapping = locateFieldMapping(domain, objectMapping, fieldDefinition);
+                    FieldMapping fieldMapping = locateFieldMapping(domain, objectMapping, fieldName);
                     List fieldDefinitions = findFieldDefinitionsforMapping(fieldMapping, recordLayout);
                     Object fieldValue = getField(fieldMapping.getDomainFieldName(), domain);
                     byte[] bytes = fieldMapping.getBinaryFieldFactory().build(fieldValue, typeConverter, fieldDefinitions);
-                    if (paddingDescriptor != null && fieldDefinition.getLength() > bytes.length) {
-                        bytes = paddingDescriptor.applyPadding(bytes, fieldDefinition.getLength());
+                    if (shouldPaddingBeApplied(paddingDescriptor, bytes, fieldLength)) {
+                        bytes = paddingDescriptor.applyPadding(bytes, fieldLength);
                     }
                     alreadyBuiltFields.addAll(fieldMapping.getRecordFields());
-                    if (notEnoughDataForField(fieldDefinition, bytes)) {
-                        Integer expected = new Integer(fieldDefinition.getLength());
+                    if (notEnoughDataForField(bytes, fieldLength)) {
+                        Integer expected = new Integer(fieldLength);
                         Integer actual = new Integer(bytes.length);
-                        String fieldName = fieldDefinition.getName();
                         String layoutId = recordLayout.getId();
                         throw new BuilderException(MessageFormat.format(NOT_ENOUGH_DATA, new Object[]{expected, actual, fieldName, layoutId}));
-                    } else if (tooMuchDataForField(fieldDefinition, bytes)) {
-                        Integer expected = new Integer(fieldDefinition.getLength());
+                    } else if (tooMuchDataForField(bytes, fieldLength)) {
+                        Integer expected = new Integer(fieldLength);
                         Integer actual = new Integer(bytes.length);
-                        String fieldName = fieldDefinition.getName();
                         String layoutId = recordLayout.getId();
                         throw new BuilderException(MessageFormat.format(TOO_MUCH_DATA, new Object[]{expected, actual, fieldName, layoutId}));
                     } else {
@@ -100,8 +101,12 @@ public class RecordBuilder {
 
     }
 
-    private boolean tooMuchDataForField(FieldDefinition fieldDefinition, byte[] bytes) {
-        return fieldDefinition.getLength() < bytes.length;
+    private boolean shouldPaddingBeApplied(PaddingDescriptor paddingDescriptor, byte[] bytes, int fieldLength) {
+        return paddingDescriptor != null && fieldLength > bytes.length;
+    }
+
+    private boolean tooMuchDataForField(byte[] bytes, int fieldLength) {
+        return fieldLength < bytes.length;
     }
 
     private List findFieldDefinitionsforMapping(FieldMapping fieldMapping, RecordLayout recordLayout) {
@@ -124,14 +129,14 @@ public class RecordBuilder {
         return null;
     }
 
-    private boolean notEnoughDataForField(FieldDefinition fieldDefinition, byte[] bytes) {
-        return bytes.length < fieldDefinition.getLength();
+    private boolean notEnoughDataForField(byte[] bytes, int fieldLength) {
+        return bytes.length < fieldLength;
     }
 
-    private FieldMapping locateFieldMapping(Object domain, ObjectMapping objectMapping, FieldDefinition fieldDefinition) {
-        FieldMapping fieldMapping = objectMapping.findRecordField(fieldDefinition.getName());
+    private FieldMapping locateFieldMapping(Object domain, ObjectMapping objectMapping, String fieldName) {
+        FieldMapping fieldMapping = objectMapping.findRecordField(fieldName);
         if (fieldMapping == null) {
-            throw new BuilderException(MessageFormat.format(NO_FIELD_MAPPING, new Object[]{fieldDefinition.getName(), domain.getClass().getName()}));
+            throw new BuilderException(MessageFormat.format(NO_FIELD_MAPPING, new Object[]{fieldName, domain.getClass().getName()}));
         }
         return fieldMapping;
     }

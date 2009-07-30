@@ -73,8 +73,8 @@ public class RecordBuilderTest extends MockObjectTestCase {
         recordLayoutResolver.expects(once()).method("resolve").with(eq(person)).will(returnValue(Arrays.asList(new Object[]{mockRecordLayout.proxy()})));
         mockObjectMappingStore.expects(once()).method("find").with(eq(Person.class)).will(returnValue(mockObjectMapping.proxy()));
         mockRecordLayout.expects(exactly(2)).method("getFieldDefinitions").will(returnValue(Arrays.asList(new Object[]{mockFieldDefinition.proxy()})));
-        mockFieldDefinition.expects(exactly(3)).method("getName").will(returnValue("field-1"));
-        mockFieldDefinition.expects(exactly(3)).method("getLength").will(returnValue(4));
+        mockFieldDefinition.expects(exactly(2)).method("getName").will(returnValue("field-1"));
+        mockFieldDefinition.expects(once()).method("getLength").will(returnValue(4));
         mockFieldDefinition.expects(once()).method("getPaddingDescriptor").will(returnValue(mockPaddingDescriptor.proxy()));
         mockObjectMapping.expects(once()).method("findRecordField").with(eq("field-1")).will(returnValue(mockFieldMapping.proxy()));
         mockFieldMapping.expects(exactly(2)).method("getRecordFields").will(returnValue(Arrays.asList(new String[]{"field-1"})));
@@ -98,8 +98,8 @@ public class RecordBuilderTest extends MockObjectTestCase {
         mockObjectMappingStore.expects(once()).method("find").with(eq(Person.class)).will(returnValue(mockObjectMapping.proxy()));
         mockRecordLayout.expects(exactly(2)).method("getFieldDefinitions").will(returnValue(Arrays.asList(new Object[]{mockFieldDefinition.proxy()})));
         mockRecordLayout.expects(once()).method("getId").will(returnValue("record-layout-id"));
-        mockFieldDefinition.expects(exactly(4)).method("getName").will(returnValue("field-1"));
-        mockFieldDefinition.expects(exactly(5)).method("getLength").will(returnValue(5));
+        mockFieldDefinition.expects(exactly(2)).method("getName").will(returnValue("field-1"));
+        mockFieldDefinition.expects(once()).method("getLength").will(returnValue(5));
         mockFieldDefinition.expects(once()).method("getPaddingDescriptor").will(returnValue(mockPaddingDescriptor.proxy()));
         mockObjectMapping.expects(once()).method("findRecordField").with(eq("field-1")).will(returnValue(mockFieldMapping.proxy()));
         mockFieldMapping.expects(exactly(2)).method("getRecordFields").will(returnValue(Arrays.asList(new String[]{"field-1"})));
@@ -128,8 +128,8 @@ public class RecordBuilderTest extends MockObjectTestCase {
         mockObjectMappingStore.expects(once()).method("find").with(eq(Person.class)).will(returnValue(mockObjectMapping.proxy()));
         mockRecordLayout.expects(exactly(2)).method("getFieldDefinitions").will(returnValue(Arrays.asList(new Object[]{mockFieldDefinition.proxy()})));
         mockRecordLayout.expects(once()).method("getId").will(returnValue("record-layout-id"));
-        mockFieldDefinition.expects(exactly(4)).method("getName").will(returnValue("field-1"));
-        mockFieldDefinition.expects(exactly(4)).method("getLength").will(returnValue(1));
+        mockFieldDefinition.expects(exactly(2)).method("getName").will(returnValue("field-1"));
+        mockFieldDefinition.expects(once()).method("getLength").will(returnValue(1));
         mockFieldDefinition.expects(once()).method("getPaddingDescriptor").will(returnValue(mockPaddingDescriptor.proxy()));
         mockObjectMapping.expects(once()).method("findRecordField").with(eq("field-1")).will(returnValue(mockFieldMapping.proxy()));
         mockFieldMapping.expects(exactly(2)).method("getRecordFields").will(returnValue(Arrays.asList(new String[]{"field-1"})));
@@ -157,8 +157,8 @@ public class RecordBuilderTest extends MockObjectTestCase {
         mockObjectMappingStore.expects(once()).method("find").with(eq(Person.class)).will(returnValue(mockObjectMapping.proxy()));
         mockRecordLayout.expects(exactly(2)).method("getFieldDefinitions").will(returnValue(Arrays.asList(new Object[]{mockFieldDefinition.proxy()})));
         mockRecordLayout.expects(once()).method("getId").will(returnValue("record-layout-id"));
-        mockFieldDefinition.expects(exactly(4)).method("getName").will(returnValue("field-1"));
-        mockFieldDefinition.expects(exactly(3)).method("getLength").will(returnValue(1));
+        mockFieldDefinition.expects(exactly(2)).method("getName").will(returnValue("field-1"));
+        mockFieldDefinition.expects(once()).method("getLength").will(returnValue(1));
         mockFieldDefinition.expects(once()).method("getPaddingDescriptor").will(returnValue(null));
         mockObjectMapping.expects(once()).method("findRecordField").with(eq("field-1")).will(returnValue(mockFieldMapping.proxy()));
         mockFieldMapping.expects(exactly(2)).method("getRecordFields").will(returnValue(Arrays.asList(new String[]{"field-1"})));
