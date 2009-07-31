@@ -61,24 +61,25 @@ public class RecordBuilder {
                 List recordLayouts = locateRecordLayouts(domain);
                 ObjectMapping objectMapping = locateObjectMapping(domain);
                 RecordLayout recordLayout = (RecordLayout) recordLayouts.get(0);
-                Iterator it = recordLayout.getFieldDefinitions().iterator();
+                List fieldDefinitions = recordLayout.getFieldDefinitions();
+                Iterator it = fieldDefinitions.iterator();
                 while (it.hasNext()) {
                     FieldDefinition fieldDefinition = (FieldDefinition) it.next();
                     String fieldName = fieldDefinition.getName();
                     int fieldLength = fieldDefinition.getLength();
-                    if (alreadyBuiltFields.contains(fieldName)) {
+                    if (alreadyBuiltFields.contains(fieldDefinition)) {
                         continue;
                     }
                     PaddingDescriptor paddingDescriptor = getPaddingDescriptor(fieldDefinition);
                     FieldMapping fieldMapping = locateFieldMapping(domain, objectMapping, fieldName);
-                    List fieldDefinitions = findFieldDefinitionsforMapping(fieldMapping, recordLayout);
+                    List mappedFieldDefinitions = findFieldDefinitionsforMapping(fieldMapping, fieldDefinitions);
                     Object fieldValue = getField(fieldMapping.getDomainFieldName(), domain);
-                    FieldByteMap byteMap = fieldMapping.getBinaryFieldFactory().build(fieldValue, typeConverter, fieldDefinitions);
+                    FieldByteMap byteMap = fieldMapping.getBinaryFieldFactory().build(fieldValue, typeConverter, mappedFieldDefinitions);
                     byte[] bytes = byteMap.get(fieldDefinition);
                     if (shouldPaddingBeApplied(bytes, fieldLength)) {
                         bytes = paddingDescriptor.applyPadding(bytes, fieldLength);
                     }
-                    alreadyBuiltFields.addAll(fieldMapping.getRecordFields());
+                    alreadyBuiltFields.addAll(mappedFieldDefinitions);
                     if (notEnoughDataForField(bytes, fieldLength)) {
                         Integer expected = new Integer(fieldLength);
                         Integer actual = new Integer(bytes.length);
@@ -121,17 +122,17 @@ public class RecordBuilder {
         return fieldLength < bytes.length;
     }
 
-    private List findFieldDefinitionsforMapping(FieldMapping fieldMapping, RecordLayout recordLayout) {
-        List fieldDefinitions = new ArrayList();
+    private List findFieldDefinitionsforMapping(FieldMapping fieldMapping, List fieldDefinitions) {
+        List mappedFieldDefinitions = new ArrayList();
         Iterator it = fieldMapping.getRecordFields().iterator();
         while (it.hasNext()) {
-            fieldDefinitions.add(locateFieldDefinitionFor((String) it.next(), recordLayout));
+            mappedFieldDefinitions.add(locateFieldDefinitionFor((String) it.next(), fieldDefinitions));
         }
-        return fieldDefinitions;
+        return mappedFieldDefinitions;
     }
 
-    private FieldDefinition locateFieldDefinitionFor(String fieldName, RecordLayout recordLayout) {
-        Iterator it = recordLayout.getFieldDefinitions().iterator();
+    private FieldDefinition locateFieldDefinitionFor(String fieldName, List fieldDefinitions) {
+        Iterator it = fieldDefinitions.iterator();
         while (it.hasNext()) {
             FieldDefinition fieldDef = (FieldDefinition) it.next();
             if (fieldDef.getName().equalsIgnoreCase(fieldName)) {

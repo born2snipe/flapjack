@@ -75,12 +75,12 @@ public class RecordBuilderTest extends MockObjectTestCase {
 
         recordLayoutResolver.expects(once()).method("resolve").with(eq(person)).will(returnValue(Arrays.asList(new Object[]{mockRecordLayout.proxy()})));
         mockObjectMappingStore.expects(once()).method("find").with(eq(Person.class)).will(returnValue(mockObjectMapping.proxy()));
-        mockRecordLayout.expects(exactly(2)).method("getFieldDefinitions").will(returnValue(Arrays.asList(new Object[]{mockFieldDefinition.proxy()})));
+        mockRecordLayout.expects(once()).method("getFieldDefinitions").will(returnValue(Arrays.asList(new Object[]{mockFieldDefinition.proxy()})));
         mockFieldDefinition.expects(exactly(2)).method("getName").will(returnValue("field-1"));
         mockFieldDefinition.expects(once()).method("getLength").will(returnValue(4));
         mockFieldDefinition.expects(once()).method("getPaddingDescriptor").will(returnValue(mockPaddingDescriptor.proxy()));
         mockObjectMapping.expects(once()).method("findRecordField").with(eq("field-1")).will(returnValue(mockFieldMapping.proxy()));
-        mockFieldMapping.expects(exactly(2)).method("getRecordFields").will(returnValue(Arrays.asList(new String[]{"field-1"})));
+        mockFieldMapping.expects(once()).method("getRecordFields").will(returnValue(Arrays.asList(new String[]{"field-1"})));
         mockFieldMapping.expects(once()).method("getDomainFieldName").will(returnValue("firstName"));
         mockFieldMapping.expects(once()).method("getBinaryFieldFactory").will(returnValue(mockBinaryFieldFactory.proxy()));
         mockBinaryFieldFactory.expects(once()).method("build").with(eq(person.firstName), eq(mockTypeConverter.proxy()), eq(Arrays.asList(new Object[]{mockFieldDefinition.proxy()}))).will(returnValue(byteMap));
@@ -100,13 +100,13 @@ public class RecordBuilderTest extends MockObjectTestCase {
 
         recordLayoutResolver.expects(once()).method("resolve").with(eq(person)).will(returnValue(Arrays.asList(new Object[]{mockRecordLayout.proxy()})));
         mockObjectMappingStore.expects(once()).method("find").with(eq(Person.class)).will(returnValue(mockObjectMapping.proxy()));
-        mockRecordLayout.expects(exactly(2)).method("getFieldDefinitions").will(returnValue(Arrays.asList(new Object[]{mockFieldDefinition.proxy()})));
+        mockRecordLayout.expects(once()).method("getFieldDefinitions").will(returnValue(Arrays.asList(new Object[]{mockFieldDefinition.proxy()})));
         mockRecordLayout.expects(once()).method("getId").will(returnValue("record-layout-id"));
         mockFieldDefinition.expects(exactly(2)).method("getName").will(returnValue("field-1"));
         mockFieldDefinition.expects(once()).method("getLength").will(returnValue(5));
         mockFieldDefinition.expects(once()).method("getPaddingDescriptor").will(returnValue(mockPaddingDescriptor.proxy()));
         mockObjectMapping.expects(once()).method("findRecordField").with(eq("field-1")).will(returnValue(mockFieldMapping.proxy()));
-        mockFieldMapping.expects(exactly(2)).method("getRecordFields").will(returnValue(Arrays.asList(new String[]{"field-1"})));
+        mockFieldMapping.expects(once()).method("getRecordFields").will(returnValue(Arrays.asList(new String[]{"field-1"})));
         mockFieldMapping.expects(once()).method("getDomainFieldName").will(returnValue("firstName"));
         mockFieldMapping.expects(once()).method("getBinaryFieldFactory").will(returnValue(mockBinaryFieldFactory.proxy()));
         mockBinaryFieldFactory.expects(once()).method("build").with(eq(person.firstName), eq(mockTypeConverter.proxy()), eq(Arrays.asList(new Object[]{mockFieldDefinition.proxy()}))).will(returnValue(byteMap));
@@ -131,13 +131,13 @@ public class RecordBuilderTest extends MockObjectTestCase {
 
         recordLayoutResolver.expects(once()).method("resolve").with(eq(person)).will(returnValue(Arrays.asList(new Object[]{mockRecordLayout.proxy()})));
         mockObjectMappingStore.expects(once()).method("find").with(eq(Person.class)).will(returnValue(mockObjectMapping.proxy()));
-        mockRecordLayout.expects(exactly(2)).method("getFieldDefinitions").will(returnValue(Arrays.asList(new Object[]{mockFieldDefinition.proxy()})));
+        mockRecordLayout.expects(once()).method("getFieldDefinitions").will(returnValue(Arrays.asList(new Object[]{mockFieldDefinition.proxy()})));
         mockRecordLayout.expects(once()).method("getId").will(returnValue("record-layout-id"));
         mockFieldDefinition.expects(exactly(2)).method("getName").will(returnValue("field-1"));
         mockFieldDefinition.expects(once()).method("getLength").will(returnValue(1));
         mockFieldDefinition.expects(once()).method("getPaddingDescriptor").will(returnValue(mockPaddingDescriptor.proxy()));
         mockObjectMapping.expects(once()).method("findRecordField").with(eq("field-1")).will(returnValue(mockFieldMapping.proxy()));
-        mockFieldMapping.expects(exactly(2)).method("getRecordFields").will(returnValue(Arrays.asList(new String[]{"field-1"})));
+        mockFieldMapping.expects(once()).method("getRecordFields").will(returnValue(Arrays.asList(new String[]{"field-1"})));
         mockFieldMapping.expects(once()).method("getDomainFieldName").will(returnValue("firstName"));
         mockFieldMapping.expects(once()).method("getBinaryFieldFactory").will(returnValue(mockBinaryFieldFactory.proxy()));
         mockBinaryFieldFactory.expects(once()).method("build").with(eq(person.firstName), eq(mockTypeConverter.proxy()), eq(Arrays.asList(new Object[]{mockFieldDefinition.proxy()}))).will(returnValue(byteMap));
@@ -161,13 +161,13 @@ public class RecordBuilderTest extends MockObjectTestCase {
 
         recordLayoutResolver.expects(once()).method("resolve").with(eq(person)).will(returnValue(Arrays.asList(new Object[]{mockRecordLayout.proxy()})));
         mockObjectMappingStore.expects(once()).method("find").with(eq(Person.class)).will(returnValue(mockObjectMapping.proxy()));
-        mockRecordLayout.expects(exactly(2)).method("getFieldDefinitions").will(returnValue(Arrays.asList(new Object[]{mockFieldDefinition.proxy()})));
+        mockRecordLayout.expects(once()).method("getFieldDefinitions").will(returnValue(Arrays.asList(new Object[]{mockFieldDefinition.proxy()})));
         mockRecordLayout.expects(once()).method("getId").will(returnValue("record-layout-id"));
         mockFieldDefinition.expects(exactly(2)).method("getName").will(returnValue("field-1"));
         mockFieldDefinition.expects(once()).method("getLength").will(returnValue(1));
         mockFieldDefinition.expects(once()).method("getPaddingDescriptor").will(returnValue(null));
         mockObjectMapping.expects(once()).method("findRecordField").with(eq("field-1")).will(returnValue(mockFieldMapping.proxy()));
-        mockFieldMapping.expects(exactly(2)).method("getRecordFields").will(returnValue(Arrays.asList(new String[]{"field-1"})));
+        mockFieldMapping.expects(once()).method("getRecordFields").will(returnValue(Arrays.asList(new String[]{"field-1"})));
         mockFieldMapping.expects(once()).method("getDomainFieldName").will(returnValue("firstName"));
         mockFieldMapping.expects(once()).method("getBinaryFieldFactory").will(returnValue(mockBinaryFieldFactory.proxy()));
         mockBinaryFieldFactory.expects(once()).method("build").with(eq(person.firstName), eq(mockTypeConverter.proxy()), eq(Arrays.asList(new Object[]{mockFieldDefinition.proxy()}))).will(returnValue(byteMap));
