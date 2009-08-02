@@ -16,8 +16,6 @@ import flapjack.layout.FieldDefinition;
 import flapjack.util.TypeConverter;
 import flapjack.util.ValueConverter;
 
-import java.io.IOException;
-import java.io.OutputStream;
 import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.List;
@@ -53,14 +51,6 @@ public class SingleFieldMapping extends AbstractFieldMapping {
     public BinaryFieldFactory getBinaryFieldFactory() {
         if (binaryFieldFactory == null) {
             binaryFieldFactory = new BinaryFieldFactory() {
-                protected void buid(OutputStream output, Object domain, TypeConverter typeConverter, List fieldDefinitions) throws IOException {
-                    byte[] bytes = new byte[0];
-                    if (domain != null) {
-                        bytes = findValueConverter(domain.getClass(), typeConverter).toBytes(domain);
-                    }
-                    output.write(bytes);
-                }
-
                 public FieldByteMap build(Object domain, TypeConverter typeConverter, List fieldDefinitions) {
                     FieldByteMap byteMap = new FieldByteMap();
                     byte[] bytes = new byte[0];
