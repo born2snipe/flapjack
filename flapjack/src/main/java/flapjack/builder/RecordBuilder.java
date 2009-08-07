@@ -33,13 +33,11 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * TODO - Should be able to map what you want, not everything all the time
  * TODO - Handle if the bytes given from the BinaryFieldFactory is Null
  */
 public class RecordBuilder {
     private static final NoOpPaddingDescriptor NO_OP_PADDING_DESCRIPTOR = new NoOpPaddingDescriptor();
     private static final String NO_RECORD_LAYOUT = "Could not resolve RecordLayout(s) for {0}";
-    private static final String NO_FIELD_MAPPING = "Could not find a FieldMapping for field=\"{0}\" on class {1}";
     private static final String NO_OBJECT_MAPPING = "Could not find an ObjectMapping for {0}";
     private static final String NOT_ENOUGH_DATA = "Not enough data given! Did you forget the padding? Expected {0}, but was {1}, for field=\"{2}\" on layout=\"{3}\"";
     private static final String TOO_MUCH_DATA = "Too much data given! Expected {0}, but was {1}, for field=\"{2}\" on layout=\"{3}\"";
@@ -68,20 +66,25 @@ public class RecordBuilder {
                     String fieldName = fieldDefinition.getName();
                     int fieldLength = fieldDefinition.getLength();
                     PaddingDescriptor paddingDescriptor = getPaddingDescriptor(fieldDefinition);
-                    FieldMapping fieldMapping = locateFieldMapping(domain, objectMapping, fieldName);
-                    List mappedFieldDefinitions = findFieldDefinitionsforMapping(fieldMapping, fieldDefinitions);
-                    Object fieldValue = getField(fieldMapping.getDomainFieldName(), domain);
+                    FieldMapping fieldMapping = objectMapping.findRecordField(fieldName);
+
                     byte bytes[] = null;
-                    if (alreadyBuiltFields.contains(fieldDefinition)) {
+                    if (fieldMapping == null) {
+                        bytes = new byte[0];
+                    } else if (alreadyBuiltFields.contains(fieldDefinition)) {
                         bytes = alreadyBuiltFields.get(fieldDefinition);
                     } else {
+                        List mappedFieldDefinitions = findFieldDefinitionsforMapping(fieldMapping, fieldDefinitions);
+                        Object fieldValue = getField(fieldMapping.getDomainFieldName(), domain);
                         FieldByteMap byteMap = fieldMapping.getBinaryFieldFactory().build(fieldValue, typeConverter, mappedFieldDefinitions);
                         bytes = byteMap.get(fieldDefinition);
                         alreadyBuiltFields.putAll(byteMap);
                     }
+
                     if (shouldPaddingBeApplied(bytes, fieldLength)) {
                         bytes = paddingDescriptor.applyPadding(bytes, fieldLength);
                     }
+
                     if (notEnoughDataForField(bytes, fieldLength)) {
                         Integer expected = new Integer(fieldLength);
                         Integer actual = new Integer(bytes.length);
@@ -146,14 +149,6 @@ public class RecordBuilder {
 
     private boolean notEnoughDataForField(byte[] bytes, int fieldLength) {
         return bytes.length < fieldLength;
-    }
-
-    private FieldMapping locateFieldMapping(Object domain, ObjectMapping objectMapping, String fieldName) {
-        FieldMapping fieldMapping = objectMapping.findRecordField(fieldName);
-        if (fieldMapping == null) {
-            throw new BuilderException(MessageFormat.format(NO_FIELD_MAPPING, new Object[]{fieldName, domain.getClass().getName()}));
-        }
-        return fieldMapping;
     }
 
     private List locateRecordLayouts(Object domain) {

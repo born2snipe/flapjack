@@ -217,7 +217,7 @@ public class RecordBuilderTest extends MockObjectTestCase {
         }
     }
 
-    public void test_build_CouldNotFindFieldMapping() {
+    public void test_build_CouldNotFindFieldMapping_NoPadding() {
         Person person = new Person("Joe", "Smith");
         objectMappingStore.add(new ObjectMapping(Person.class));
 
@@ -231,7 +231,7 @@ public class RecordBuilderTest extends MockObjectTestCase {
             builder.build(Arrays.asList(new Object[]{person}), (RecordWriter) writer.proxy());
             fail();
         } catch (BuilderException err) {
-            assertEquals("Could not find a FieldMapping for field=\"First Name\" on class " + Person.class.getName(), err.getMessage());
+            assertEquals("Not enough data given! Did you forget the padding? Expected 3, but was 0, for field=\"First Name\" on layout=\"" + recordLayout.getId() + "\"", err.getMessage());
         }
     }
 
