@@ -32,9 +32,6 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
-/**
- * TODO - Handle if the bytes given from the BinaryFieldFactory is Null
- */
 public class RecordBuilder {
     private static final NoOpPaddingDescriptor NO_OP_PADDING_DESCRIPTOR = new NoOpPaddingDescriptor();
     private static final String NO_RECORD_LAYOUT = "Could not resolve RecordLayout(s) for {0}";
@@ -44,6 +41,7 @@ public class RecordBuilder {
     private BuilderRecordLayoutResolver builderRecordLayoutResolver;
     private ObjectMappingStore objectMappingStore;
     private TypeConverter typeConverter = new TypeConverter();
+    private static final byte[] ZERO_BYTES = new byte[0];
 
     public void build(Object domainObject, RecordWriter writer) {
         build(Arrays.asList(new Object[]{domainObject}), writer);
@@ -68,17 +66,19 @@ public class RecordBuilder {
                     PaddingDescriptor paddingDescriptor = getPaddingDescriptor(fieldDefinition);
                     FieldMapping fieldMapping = objectMapping.findRecordField(fieldName);
 
-                    byte bytes[] = null;
-                    if (fieldMapping == null) {
-                        bytes = new byte[0];
-                    } else if (alreadyBuiltFields.contains(fieldDefinition)) {
+                    byte bytes[] = ZERO_BYTES;
+                    if (alreadyBuiltFields.contains(fieldDefinition)) {
                         bytes = alreadyBuiltFields.get(fieldDefinition);
-                    } else {
+                    } else if (fieldMapping != null) {
                         List mappedFieldDefinitions = findFieldDefinitionsforMapping(fieldMapping, fieldDefinitions);
                         Object fieldValue = getField(fieldMapping.getDomainFieldName(), domain);
                         FieldByteMap byteMap = fieldMapping.getBinaryFieldFactory().build(fieldValue, typeConverter, mappedFieldDefinitions);
                         bytes = byteMap.get(fieldDefinition);
                         alreadyBuiltFields.putAll(byteMap);
+                    }
+
+                    if (bytes == null) {
+                        bytes = ZERO_BYTES;
                     }
 
                     if (shouldPaddingBeApplied(bytes, fieldLength)) {
