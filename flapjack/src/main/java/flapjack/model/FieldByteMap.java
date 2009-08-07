@@ -22,6 +22,18 @@ import java.util.Map;
 public class FieldByteMap {
     private Map fieldBytes = new HashMap();
 
+    public void clear() {
+        fieldBytes.clear();
+    }
+
+    public void putAll(FieldByteMap fieldByteMap) {
+        fieldBytes.putAll(fieldByteMap.fieldBytes);
+    }
+
+    public boolean contains(FieldDefinition fieldDefinition) {
+        return fieldBytes.containsKey(fieldDefinition);
+    }
+
     public void put(FieldDefinition fieldDefinition, byte[] data) {
         fieldBytes.put(fieldDefinition, data);
     }

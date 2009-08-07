@@ -18,6 +18,7 @@ import java.util.*;
  * This class contains all the FieldMappings for a given domain class
  */
 // TODO - add validation checks to make sure the fields exist on the domain model
+// TODO - give the ability to plugin different hooks for field manipulation after convertion (ex. autotrim)
 public class ObjectMapping {
     private Map recordFieldToDomainFieldMappings = new HashMap();
     private Map domainFieldToRecordFieldMappings = new HashMap();

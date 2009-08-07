@@ -55,7 +55,7 @@ public class RecordBuilder {
         try {
             ByteArrayOutputStream output = new ByteArrayOutputStream();
             Iterator domainObjectIterator = domainObjects.iterator();
-            List alreadyBuiltFields = new ArrayList();
+            FieldByteMap alreadyBuiltFields = new FieldByteMap();
             while (domainObjectIterator.hasNext()) {
                 Object domain = domainObjectIterator.next();
                 List recordLayouts = locateRecordLayouts(domain);
@@ -67,19 +67,21 @@ public class RecordBuilder {
                     FieldDefinition fieldDefinition = (FieldDefinition) it.next();
                     String fieldName = fieldDefinition.getName();
                     int fieldLength = fieldDefinition.getLength();
-                    if (alreadyBuiltFields.contains(fieldDefinition)) {
-                        continue;
-                    }
                     PaddingDescriptor paddingDescriptor = getPaddingDescriptor(fieldDefinition);
                     FieldMapping fieldMapping = locateFieldMapping(domain, objectMapping, fieldName);
                     List mappedFieldDefinitions = findFieldDefinitionsforMapping(fieldMapping, fieldDefinitions);
                     Object fieldValue = getField(fieldMapping.getDomainFieldName(), domain);
-                    FieldByteMap byteMap = fieldMapping.getBinaryFieldFactory().build(fieldValue, typeConverter, mappedFieldDefinitions);
-                    byte[] bytes = byteMap.get(fieldDefinition);
+                    byte bytes[] = null;
+                    if (alreadyBuiltFields.contains(fieldDefinition)) {
+                        bytes = alreadyBuiltFields.get(fieldDefinition);
+                    } else {
+                        FieldByteMap byteMap = fieldMapping.getBinaryFieldFactory().build(fieldValue, typeConverter, mappedFieldDefinitions);
+                        bytes = byteMap.get(fieldDefinition);
+                        alreadyBuiltFields.putAll(byteMap);
+                    }
                     if (shouldPaddingBeApplied(bytes, fieldLength)) {
                         bytes = paddingDescriptor.applyPadding(bytes, fieldLength);
                     }
-                    alreadyBuiltFields.addAll(mappedFieldDefinitions);
                     if (notEnoughDataForField(bytes, fieldLength)) {
                         Integer expected = new Integer(fieldLength);
                         Integer actual = new Integer(bytes.length);
