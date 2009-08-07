@@ -77,10 +77,6 @@ public class RecordBuilder {
                         alreadyBuiltFields.putAll(byteMap);
                     }
 
-                    if (bytes == null) {
-                        bytes = ZERO_BYTES;
-                    }
-
                     if (shouldPaddingBeApplied(bytes, fieldLength)) {
                         bytes = paddingDescriptor.applyPadding(bytes, fieldLength);
                     }

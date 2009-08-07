@@ -21,6 +21,7 @@ import java.util.Map;
 
 public class FieldByteMap {
     private Map fieldBytes = new HashMap();
+    private static final byte[] ZERO_BYTES = new byte[0];
 
     public void clear() {
         fieldBytes.clear();
@@ -39,7 +40,11 @@ public class FieldByteMap {
     }
 
     public byte[] get(FieldDefinition fieldDefinition) {
-        return (byte[]) fieldBytes.get(fieldDefinition);
+        byte[] contents = (byte[]) fieldBytes.get(fieldDefinition);
+        if (contents == null) {
+            return ZERO_BYTES;
+        }
+        return contents;
     }
 
     public int size() {
