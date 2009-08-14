@@ -32,7 +32,7 @@ public class JarFileClassLocatorTest extends TestCase {
         locator = new JarFileClassLocator();
     }
 
-    public void test_locate() {
+    public void test_exactPackagename() {
         URL url = Thread.currentThread().getContextClassLoader().getResource("flapjack/annotation/test");
 
         List<Class> classes = locator.locate(url, "flapjack.annotation.test");
@@ -40,5 +40,23 @@ public class JarFileClassLocatorTest extends TestCase {
         assertEquals(2, classes.size());
         assertEquals("flapjack.annotation.test.Dog", classes.get(0).getName());
         assertEquals("flapjack.annotation.test.DogRecordLayout", classes.get(1).getName());
+    }
+    
+    public void test_matchingPattern() {
+        URL url = Thread.currentThread().getContextClassLoader().getResource("flapjack/annotation/test");
+
+        List<Class> classes = locator.locate(url, "flapjack.+");
+
+        assertEquals(2, classes.size());
+        assertEquals("flapjack.annotation.test.Dog", classes.get(0).getName());
+        assertEquals("flapjack.annotation.test.DogRecordLayout", classes.get(1).getName());
+    }
+
+    public void test_noMatches() {
+        URL url = Thread.currentThread().getContextClassLoader().getResource("flapjack/annotation/test");
+
+        List<Class> classes = locator.locate(url, "nothingFound");
+
+        assertEquals(0, classes.size());
     }
 }

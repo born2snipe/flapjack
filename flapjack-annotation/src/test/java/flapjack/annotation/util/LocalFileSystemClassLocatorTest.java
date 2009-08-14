@@ -30,13 +30,30 @@ public class LocalFileSystemClassLocatorTest extends TestCase {
         locator = new LocalFileSystemClassLocator();
     }
 
-    public void test_locate_GoodPath() throws MalformedURLException {
+    public void test_ExactPackage() throws MalformedURLException {
         URL url = Thread.currentThread().getContextClassLoader().getResource("flapjack/test");
 
         List<Class> classes = locator.locate(url, "flapjack.test");
 
         assertEquals(3, classes.size());
         assertEquals(Arrays.asList(Address.class, User.class, UserRecordLayout.class), classes);
+    }
+    
+    public void test_RegexPattern() throws MalformedURLException {
+        URL url = Thread.currentThread().getContextClassLoader().getResource("flapjack/test");
+
+        List<Class> classes = locator.locate(url, "flapjack.+");
+
+        assertEquals(3, classes.size());
+        assertEquals(Arrays.asList(Address.class, User.class, UserRecordLayout.class), classes);
+    }
+
+    public void test_NoMatch() throws MalformedURLException {
+        URL url = Thread.currentThread().getContextClassLoader().getResource("flapjack/test");
+
+        List<Class> classes = locator.locate(url, "doesNotMatch");
+
+        assertEquals(0, classes.size());
     }
 
 }

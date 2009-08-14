@@ -1,11 +1,11 @@
 /**
  * Copyright 2008-2009 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at:
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is
  * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and limitations under the License. 
@@ -19,21 +19,23 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
+import java.util.regex.Pattern;
 
 /**
  * Locates classes found in a Jar file
  */
 public class JarFileClassLocator extends AbstractClassLocator {
 
-    private boolean isInPackage(JarEntry entry, String packageName) {
-        return entry.getName().replace("/", ".").startsWith(packageName);
+    private boolean isInPackage(JarEntry entry, Pattern packageNamePattern) {
+        String packageNameValue = entry.getName().replace("/", ".");
+        return packageNamePattern.matcher(packageNameValue).find();
     }
 
     private boolean isClass(JarEntry entry) {
         return entry.getName().endsWith(".class");
     }
 
-    protected void findClasses(List<Class> classes, URL url, String packageName) {
+    protected void findClasses(List<Class> classes, URL url, Pattern packageName) {
         JarFile jarFile = null;
         try {
             JarURLConnection connection = (JarURLConnection) url.openConnection();
