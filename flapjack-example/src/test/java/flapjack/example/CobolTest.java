@@ -16,6 +16,7 @@ import flapjack.annotation.Field;
 import flapjack.annotation.Record;
 import flapjack.annotation.model.AnnotatedObjectMappingStore;
 import flapjack.cobol.layout.CobolRecordLayout;
+import flapjack.cobol.util.CobolTypeConverter;
 import flapjack.io.LineRecordReader;
 import flapjack.layout.RecordLayout;
 import flapjack.model.RecordFactory;
@@ -43,7 +44,7 @@ public class CobolTest extends TestCase {
     }
 
     public void test_parser() throws IOException {
-        String record = "123456789JOE A SCHMOE                  01500";
+        String record = "123456789JOE A SCHMOE                  01500012";
 
         /**
          * Initialize the RecordParser with our RecordLayoutResolver and RecordFactoryResolver
@@ -52,6 +53,7 @@ public class CobolTest extends TestCase {
         recordParser.setRecordLayoutResolver(new SameRecordLayoutResolver(new LoanRecordLayout()));
         recordParser.setRecordFactoryResolver(new SameRecordFactoryResolver(LoanRecordFactory.class));
         recordParser.setObjectMappingStore(objectMappingStore);
+        recordParser.setTypeConverter(new CobolTypeConverter());
 
         /**
          * Actually call the parser with our RecordReader
@@ -68,6 +70,7 @@ public class CobolTest extends TestCase {
         assertEquals("123456789", loan.getSsn());
         assertEquals("JOE A SCHMOE                  ", loan.getName());
         assertEquals(1500, loan.getAmount());
+        assertEquals(0.12d, loan.rate);
     }
 
     /**
@@ -80,6 +83,7 @@ public class CobolTest extends TestCase {
             field("SSN", "9(9)");
             field("NAME", "X(30)");
             field("AMOUNT", "9(5)");
+            field("RATE", "9v99");
         }
     }
 
@@ -91,6 +95,8 @@ public class CobolTest extends TestCase {
         private String name;
         @Field
         private int amount;
+        @Field
+        private double rate;
 
         public String getSsn() {
             return ssn;
