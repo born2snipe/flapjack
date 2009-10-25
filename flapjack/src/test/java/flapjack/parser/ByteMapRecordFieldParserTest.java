@@ -34,8 +34,13 @@ public class ByteMapRecordFieldParserTest extends TestCase {
         assertTrue(obj instanceof Map);
 
         Map record = (Map) obj;
-        assertTrue(Arrays.equals("Smith     ".getBytes(), (byte[]) record.get("last name")));
-        assertTrue(Arrays.equals("Joe       ".getBytes(), (byte[]) record.get("first name")));
+        FieldData lastNameData = (FieldData) record.get("last name");
+        FieldData firstNameData = (FieldData) record.get("first name");
+
+        assertTrue(Arrays.equals("Smith     ".getBytes(), lastNameData.data));
+        assertEquals(layout.getFieldDefinitions().get(0), lastNameData.definition);
+        assertTrue(Arrays.equals("Joe       ".getBytes(), firstNameData.data));
+        assertEquals(layout.getFieldDefinitions().get(1), firstNameData.definition);
     }
 
     protected void setUp() throws Exception {

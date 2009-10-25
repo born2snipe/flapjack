@@ -13,6 +13,7 @@
 package flapjack.model;
 
 import flapjack.layout.FieldDefinition;
+import flapjack.parser.FieldData;
 import flapjack.util.TypeConverter;
 import flapjack.util.ValueConverter;
 
@@ -41,7 +42,8 @@ public class SingleFieldMapping extends AbstractFieldMapping {
         if (domainFieldFactory == null) {
             domainFieldFactory = new DomainFieldFactory() {
                 public Object build(ListMap fields, Class domainFieldType, TypeConverter typeConverter) {
-                    return findValueConverter(domainFieldType, typeConverter).toDomain((byte[]) fields.get(0));
+                    FieldData fieldData = (FieldData) fields.get(0);
+                    return findValueConverter(domainFieldType, typeConverter, fieldData.definition).toDomain(fieldData.data);
                 }
             };
         }
@@ -55,7 +57,7 @@ public class SingleFieldMapping extends AbstractFieldMapping {
                     FieldByteMap byteMap = new FieldByteMap();
                     byte[] bytes = new byte[0];
                     if (domain != null) {
-                        bytes = findValueConverter(domain.getClass(), typeConverter).toBytes(domain);
+                        bytes = findValueConverter(domain.getClass(), typeConverter, null).toBytes(domain);
                     }
                     byteMap.put((FieldDefinition) fieldDefinitions.get(0), bytes);
                     return byteMap;
@@ -65,14 +67,14 @@ public class SingleFieldMapping extends AbstractFieldMapping {
         return binaryFieldFactory;
     }
 
-    private ValueConverter findValueConverter(Class domainType, TypeConverter typeConverter) {
+    private ValueConverter findValueConverter(Class domainType, TypeConverter typeConverter, FieldDefinition fieldDefinition) {
         if (valueConverter != null) {
             if (!typeConverter.isRegistered(valueConverter)) {
                 throw new IllegalArgumentException(MessageFormat.format(NO_VALUE_CONVERTER, new String[]{valueConverter.getName()}));
             }
             return typeConverter.find(valueConverter);
         } else {
-            return typeConverter.type(domainType);
+            return typeConverter.type(domainType, fieldDefinition);
         }
     }
 }

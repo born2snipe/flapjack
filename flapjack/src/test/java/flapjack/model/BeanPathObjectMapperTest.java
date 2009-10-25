@@ -12,6 +12,7 @@
  */
 package flapjack.model;
 
+import flapjack.parser.FieldData;
 import flapjack.util.TypeConverter;
 import flapjack.util.ValueConverter;
 import org.jmock.Mock;
@@ -115,8 +116,8 @@ public class BeanPathObjectMapperTest extends MockObjectTestCase {
         objMapping.field("field1", "firstName");
         objMapping.field("field2", "lastName");
 
-        fields.put("field1", "Jim".getBytes());
-        fields.put("field2", "Smith".getBytes());
+        fields.put("field1", new FieldData(null, "Jim".getBytes()));
+        fields.put("field2", new FieldData(null, "Smith".getBytes()));
 
         mapper.mapOnTo(fields, person);
 
@@ -127,7 +128,7 @@ public class BeanPathObjectMapperTest extends MockObjectTestCase {
     public void test_mapOnTo_SingleField() {
         objMapping.field("field1", "firstName");
 
-        fields.put("field1", "Jim".getBytes());
+        fields.put("field1", new FieldData(null, "Jim".getBytes()));
 
         mapper.mapOnTo(fields, person);
 
@@ -142,7 +143,7 @@ public class BeanPathObjectMapperTest extends MockObjectTestCase {
 
         objMapping.field("field1", "firstName", CustomConverter.class);
 
-        fields.put("field1", "Jim".getBytes());
+        fields.put("field1", new FieldData(null, "Jim".getBytes()));
 
         mapper.mapOnTo(fields, person);
 
@@ -152,7 +153,7 @@ public class BeanPathObjectMapperTest extends MockObjectTestCase {
     public void test_mapOnTo_SingleField_UseCustomValueConverter_NotRegisteredInTypeConverter() {
         objMapping.field("field1", "firstName", CustomConverter.class);
 
-        fields.put("field1", "Jim".getBytes());
+        fields.put("field1", new FieldData(null, "Jim".getBytes()));
 
         try {
             mapper.mapOnTo(fields, person);

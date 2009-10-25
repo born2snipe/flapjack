@@ -12,6 +12,7 @@
  */
 package flapjack.model;
 
+import flapjack.parser.FieldData;
 import flapjack.util.IntegerTextValueConverter;
 import flapjack.util.TypeConverter;
 import junit.framework.TestCase;
@@ -63,7 +64,7 @@ public class ObjectMappingTest extends TestCase {
         FieldMapping fieldMapping = mapping.findRecordField("field");
 
         ListMap listMap = new ListMap();
-        listMap.put("field", "1".getBytes());
+        listMap.put("field", new FieldData(null, "1".getBytes()));
 
         DomainFieldFactory factory = fieldMapping.getDomainFieldFactory();
         assertEquals(new Integer(1), factory.build(listMap, Integer.class, new TypeConverter()));

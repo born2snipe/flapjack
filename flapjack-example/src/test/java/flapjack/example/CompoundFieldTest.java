@@ -22,6 +22,7 @@ import flapjack.layout.RecordLayout;
 import flapjack.layout.SimpleRecordLayout;
 import flapjack.layout.TextPaddingDescriptor;
 import flapjack.model.*;
+import flapjack.parser.FieldData;
 import flapjack.parser.ParseResult;
 import flapjack.parser.RecordParserImpl;
 import flapjack.parser.SameRecordLayoutResolver;
@@ -117,9 +118,9 @@ public class CompoundFieldTest extends TestCase {
         public Object build(ListMap fields, Class domainFieldType, TypeConverter typeConverter) {
             Address address = new Address();
             ValueConverter converter = typeConverter.type(String.class);
-            address.setLine((String) converter.toDomain((byte[]) fields.get(0)));
-            address.setCity((String) converter.toDomain((byte[]) fields.get(1)));
-            address.setState((String) converter.toDomain((byte[]) fields.get(2)));
+            address.setLine((String) converter.toDomain(((FieldData) fields.get(0)).data));
+            address.setCity((String) converter.toDomain(((FieldData) fields.get(1)).data));
+            address.setState((String) converter.toDomain(((FieldData) fields.get(2)).data));
             return address;
         }
 

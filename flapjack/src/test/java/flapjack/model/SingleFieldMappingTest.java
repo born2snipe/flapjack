@@ -12,7 +12,9 @@
  */
 package flapjack.model;
 
+import flapjack.layout.FieldDefinition;
 import flapjack.layout.SimpleFieldDefinition;
+import flapjack.parser.FieldData;
 import flapjack.util.ReverseValueConverter;
 import flapjack.util.TypeConverter;
 import flapjack.util.ValueConverter;
@@ -28,6 +30,7 @@ public class SingleFieldMappingTest extends MockObjectTestCase {
     private DomainFieldFactory domainFactory;
     private Mock mockTypeConverter;
     private Mock valueConverter;
+    private FieldDefinition fieldDefinition;
 
     protected void setUp() throws Exception {
         super.setUp();
@@ -36,6 +39,7 @@ public class SingleFieldMappingTest extends MockObjectTestCase {
         domainFactory = mapping.getDomainFieldFactory();
         binaryFactory = mapping.getBinaryFieldFactory();
         valueConverter = mock(ValueConverter.class);
+        fieldDefinition = (FieldDefinition) mock(FieldDefinition.class).proxy();
     }
 
     public void test_domainFieldFactory_CustomValueConverter() {
@@ -43,7 +47,7 @@ public class SingleFieldMappingTest extends MockObjectTestCase {
         DomainFieldFactory domainFactory = mapping.getDomainFieldFactory();
 
         ListMap listMap = new ListMap();
-        listMap.put("1", "value".getBytes());
+        listMap.put("1", new FieldData(null, "value".getBytes()));
 
         mockTypeConverter.expects(once()).method("isRegistered").with(eq(ReverseValueConverter.class)).will(returnValue(true));
         mockTypeConverter.expects(once()).method("find").with(eq(ReverseValueConverter.class)).will(returnValue(valueConverter.proxy()));
@@ -54,9 +58,9 @@ public class SingleFieldMappingTest extends MockObjectTestCase {
 
     public void test_domainFieldFactory() {
         ListMap listMap = new ListMap();
-        listMap.put("1", "value".getBytes());
+        listMap.put("1", new FieldData(fieldDefinition, "value".getBytes()));
 
-        mockTypeConverter.expects(once()).method("type").with(eq(String.class)).will(returnValue(valueConverter.proxy()));
+        mockTypeConverter.expects(once()).method("type").with(eq(String.class), eq(fieldDefinition)).will(returnValue(valueConverter.proxy()));
         valueConverter.expects(once()).method("toDomain").with(eq("value".getBytes())).will(returnValue("domain"));
 
         assertEquals("domain", domainFactory.build(listMap, String.class, (TypeConverter) mockTypeConverter.proxy()));
@@ -72,7 +76,7 @@ public class SingleFieldMappingTest extends MockObjectTestCase {
     public void test_binaryFieldFactory() {
         SimpleFieldDefinition fieldDefinition = new SimpleFieldDefinition("id", 0, 0);
 
-        mockTypeConverter.expects(once()).method("type").with(eq(String.class)).will(returnValue(valueConverter.proxy()));
+        mockTypeConverter.expects(once()).method("type").with(eq(String.class), eq(null)).will(returnValue(valueConverter.proxy()));
         valueConverter.expects(once()).method("toBytes").with(eq("value")).will(returnValue("binary".getBytes()));
 
         FieldByteMap byteMap = binaryFactory.build("value", (TypeConverter) mockTypeConverter.proxy(), Arrays.asList(new Object[]{fieldDefinition}));

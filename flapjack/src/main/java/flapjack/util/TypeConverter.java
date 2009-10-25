@@ -12,6 +12,8 @@
  */
 package flapjack.util;
 
+import flapjack.layout.FieldDefinition;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -94,5 +96,9 @@ public class TypeConverter {
 
     public ValueConverter type(Class domainType) {
         return (ValueConverter) typeToConverter.get(domainType);
+    }
+
+    public ValueConverter type(Class domainType, FieldDefinition fieldDef) {
+        return type(domainType);
     }
 }
