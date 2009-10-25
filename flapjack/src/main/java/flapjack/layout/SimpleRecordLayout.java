@@ -17,7 +17,6 @@ package flapjack.layout;
  */
 public class SimpleRecordLayout extends AbstractRecordLayout {
     private static final NoOpPaddingDescriptor NO_OP_PADDING = new NoOpPaddingDescriptor();
-    private int offset = 0;
 
     public SimpleRecordLayout(String id) {
         super(id);
@@ -25,10 +24,6 @@ public class SimpleRecordLayout extends AbstractRecordLayout {
 
     public void field(String name, int position, int length, PaddingDescriptor paddingDescriptor) {
         addFieldDefinition(new SimpleFieldDefinition(name, position, length, paddingDescriptor));
-        if (offset != position) {
-            offset = position;
-        }
-        offset += length;
     }
 
 

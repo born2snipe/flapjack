@@ -16,7 +16,6 @@ import flapjack.layout.AbstractRecordLayout;
 
 
 public class CobolRecordLayout extends AbstractRecordLayout {
-    private int offset = 0;
     private CobolFieldPatternValidator patternValidator = new CobolFieldPatternValidator();
     private CobolFieldTypeResolver fieldTypeResolver = new CobolFieldTypeResolver();
     private FieldDefinitionFactory fieldDefFactory;
@@ -40,7 +39,6 @@ public class CobolRecordLayout extends AbstractRecordLayout {
 
         CobolFieldDefinition fieldDef = fieldDefFactory.build(fieldInfo);
         addFieldDefinition(fieldDef);
-        offset += fieldDef.getLength();
     }
 
     public void setFieldDefFactory(FieldDefinitionFactory fieldDefFactory) {

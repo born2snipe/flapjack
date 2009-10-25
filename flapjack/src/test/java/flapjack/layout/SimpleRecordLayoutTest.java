@@ -16,7 +16,7 @@ import junit.framework.TestCase;
 
 
 public class SimpleRecordLayoutTest extends TestCase {
-    SimpleRecordLayout layout;
+    private SimpleRecordLayout layout;
 
     public void setUp() {
         layout = new SimpleRecordLayout("123");

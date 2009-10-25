@@ -17,6 +17,7 @@ import java.util.*;
 public abstract class AbstractRecordLayout implements RecordLayout {
     private List fieldDefinitions = new ArrayList();
     protected String id;
+    protected int offset;
 
     protected AbstractRecordLayout(String id) {
         this.id = id;
@@ -25,6 +26,10 @@ public abstract class AbstractRecordLayout implements RecordLayout {
     public void addFieldDefinition(FieldDefinition fieldDef) {
         fieldDefinitions.add(fieldDef);
         Collections.sort(fieldDefinitions, new FieldDefinitionComparator());
+        if (offset != fieldDef.getPosition()) {
+            offset = fieldDef.getPosition();
+        }
+        offset += fieldDef.getLength();
     }
 
     public List getFieldDefinitions() {
