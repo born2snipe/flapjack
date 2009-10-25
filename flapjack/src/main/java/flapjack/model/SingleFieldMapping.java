@@ -55,11 +55,12 @@ public class SingleFieldMapping extends AbstractFieldMapping {
             binaryFieldFactory = new BinaryFieldFactory() {
                 public FieldByteMap build(Object domain, TypeConverter typeConverter, List fieldDefinitions) {
                     FieldByteMap byteMap = new FieldByteMap();
+                    FieldDefinition fieldDefinition = (FieldDefinition) fieldDefinitions.get(0);
                     byte[] bytes = new byte[0];
                     if (domain != null) {
-                        bytes = findValueConverter(domain.getClass(), typeConverter, null).toBytes(domain);
+                        bytes = findValueConverter(domain.getClass(), typeConverter, fieldDefinition).toBytes(domain);
                     }
-                    byteMap.put((FieldDefinition) fieldDefinitions.get(0), bytes);
+                    byteMap.put(fieldDefinition, bytes);
                     return byteMap;
                 }
             };

@@ -16,11 +16,20 @@ import flapjack.util.ConversionException;
 import junit.framework.TestCase;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 
 
 public class CobolDecimalTextValueConverterTest extends TestCase {
 
-    public void test_notEnoughData() {
+    public void test_toBytes_WithNull() {
+        assertTrue(Arrays.equals(new byte[0], converter(Double.class, "9v9").toBytes(null)));
+    }
+    
+    public void test_toBytes_WithValue() {
+        assertTrue(Arrays.equals("12".getBytes(), converter(Double.class, "9v9").toBytes(new Double(1.2))));
+    }
+    
+    public void test_toDomain_notEnoughData() {
         try {
             converter(Double.class, "9v99").toDomain("1".getBytes());
             fail();
@@ -29,31 +38,31 @@ public class CobolDecimalTextValueConverterTest extends TestCase {
         }
     }
 
-    public void test_BigDecimal() {
+    public void test_toDomain_BigDecimal() {
         assertEquals(new BigDecimal("1.2"), converter(BigDecimal.class, "9v9").toDomain("12".getBytes()));
     }
 
-    public void test_float() {
+    public void test_toDomain_float() {
         assertEquals(new Float(1.2), converter(float.class, "9v9").toDomain("12".getBytes()));
     }
 
-    public void test_Float() {
+    public void test_toDomain_Float() {
         assertEquals(new Float(1.2), converter(Float.class, "9v9").toDomain("12".getBytes()));
     }
 
-    public void test_double() {
+    public void test_toDomain_double() {
         assertEquals(new Double(1.2), converter(double.class, "9v9").toDomain("12".getBytes()));
     }
 
-    public void test_Double() {
+    public void test_toDomain_Double() {
         assertEquals(new Double(1.2), converter(Double.class, "9v9").toDomain("12".getBytes()));
     }
 
-    public void test_NoBytes() {
+    public void test_toDomain_NoBytes() {
         assertNull(converter(Double.class, "9v9").toDomain(new byte[0]));
     }
 
-    public void test_NullBytes() {
+    public void test_toDomain_NullBytes() {
         assertNull(converter(Double.class, "9v9").toDomain(null));
     }
 

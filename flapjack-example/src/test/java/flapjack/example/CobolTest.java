@@ -15,9 +15,13 @@ package flapjack.example;
 import flapjack.annotation.Field;
 import flapjack.annotation.Record;
 import flapjack.annotation.model.AnnotatedObjectMappingStore;
+import flapjack.builder.RecordBuilder;
+import flapjack.builder.SameBuilderRecordLayoutResolver;
 import flapjack.cobol.layout.CobolRecordLayout;
 import flapjack.cobol.util.CobolTypeConverter;
 import flapjack.io.LineRecordReader;
+import flapjack.io.LineRecordWriter;
+import flapjack.io.StreamRecordWriter;
 import flapjack.layout.RecordLayout;
 import flapjack.model.RecordFactory;
 import flapjack.model.SameRecordFactoryResolver;
@@ -27,12 +31,15 @@ import flapjack.parser.SameRecordLayoutResolver;
 import junit.framework.TestCase;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Arrays;
 
 
 public class CobolTest extends TestCase {
     private AnnotatedObjectMappingStore objectMappingStore;
+    private CobolTypeConverter typeConverter;
+    private LoanRecordLayout recordLayout;
 
     public void setUp() {
         /**
@@ -41,6 +48,29 @@ public class CobolTest extends TestCase {
          */
         objectMappingStore = new AnnotatedObjectMappingStore();
         objectMappingStore.setPackages(Arrays.asList("flapjack.example"));
+        typeConverter = new CobolTypeConverter();
+        recordLayout = new LoanRecordLayout();
+    }
+
+    public void test_build() throws Exception {
+        /**
+         * Initialize the RecordBuilder
+         */
+        RecordBuilder builder = new RecordBuilder();
+        builder.setObjectMappingStore(objectMappingStore);
+        builder.setTypeConverter(typeConverter);
+        builder.setBuilderRecordLayoutResolver(new SameBuilderRecordLayoutResolver(recordLayout));
+
+        Loan loan = new Loan();
+        loan.ssn = "123456789";
+        loan.name = "JOE A SCHMOE";
+        loan.amount = 1500;
+        loan.rate = 0.12d;
+
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        builder.build(loan, new LineRecordWriter(new StreamRecordWriter(output), "\n"));
+
+        assertEquals("123456789JOE A SCHMOE                  01500012\n", new String(output.toByteArray()));
     }
 
     public void test_parser() throws IOException {
@@ -50,10 +80,10 @@ public class CobolTest extends TestCase {
          * Initialize the RecordParser with our RecordLayoutResolver and RecordFactoryResolver
          */
         RecordParserImpl recordParser = new RecordParserImpl();
-        recordParser.setRecordLayoutResolver(new SameRecordLayoutResolver(new LoanRecordLayout()));
+        recordParser.setRecordLayoutResolver(new SameRecordLayoutResolver(recordLayout));
         recordParser.setRecordFactoryResolver(new SameRecordFactoryResolver(LoanRecordFactory.class));
         recordParser.setObjectMappingStore(objectMappingStore);
-        recordParser.setTypeConverter(new CobolTypeConverter());
+        recordParser.setTypeConverter(typeConverter);
 
         /**
          * Actually call the parser with our RecordReader

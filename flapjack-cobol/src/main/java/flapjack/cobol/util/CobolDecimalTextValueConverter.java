@@ -39,6 +39,10 @@ public class CobolDecimalTextValueConverter extends AbstractTextValueConverter {
         return build(inFrontOfDecimal+"."+text.substring(text.length() - decimalPlaceCount));
     }
 
+    protected String fromDomainToText(Object domain) {
+        return super.fromDomainToText(domain).replaceAll("\\.", "");
+    }
+
     private Object build(String value) {
         if (Double.class.isAssignableFrom(domainType) || double.class.isAssignableFrom(domainType)) {
             return new Double(value);

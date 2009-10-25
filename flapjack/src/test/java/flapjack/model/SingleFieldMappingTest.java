@@ -76,7 +76,7 @@ public class SingleFieldMappingTest extends MockObjectTestCase {
     public void test_binaryFieldFactory() {
         SimpleFieldDefinition fieldDefinition = new SimpleFieldDefinition("id", 0, 0);
 
-        mockTypeConverter.expects(once()).method("type").with(eq(String.class), eq(null)).will(returnValue(valueConverter.proxy()));
+        mockTypeConverter.expects(once()).method("type").with(eq(String.class), eq(fieldDefinition)).will(returnValue(valueConverter.proxy()));
         valueConverter.expects(once()).method("toBytes").with(eq("value")).will(returnValue("binary".getBytes()));
 
         FieldByteMap byteMap = binaryFactory.build("value", (TypeConverter) mockTypeConverter.proxy(), Arrays.asList(new Object[]{fieldDefinition}));
