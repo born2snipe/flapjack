@@ -33,6 +33,7 @@ public class BeanPathObjectMapper implements ObjectMapper {
     private TypeConverter typeConverter = new TypeConverter();
     private boolean ignoreUnmappedFields;
     private ObjectMappingStore objectMappingStore;
+    private FieldValueAccessor accessor = new FieldValueAccessor();
 
 
     public void mapOnTo(Object parsedFields, Object domain) throws ObjectMappingException {
@@ -51,7 +52,7 @@ public class BeanPathObjectMapper implements ObjectMapper {
                 DomainFieldFactory domainFieldFactory = fieldMapping.getDomainFieldFactory();
                 ListMap recordData = grabRecordDataForField(fields, fieldMapping.getRecordFields());
                 verifyAllRecordFieldsHaveData(recordData, beanPath, domainClass);
-                ClassUtil.setBean(domain, beanPath, domainFieldFactory.build(recordData, field.getType(), typeConverter));
+                accessor.set(domainFieldFactory.build(recordData, field.getType(), typeConverter), domain, beanPath);
                 alreadyMappedFields.addAll(fieldMapping.getRecordFields());
             }
         }

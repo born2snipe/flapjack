@@ -17,15 +17,11 @@ import flapjack.layout.FieldDefinition;
 import flapjack.layout.NoOpPaddingDescriptor;
 import flapjack.layout.PaddingDescriptor;
 import flapjack.layout.RecordLayout;
-import flapjack.model.FieldByteMap;
-import flapjack.model.FieldMapping;
-import flapjack.model.ObjectMapping;
-import flapjack.model.ObjectMappingStore;
+import flapjack.model.*;
 import flapjack.util.TypeConverter;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -42,6 +38,7 @@ public class RecordBuilder {
     private ObjectMappingStore objectMappingStore;
     private TypeConverter typeConverter = new TypeConverter();
     private static final byte[] ZERO_BYTES = new byte[0];
+    private FieldValueAccessor accessor = new FieldValueAccessor();
 
     public void build(Object domainObject, RecordWriter writer) {
         build(Arrays.asList(new Object[]{domainObject}), writer);
@@ -71,7 +68,7 @@ public class RecordBuilder {
                         bytes = alreadyBuiltFields.get(fieldDefinition);
                     } else if (fieldMapping != null) {
                         List mappedFieldDefinitions = findFieldDefinitionsforMapping(fieldMapping, fieldDefinitions);
-                        Object fieldValue = getField(fieldMapping.getDomainFieldName(), domain);
+                        Object fieldValue = accessor.get(domain, fieldMapping.getDomainFieldName());
                         FieldByteMap byteMap = fieldMapping.getBinaryFieldFactory().build(fieldValue, typeConverter, mappedFieldDefinitions);
                         bytes = byteMap.get(fieldDefinition);
                         alreadyBuiltFields.putAll(byteMap);
@@ -161,20 +158,6 @@ public class RecordBuilder {
             throw new BuilderException(MessageFormat.format(NO_OBJECT_MAPPING, new Object[]{domain.getClass().getName()}));
         }
         return objectMapping;
-    }
-
-    private Object getField(String fieldName, Object domain) {
-        // TODO - needs to be pulled out to another class!!
-        try {
-            Field field = domain.getClass().getDeclaredField(fieldName);
-            field.setAccessible(true);
-            return field.get(domain);
-        } catch (NoSuchFieldException e) {
-            // TODO - needs coverage
-        } catch (IllegalAccessException e) {
-            // TODO = needs coverage
-        }
-        return null;
     }
 
     public void setBuilderRecordLayoutResolver(BuilderRecordLayoutResolver recordLayoutResolver) {
