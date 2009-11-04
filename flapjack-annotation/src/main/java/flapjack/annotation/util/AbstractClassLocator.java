@@ -14,6 +14,8 @@ package flapjack.annotation.util;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -26,6 +28,11 @@ public abstract class AbstractClassLocator implements ClassLocator {
     public List<Class> locate(URL url, Pattern packageNamePattern) {
         List<Class> classes = new ArrayList<Class>();
         findClasses(classes, url, packageNamePattern);
+        Collections.sort(classes, new Comparator<Class>(){
+            public int compare(Class o1, Class o2) {
+                return o1.getName().compareTo(o2.getName());
+            }
+        });
         return classes;
     }
 
