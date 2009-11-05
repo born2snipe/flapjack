@@ -12,19 +12,27 @@
  */
 package flapjack.cobol.util;
 
+import java.text.MessageFormat;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
 public class CobolDecimalPatternParser {
-    private static final Pattern NO_MULTIPLIER = Pattern.compile("(?i)9+v9+");
-    private static final Pattern MULTIPLIER = Pattern.compile("v9\\(([0-9]+)\\)", Pattern.CASE_INSENSITIVE);
+    private static final String NOT_A_DECIMAL_PATTERN = "Unable to parse out the decimal points from cobol pattern ({0})";
+    private static final Pattern NO_MULTIPLIER = Pattern.compile("(?i)9+$");
+    private static final Pattern MULTIPLIER = Pattern.compile("9\\(([0-9]+)\\)$", Pattern.CASE_INSENSITIVE);
 
     public int parseDecimalPlaces(String pattern) {
-        if (Pattern.matches(NO_MULTIPLIER.pattern(), pattern))  {
-            return pattern.split("v|V")[1].length();
+        if (pattern.toLowerCase().indexOf("v") == -1) {
+            throw new IllegalArgumentException(MessageFormat.format(NOT_A_DECIMAL_PATTERN, new Object[]{pattern}));
         }
-        Matcher matcher = MULTIPLIER.matcher(pattern);
+
+        String decimal = pattern.split("v|V")[1];
+        if (Pattern.matches(NO_MULTIPLIER.pattern(), decimal))  {
+            return decimal.length();
+        }
+        
+        Matcher matcher = MULTIPLIER.matcher(decimal);
         matcher.find();
         return Integer.parseInt(matcher.group(1));
     }
