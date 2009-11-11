@@ -12,19 +12,17 @@
  */
 package flapjack.cobol.layout;
 
-import flapjack.layout.TextPaddingDescriptor;
+import flapjack.layout.PaddingDescriptor;
 
 
 public class CobolFieldDefinitionFactory implements FieldDefinitionFactory {
-    private static final TextPaddingDescriptor ZERO_PADDER = new TextPaddingDescriptor(TextPaddingDescriptor.Padding.LEFT, '0');
-    private static final TextPaddingDescriptor SPACE_PADDER = new TextPaddingDescriptor(TextPaddingDescriptor.Padding.RIGHT, ' ');
 
-    public CobolFieldDefinition build(CobolFieldInfo fieldInfo) {
+    public CobolFieldDefinition build(CobolFieldInfo fieldInfo, PaddingDescriptor paddingDescriptor) {
         if (fieldInfo.getType() == CobolFieldType.DECIMAL)
-            return new DecimalFieldDefinition(fieldInfo.getName(), fieldInfo.getPosition(), fieldInfo.getPattern(), ZERO_PADDER);
+            return new DecimalFieldDefinition(fieldInfo.getName(), fieldInfo.getPosition(), fieldInfo.getPattern(), paddingDescriptor);
         else if (fieldInfo.getType() == CobolFieldType.INTEGER)
-            return new IntegerFieldDefinition(fieldInfo.getName(), fieldInfo.getPosition(), fieldInfo.getPattern(), ZERO_PADDER);
+            return new IntegerFieldDefinition(fieldInfo.getName(), fieldInfo.getPosition(), fieldInfo.getPattern(), paddingDescriptor);
         else
-            return new AlphaNumericFieldDefinition(fieldInfo.getName(), fieldInfo.getPosition(), fieldInfo.getPattern(), SPACE_PADDER);
+            return new AlphaNumericFieldDefinition(fieldInfo.getName(), fieldInfo.getPosition(), fieldInfo.getPattern(), paddingDescriptor);
     }
 }

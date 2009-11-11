@@ -28,7 +28,7 @@
 
         <dependency>
             <groupId>jmock</groupId>
-            <artifactId>jmock</artifactId>
+            <artifactId>jmock-cglib</artifactId>
             <scope>test</scope>
         </dependency>
 

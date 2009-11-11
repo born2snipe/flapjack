@@ -12,6 +12,8 @@
  */
 package flapjack.cobol.layout;
 
+import flapjack.layout.PaddingDescriptor;
+
 public interface FieldDefinitionFactory {
-    CobolFieldDefinition build(CobolFieldInfo fieldInfo);
+    CobolFieldDefinition build(CobolFieldInfo fieldInfo, PaddingDescriptor paddingDescriptor);
 }
