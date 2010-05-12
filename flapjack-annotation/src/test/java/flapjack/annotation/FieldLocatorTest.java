@@ -12,7 +12,6 @@
  */
 package flapjack.annotation;
 
-import flapjack.layout.SimpleRecordLayout;
 import junit.framework.TestCase;
 
 import java.util.Arrays;
@@ -31,42 +30,42 @@ public class FieldLocatorTest extends TestCase {
     }
 
     public void test_locateById_FoundFieldByIdProvided() {
-        java.lang.reflect.Field field = locator.locateById(Dummy.class, "field1");
+        ReflectionField field = locator.locateById(Dummy.class, "field1");
 
         assertNotNull(field);
         assertEquals("fieldOne", field.getName());
     }
 
     public void test_locateById_FoundFieldByFieldNameMatching() {
-        java.lang.reflect.Field field = locator.locateById(Dummy.class, "field2");
+        ReflectionField field = locator.locateById(Dummy.class, "field2");
 
         assertNotNull(field);
         assertEquals("field2", field.getName());
     }
 
     public void test_locateById_FoundFieldByFieldNameMatching_FieldIdDoesNotMeetJavaSpec_WithNumber() {
-        java.lang.reflect.Field field = locator.locateById(Dummy.class, "Field 2");
+        ReflectionField field = locator.locateById(Dummy.class, "Field 2");
 
         assertNotNull(field);
         assertEquals("field2", field.getName());
     }
 
     public void test_locateById_FoundFieldByFieldNameMatching_FieldIdDoesNotMeetJavaSpec() {
-        java.lang.reflect.Field field = locator.locateById(Dummy.class, "Field three");
+        ReflectionField field = locator.locateById(Dummy.class, "Field three");
 
         assertNotNull(field);
         assertEquals("fieldThree", field.getName());
     }
 
     public void test_locateById_FoundFieldByFieldNameMatching_FieldIdDoesNotMeetJavaSpec_SingleLetter() {
-        java.lang.reflect.Field field = locator.locateById(Dummy.class, "Field a");
+        ReflectionField field = locator.locateById(Dummy.class, "Field a");
 
         assertNotNull(field);
         assertEquals("fieldA", field.getName());
     }
 
     public void test_locateById_FoundFieldByFieldNameMatching_FieldIdExactMatch() {
-        java.lang.reflect.Field field = locator.locateById(Dummy.class, "FieldB");
+        ReflectionField field = locator.locateById(Dummy.class, "FieldB");
 
         assertNotNull(field);
         assertEquals("FieldB", field.getName());

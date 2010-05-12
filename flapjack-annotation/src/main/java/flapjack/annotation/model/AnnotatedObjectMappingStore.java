@@ -12,21 +12,29 @@
  */
 package flapjack.annotation.model;
 
-import flapjack.annotation.Converter;
 import flapjack.annotation.FieldLocator;
 import flapjack.annotation.RecordPackageClassScanner;
+import flapjack.annotation.ReflectionField;
 import flapjack.model.ObjectMapping;
 import flapjack.model.ObjectMappingStore;
-import flapjack.util.ValueConverter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class AnnotatedObjectMappingStore extends ObjectMappingStore {
-    private static final RecordPackageClassScanner CLASS_SCANNER = new RecordPackageClassScanner();
-    private static final FieldLocator FIELD_LOCATOR = new FieldLocator();
+    private RecordPackageClassScanner classScanner;
+    private FieldLocator fieldLocator;
     private List<String> packages = new ArrayList<String>();
+
+    public AnnotatedObjectMappingStore() {
+        this(new RecordPackageClassScanner(), new FieldLocator());
+    }
+
+    protected AnnotatedObjectMappingStore(RecordPackageClassScanner classScanner, FieldLocator fieldLocator) {
+        this.classScanner = classScanner;
+        this.fieldLocator = fieldLocator;
+    }
 
     @Override
     public ObjectMapping find(Class domainClass) {
@@ -37,14 +45,13 @@ public class AnnotatedObjectMappingStore extends ObjectMappingStore {
     }
 
     private void initializeObjectMappings() {
-        for (Class clazz : CLASS_SCANNER.scan(packages)) {
+        for (Class clazz : classScanner.scan(packages)) {
             ObjectMapping objMapping = new ObjectMapping(clazz);
-            List<String> fieldIds = FIELD_LOCATOR.gatherFieldIds(clazz);
+            List<String> fieldIds = fieldLocator.gatherFieldIds(clazz);
             for (String id : fieldIds) {
-                java.lang.reflect.Field domainField = FIELD_LOCATOR.locateById(clazz, id);
-                Converter converter = domainField.getAnnotation(Converter.class);
-                if (converter != null && !converter.value().equals(ValueConverter.class)) {
-                    objMapping.field(id, domainField.getName(), converter.value());
+                ReflectionField domainField = fieldLocator.locateById(clazz, id);
+                if (domainField.hasConverter()) {
+                    objMapping.field(id, domainField.getName(), domainField.getConverterClass());
                 } else {
                     objMapping.field(id, domainField.getName());
                 }

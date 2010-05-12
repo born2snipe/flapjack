@@ -12,21 +12,65 @@
  */
 package flapjack.annotation.model;
 
-import flapjack.annotation.Converter;
-import flapjack.annotation.Field;
-import flapjack.annotation.Record;
+import flapjack.annotation.*;
+import flapjack.model.FieldMapping;
 import flapjack.model.ObjectMapping;
+import flapjack.util.IntegerTextValueConverter;
 import flapjack.util.ValueConverter;
 import junit.framework.TestCase;
 
-import java.util.Arrays;
+import static java.util.Arrays.asList;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 
 public class AnnotatedObjectMappingStoreTest extends TestCase {
+    private RecordPackageClassScanner classScanner;
+    private FieldLocator fieldLocator;
+    private AnnotatedObjectMappingStore store;
+
+    protected void setUp() throws Exception {
+        super.setUp();
+        classScanner = mock(RecordPackageClassScanner.class);
+        fieldLocator = mock(FieldLocator.class);
+        store = new AnnotatedObjectMappingStore(classScanner, fieldLocator);
+        store.setPackages(asList("some.package.name"));
+    }
+
+    public void test_singleAnnotatedFieldWithConverter() {
+        ReflectionField field = mock(ReflectionField.class);
+
+        when(classScanner.scan(asList("some.package.name"))).thenReturn(asList(Person.class, Address.class));
+        when(fieldLocator.gatherFieldIds(Person.class)).thenReturn(asList("firstName"));
+        when(fieldLocator.locateById(Person.class, "firstName")).thenReturn(field);
+        when(field.getName()).thenReturn("firstName");
+        when(field.hasConverter()).thenReturn(true);
+        when(field.getConverterClass()).thenReturn(IntegerTextValueConverter.class);
+
+        ObjectMapping objectMapping = store.find(Person.class);
+
+        FieldMapping fieldMapping = objectMapping.findDomainField("firstName");
+        assertNotNull(fieldMapping);
+        assertEquals(1, objectMapping.getFieldCount());
+    }
+
+    public void test_singleAnnotatedField() {
+        ReflectionField field = mock(ReflectionField.class);
+
+        when(classScanner.scan(asList("some.package.name"))).thenReturn(asList(Person.class, Address.class));
+        when(fieldLocator.gatherFieldIds(Person.class)).thenReturn(asList("firstName"));
+        when(fieldLocator.locateById(Person.class, "firstName")).thenReturn(field);
+        when(field.getName()).thenReturn("firstName");
+
+        ObjectMapping objectMapping = store.find(Person.class);
+
+        assertNotNull(objectMapping.findDomainField("firstName"));
+        assertEquals(1, objectMapping.getFieldCount());
+    }
 
     public void test_find_FindMapping() {
         AnnotatedObjectMappingStore objMappingStore = new AnnotatedObjectMappingStore();
-        objMappingStore.setPackages(Arrays.asList("flapjack.annotation.model"));
+        objMappingStore.setPackages(asList("flapjack.annotation.model"));
 
         ObjectMapping objMapping = objMappingStore.find(Person.class);
 
@@ -42,6 +86,7 @@ public class AnnotatedObjectMappingStoreTest extends TestCase {
         assertNotNull(addressMapping);
         assertNotNull(addressMapping.findRecordField("line1"));
     }
+
 
     @Record("person")
     private static class Person {

@@ -38,12 +38,12 @@
     </distributionManagement>
 
     <build>
-        <extensions>
+        <!--extensions>
             <extension>
                 <groupId>org.apache.maven.wagon</groupId>
                 <artifactId>wagon-webdav</artifactId>
             </extension>
-        </extensions>
+        </extensions -->
 
         <plugins>
 

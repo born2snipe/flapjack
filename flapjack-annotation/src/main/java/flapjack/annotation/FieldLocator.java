@@ -56,13 +56,13 @@ public class FieldLocator {
      * @param id    - the id to match the Field on
      * @return the Field found on the class or will return  null if no matching field was found
      */
-    public java.lang.reflect.Field locateById(Class<?> clazz, String id) {
+    public ReflectionField locateById(Class<?> clazz, String id) {
         for (java.lang.reflect.Field field : locateAnnotated(clazz, Field.class)) {
             String annotationValue = field.getAnnotation(Field.class).value();
             if (!isEmpty(annotationValue) && id.equals(annotationValue)) {
-                return field;
+                return new ReflectionField(field);
             } else if (isEmpty(annotationValue) && (field.getName().equals(id) || field.getName().equals(convertIdIntoJavaFieldName(id)))) {
-                return field;
+                return new ReflectionField(field);
             }
         }
         return null;
