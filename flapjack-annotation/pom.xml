@@ -6,6 +6,7 @@
         <groupId>flapjack</groupId>
         <artifactId>flapjack-dependency-management</artifactId>
         <version>1.0.4-SNAPSHOT</version>
+        <relativePath>../flapjack-dependency-management/pom.xml</relativePath>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
@@ -27,7 +28,7 @@
         <dependency>
             <groupId>flapjack</groupId>
             <artifactId>flapjack</artifactId>
-            <version>${version}</version>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
@@ -47,28 +48,6 @@
     <build>
 
         <plugins>
-
-            <plugin>
-                <artifactId>maven-repository-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>bundle-create</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>bundle-create</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>1.5</source>
-                    <target>1.5</target>
-                </configuration>
-            </plugin>
 
             <plugin>
                 <groupId>com.google.code.maven-license-plugin</groupId>

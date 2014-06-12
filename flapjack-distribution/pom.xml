@@ -4,6 +4,7 @@
         <groupId>flapjack</groupId>
         <artifactId>flapjack-parent</artifactId>
         <version>1.0.1</version>
+        <relativePath>../flapjack-parent/pom.xml</relativePath>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
