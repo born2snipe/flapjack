@@ -1,7 +1,1 @@
-cd flapjack-parent
-
-mvn clean install
-
-cd ..
-
-mvn clean install
+mvn clean install -f flapjack-parent && mvn clean install

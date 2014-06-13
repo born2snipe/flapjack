@@ -58,20 +58,6 @@
 
         </plugins>
 
-        <pluginManagement>
-
-            <plugins>
-
-                <plugin>
-                    <groupId>com.google.code.maven-license-plugin</groupId>
-                    <artifactId>maven-license-plugin</artifactId>
-                    <version>1.4.0-rc1</version>
-                </plugin>
-
-            </plugins>
-
-        </pluginManagement>
-
     </build>
 
     <profiles>
@@ -144,21 +130,5 @@
         </profile>
 
     </profiles>
-
-    <pluginRepositories>
-
-        <pluginRepository>
-            <id>mc-release</id>
-            <name>Local Maven repository of releases</name>
-            <url>http://mc-repo.googlecode.com/svn/maven2/releases</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-        </pluginRepository>
-
-    </pluginRepositories>
 
 </project>
