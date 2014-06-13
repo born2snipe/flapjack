@@ -3,14 +3,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <parent>
         <groupId>flapjack</groupId>
-        <artifactId>flapjack-dependency-management</artifactId>
+        <artifactId>flapjack-aggregate</artifactId>
         <version>1.0.4-SNAPSHOT</version>
-        <relativePath>../flapjack-dependency-management/pom.xml</relativePath>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>flapjack</groupId>
     <artifactId>flapjack-cobol</artifactId>
     <name>Flapjack Cobol</name>
 

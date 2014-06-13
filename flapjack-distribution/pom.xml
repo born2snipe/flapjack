@@ -2,14 +2,13 @@
 <project>
     <parent>
         <groupId>flapjack</groupId>
-        <artifactId>flapjack-parent</artifactId>
-        <version>1.0.1</version>
-        <relativePath>../flapjack-parent/pom.xml</relativePath>
+        <artifactId>flapjack-aggregate</artifactId>
+        <version>1.0.4-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>flapjack</groupId>
     <artifactId>flapjack-distribution</artifactId>
     <name>Flapjack Distribution</name>
     <packaging>pom</packaging>

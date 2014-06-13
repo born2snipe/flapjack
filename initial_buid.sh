@@ -1,1 +1,0 @@
-mvn clean install -f flapjack-parent && mvn clean install
