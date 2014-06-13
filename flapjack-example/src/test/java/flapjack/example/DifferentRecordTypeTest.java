@@ -24,14 +24,18 @@ import flapjack.model.RecordFactoryResolver;
 import flapjack.parser.ParseResult;
 import flapjack.parser.RecordLayoutResolver;
 import flapjack.parser.RecordParserImpl;
-import junit.framework.TestCase;
+import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
-public class DifferentRecordTypeTest extends TestCase {
 
+public class DifferentRecordTypeTest {
+
+    @Test
     public void test() throws IOException {
         String records = "#1Joe       Smith     jsmith    \n" +
                 "#21234 Easy St        Chicago        IL";

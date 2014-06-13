@@ -15,16 +15,19 @@ package flapjack.annotation;
 import flapjack.test.Address;
 import flapjack.test.User;
 import flapjack.test2.Phone;
-import junit.framework.TestCase;
+import org.junit.Test;
 
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.junit.Assert.*;
 
-public class RecordPackageClassScannerTest extends TestCase {
 
+public class RecordPackageClassScannerTest {
+
+    @Test
     public void test_scan_ScanJar() {
         ClassLoader loader = Thread.currentThread().getContextClassLoader();
         URL url = loader.getResource("flapjack-annotation-test-helper.jar");
@@ -40,6 +43,7 @@ public class RecordPackageClassScannerTest extends TestCase {
         assertEquals("flapjack.annotation.test.Dog", classes.get(0).getName());
     }
 
+    @Test
     public void test_scan_SinglePackage() {
         RecordPackageClassScanner scanner = new RecordPackageClassScanner();
 
@@ -51,6 +55,7 @@ public class RecordPackageClassScannerTest extends TestCase {
         assertEquals(1, classes.size());
     }
 
+    @Test
     public void test_scan_MultiplePackages() {
         RecordPackageClassScanner scanner = new RecordPackageClassScanner();
 
@@ -63,6 +68,7 @@ public class RecordPackageClassScannerTest extends TestCase {
         assertEquals(2, classes.size());
     }
 
+    @Test
     public void test_scan_PackageGivenDoesNotExist() {
         RecordPackageClassScanner scanner = new RecordPackageClassScanner();
 

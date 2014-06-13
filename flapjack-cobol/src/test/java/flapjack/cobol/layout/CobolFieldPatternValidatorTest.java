@@ -12,10 +12,14 @@
  */
 package flapjack.cobol.layout;
 
-import junit.framework.TestCase;
+import org.junit.Test;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 
-public class CobolFieldPatternValidatorTest extends TestCase {
+public class CobolFieldPatternValidatorTest {
+    @Test
     public void test_validate() {
         CobolFieldPatternValidator validator = new CobolFieldPatternValidator();
         assertTrue(validator.validate("X"));

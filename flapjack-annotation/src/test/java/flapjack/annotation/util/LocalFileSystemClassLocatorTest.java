@@ -15,21 +15,26 @@ package flapjack.annotation.util;
 import flapjack.test.Address;
 import flapjack.test.User;
 import flapjack.test.UserRecordLayout;
-import junit.framework.TestCase;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.junit.Assert.assertEquals;
 
-public class LocalFileSystemClassLocatorTest extends TestCase {
+
+public class LocalFileSystemClassLocatorTest {
     private LocalFileSystemClassLocator locator;
 
+    @Before
     public void setUp() {
         locator = new LocalFileSystemClassLocator();
     }
 
+    @Test
     public void test_ExactPackage() throws MalformedURLException {
         URL url = Thread.currentThread().getContextClassLoader().getResource("flapjack/test");
 
@@ -38,7 +43,8 @@ public class LocalFileSystemClassLocatorTest extends TestCase {
         assertEquals(3, classes.size());
         assertEquals(Arrays.asList(Address.class, User.class, UserRecordLayout.class), classes);
     }
-    
+
+    @Test
     public void test_RegexPattern() throws MalformedURLException {
         URL url = Thread.currentThread().getContextClassLoader().getResource("flapjack/test");
 
@@ -48,6 +54,7 @@ public class LocalFileSystemClassLocatorTest extends TestCase {
         assertEquals(Arrays.asList(Address.class, User.class, UserRecordLayout.class), classes);
     }
 
+    @Test
     public void test_NoMatch() throws MalformedURLException {
         URL url = Thread.currentThread().getContextClassLoader().getResource("flapjack/test");
 

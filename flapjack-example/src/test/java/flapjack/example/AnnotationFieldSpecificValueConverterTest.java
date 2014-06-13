@@ -31,18 +31,23 @@ import flapjack.parser.RecordParserImpl;
 import flapjack.parser.SameRecordLayoutResolver;
 import flapjack.util.AbstractTextValueConverter;
 import flapjack.util.TypeConverter;
-import junit.framework.TestCase;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.Arrays;
 
+import static junit.framework.TestCase.assertTrue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
-public class AnnotationFieldSpecificValueConverterTest extends TestCase {
+
+public class AnnotationFieldSpecificValueConverterTest {
     private AnnotatedObjectMappingStore objectMappingStore;
     private TypeConverter typeConverter;
 
-    @Override
+    @Before
     public void setUp() {
 
         /**
@@ -58,6 +63,7 @@ public class AnnotationFieldSpecificValueConverterTest extends TestCase {
         typeConverter.registerConverter(new YesNoValueConverter());
     }
 
+    @Test
     public void test_build() {
 
         /**
@@ -79,6 +85,7 @@ public class AnnotationFieldSpecificValueConverterTest extends TestCase {
         assertEquals("Joe        Schmoe     N\n", new String(output.toByteArray()));
     }
 
+    @Test
     public void test_parse() throws Exception {
         String records = "Joe        Schmoe     Y";
 

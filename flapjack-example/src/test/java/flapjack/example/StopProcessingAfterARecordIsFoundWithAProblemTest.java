@@ -20,14 +20,21 @@ import flapjack.model.ObjectMapping;
 import flapjack.model.ObjectMappingStore;
 import flapjack.model.RecordFactory;
 import flapjack.model.RecordFactoryResolver;
-import flapjack.parser.*;
-import junit.framework.TestCase;
+import flapjack.parser.BadRecord;
+import flapjack.parser.ParseResult;
+import flapjack.parser.ParseResultFactory;
+import flapjack.parser.RecordParserImpl;
+import flapjack.parser.SameRecordLayoutResolver;
+import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
 
+import static org.junit.Assert.fail;
 
-public class StopProcessingAfterARecordIsFoundWithAProblemTest extends TestCase {
 
+public class StopProcessingAfterARecordIsFoundWithAProblemTest {
+
+    @Test
     public void test() throws Exception {
         // this record is not the proper length to match the RecordLayout
         String records = "Joe        Schmoe     jschmoe111";

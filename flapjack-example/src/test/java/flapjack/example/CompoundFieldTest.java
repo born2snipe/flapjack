@@ -21,26 +21,38 @@ import flapjack.layout.FieldDefinition;
 import flapjack.layout.RecordLayout;
 import flapjack.layout.SimpleRecordLayout;
 import flapjack.layout.TextPaddingDescriptor;
-import flapjack.model.*;
+import flapjack.model.BinaryFieldFactory;
+import flapjack.model.DomainFieldFactory;
+import flapjack.model.FieldByteMap;
+import flapjack.model.ListMap;
+import flapjack.model.ObjectMapping;
+import flapjack.model.ObjectMappingStore;
+import flapjack.model.RecordFactory;
+import flapjack.model.SameRecordFactoryResolver;
 import flapjack.parser.FieldData;
 import flapjack.parser.ParseResult;
 import flapjack.parser.RecordParserImpl;
 import flapjack.parser.SameRecordLayoutResolver;
 import flapjack.util.TypeConverter;
 import flapjack.util.ValueConverter;
-import junit.framework.TestCase;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
-public class CompoundFieldTest extends TestCase {
+
+public class CompoundFieldTest {
     private SimpleRecordLayout recordLayout;
     private ObjectMapping objectMapping;
     private ObjectMappingStore objectMappingStore;
 
+    @Before
     public void setUp() {
         /**
          * Create the record layout
@@ -64,6 +76,7 @@ public class CompoundFieldTest extends TestCase {
         objectMappingStore.add(objectMapping);
     }
 
+    @Test
     public void test_build() {
         RecordBuilder builder = new RecordBuilder();
         builder.setBuilderRecordLayoutResolver(new SameBuilderRecordLayoutResolver(recordLayout));
@@ -83,6 +96,7 @@ public class CompoundFieldTest extends TestCase {
         assertEquals("Joe  Smith     123 Easy St    City  IA", new String(output.toByteArray()));
     }
 
+    @Test
     public void test_parse() throws IOException {
         String record = "Joe  Smith     123 Easy St    City  IA";
 

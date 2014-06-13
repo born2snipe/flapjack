@@ -12,10 +12,14 @@
  */
 package flapjack.cobol.layout;
 
-import junit.framework.TestCase;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 
-public class IntegerFieldDefinitionTest extends TestCase {
+public class IntegerFieldDefinitionTest {
+    @Test
     public void test_constructor() {
         assertEquals(1, new IntegerFieldDefinition("name", 0, "9").getLength());
         assertEquals(1, new IntegerFieldDefinition("name", 0, " 9 ").getLength());

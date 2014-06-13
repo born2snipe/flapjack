@@ -24,15 +24,18 @@ import flapjack.parser.BadRecord;
 import flapjack.parser.NotifyingParseResultFactory;
 import flapjack.parser.RecordParserImpl;
 import flapjack.parser.SameRecordLayoutResolver;
-import junit.framework.TestCase;
+import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.Assert.assertEquals;
 
-public class EventDrivenParsingTest extends TestCase {
+
+public class EventDrivenParsingTest {
+    @Test
     public void test() throws IOException {
         String data = "Joe        Schmoe     jschmoe111 #\n" +
                 "Jimmy      Smith      jsmith     #";

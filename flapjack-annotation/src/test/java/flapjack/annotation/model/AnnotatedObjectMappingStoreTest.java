@@ -12,31 +12,39 @@
  */
 package flapjack.annotation.model;
 
-import flapjack.annotation.*;
+import flapjack.annotation.Converter;
+import flapjack.annotation.Field;
+import flapjack.annotation.FieldLocator;
+import flapjack.annotation.Record;
+import flapjack.annotation.RecordPackageClassScanner;
+import flapjack.annotation.ReflectionField;
 import flapjack.model.FieldMapping;
 import flapjack.model.ObjectMapping;
 import flapjack.util.IntegerTextValueConverter;
 import flapjack.util.ValueConverter;
-import junit.framework.TestCase;
+import org.junit.Before;
+import org.junit.Test;
 
 import static java.util.Arrays.asList;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 
-public class AnnotatedObjectMappingStoreTest extends TestCase {
+public class AnnotatedObjectMappingStoreTest {
     private RecordPackageClassScanner classScanner;
     private FieldLocator fieldLocator;
     private AnnotatedObjectMappingStore store;
 
-    protected void setUp() throws Exception {
-        super.setUp();
+    @Before
+    public void setUp() throws Exception {
         classScanner = mock(RecordPackageClassScanner.class);
         fieldLocator = mock(FieldLocator.class);
         store = new AnnotatedObjectMappingStore(classScanner, fieldLocator);
         store.setPackages(asList("some.package.name"));
     }
 
+    @Test
     public void test_singleAnnotatedFieldWithConverter() {
         ReflectionField field = mock(ReflectionField.class);
 
@@ -54,6 +62,7 @@ public class AnnotatedObjectMappingStoreTest extends TestCase {
         assertEquals(1, objectMapping.getFieldCount());
     }
 
+    @Test
     public void test_singleAnnotatedField() {
         ReflectionField field = mock(ReflectionField.class);
 
@@ -68,6 +77,7 @@ public class AnnotatedObjectMappingStoreTest extends TestCase {
         assertEquals(1, objectMapping.getFieldCount());
     }
 
+    @Test
     public void test_find_FindMapping() {
         AnnotatedObjectMappingStore objMappingStore = new AnnotatedObjectMappingStore();
         objMappingStore.setPackages(asList("flapjack.annotation.model"));

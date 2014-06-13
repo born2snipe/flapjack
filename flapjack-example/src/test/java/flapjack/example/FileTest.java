@@ -24,13 +24,17 @@ import flapjack.parser.FlatFileParser;
 import flapjack.parser.ParseResult;
 import flapjack.parser.RecordParserImpl;
 import flapjack.parser.SameRecordLayoutResolver;
-import junit.framework.TestCase;
+import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-public class FileTest extends TestCase {
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
+public class FileTest {
+    @Test
     public void test() throws URISyntaxException, IOException {
         // The file to be parsed
         File file = new File(Thread.currentThread().getContextClassLoader().getResource("test.txt").toURI());

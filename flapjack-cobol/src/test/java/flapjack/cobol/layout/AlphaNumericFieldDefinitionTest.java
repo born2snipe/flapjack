@@ -12,10 +12,14 @@
  */
 package flapjack.cobol.layout;
 
-import junit.framework.TestCase;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 
-public class AlphaNumericFieldDefinitionTest extends TestCase {
+public class AlphaNumericFieldDefinitionTest {
+    @Test
     public void test_constructor_SinglePattern() {
         AlphaNumericFieldDefinition fieldDef = new AlphaNumericFieldDefinition("name", 1, "X");
 
@@ -26,6 +30,7 @@ public class AlphaNumericFieldDefinitionTest extends TestCase {
         assertNotNull(fieldDef.getPaddingDescriptor());
     }
 
+    @Test
     public void test_constructor_SinglePattern_WithSpaces() {
         AlphaNumericFieldDefinition fieldDef = new AlphaNumericFieldDefinition("name", 1, " X ");
 
@@ -35,6 +40,7 @@ public class AlphaNumericFieldDefinitionTest extends TestCase {
         assertEquals("X", fieldDef.getPattern());
     }
 
+    @Test
     public void test_constructor_MultiPattern() {
         AlphaNumericFieldDefinition fieldDef = new AlphaNumericFieldDefinition("two", 2, "XX");
 
@@ -44,6 +50,7 @@ public class AlphaNumericFieldDefinitionTest extends TestCase {
         assertEquals("XX", fieldDef.getPattern());
     }
 
+    @Test
     public void test_constructor_MultiplierPattern_SingleDigit() {
         AlphaNumericFieldDefinition fieldDef = new AlphaNumericFieldDefinition("two", 2, "X(2)");
 
@@ -53,6 +60,7 @@ public class AlphaNumericFieldDefinitionTest extends TestCase {
         assertEquals("X(2)", fieldDef.getPattern());
     }
 
+    @Test
     public void test_constructor_MultiplierPattern_MultipleDigits() {
         AlphaNumericFieldDefinition fieldDef = new AlphaNumericFieldDefinition("two", 2, "X(21)");
 
@@ -62,6 +70,7 @@ public class AlphaNumericFieldDefinitionTest extends TestCase {
         assertEquals("X(21)", fieldDef.getPattern());
     }
 
+    @Test
     public void test_constructor_MultiplierPattern_Lowercase() {
         AlphaNumericFieldDefinition fieldDef = new AlphaNumericFieldDefinition("two", 2, "x(21)");
 

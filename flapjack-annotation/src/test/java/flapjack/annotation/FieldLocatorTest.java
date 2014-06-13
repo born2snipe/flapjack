@@ -12,23 +12,29 @@
  */
 package flapjack.annotation;
 
-import junit.framework.TestCase;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.List;
 
+import static org.junit.Assert.*;
 
-public class FieldLocatorTest extends TestCase {
+
+public class FieldLocatorTest {
     private FieldLocator locator;
 
+    @Before
     public void setUp() {
         locator = new FieldLocator();
     }
 
+    @Test
     public void test_locateById_NotFoundField() {
         assertNull(locator.locateById(Dummy.class, "doesNotExist"));
     }
 
+    @Test
     public void test_locateById_FoundFieldByIdProvided() {
         ReflectionField field = locator.locateById(Dummy.class, "field1");
 
@@ -36,6 +42,7 @@ public class FieldLocatorTest extends TestCase {
         assertEquals("fieldOne", field.getName());
     }
 
+    @Test
     public void test_locateById_FoundFieldByFieldNameMatching() {
         ReflectionField field = locator.locateById(Dummy.class, "field2");
 
@@ -43,6 +50,7 @@ public class FieldLocatorTest extends TestCase {
         assertEquals("field2", field.getName());
     }
 
+    @Test
     public void test_locateById_FoundFieldByFieldNameMatching_FieldIdDoesNotMeetJavaSpec_WithNumber() {
         ReflectionField field = locator.locateById(Dummy.class, "Field 2");
 
@@ -50,6 +58,7 @@ public class FieldLocatorTest extends TestCase {
         assertEquals("field2", field.getName());
     }
 
+    @Test
     public void test_locateById_FoundFieldByFieldNameMatching_FieldIdDoesNotMeetJavaSpec() {
         ReflectionField field = locator.locateById(Dummy.class, "Field three");
 
@@ -57,6 +66,7 @@ public class FieldLocatorTest extends TestCase {
         assertEquals("fieldThree", field.getName());
     }
 
+    @Test
     public void test_locateById_FoundFieldByFieldNameMatching_FieldIdDoesNotMeetJavaSpec_SingleLetter() {
         ReflectionField field = locator.locateById(Dummy.class, "Field a");
 
@@ -64,6 +74,7 @@ public class FieldLocatorTest extends TestCase {
         assertEquals("fieldA", field.getName());
     }
 
+    @Test
     public void test_locateById_FoundFieldByFieldNameMatching_FieldIdExactMatch() {
         ReflectionField field = locator.locateById(Dummy.class, "FieldB");
 
@@ -71,6 +82,7 @@ public class FieldLocatorTest extends TestCase {
         assertEquals("FieldB", field.getName());
     }
 
+    @Test
     public void test_locateAnnotated() {
         List<String> fields = locator.gatherFieldIds(Dummy.class);
         assertNotNull(fields);

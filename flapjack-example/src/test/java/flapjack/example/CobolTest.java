@@ -28,19 +28,23 @@ import flapjack.model.SameRecordFactoryResolver;
 import flapjack.parser.ParseResult;
 import flapjack.parser.RecordParserImpl;
 import flapjack.parser.SameRecordLayoutResolver;
-import junit.framework.TestCase;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Arrays;
 
+import static org.junit.Assert.assertEquals;
 
-public class CobolTest extends TestCase {
+
+public class CobolTest {
     private AnnotatedObjectMappingStore objectMappingStore;
     private CobolTypeConverter typeConverter;
     private LoanRecordLayout recordLayout;
 
+    @Before
     public void setUp() {
         /**
          * Initialize the AnnotatedObjctMappingStore with what packages need to be scanned for the domain classes
@@ -52,6 +56,7 @@ public class CobolTest extends TestCase {
         recordLayout = new LoanRecordLayout();
     }
 
+    @Test
     public void test_build() throws Exception {
         /**
          * Initialize the RecordBuilder
@@ -73,6 +78,7 @@ public class CobolTest extends TestCase {
         assertEquals("123456789JOE A SCHMOE                  01500012\n", new String(output.toByteArray()));
     }
 
+    @Test
     public void test_parser() throws IOException {
         String record = "123456789JOE A SCHMOE                  01500012";
 
@@ -100,7 +106,7 @@ public class CobolTest extends TestCase {
         assertEquals("123456789", loan.getSsn());
         assertEquals("JOE A SCHMOE                  ", loan.getName());
         assertEquals(1500, loan.getAmount());
-        assertEquals(0.12d, loan.rate);
+        assertEquals(0.12d, loan.rate, 0.0d);
     }
 
     /**

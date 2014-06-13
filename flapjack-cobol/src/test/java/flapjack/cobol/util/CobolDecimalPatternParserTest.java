@@ -12,17 +12,22 @@
  */
 package flapjack.cobol.util;
 
-import junit.framework.TestCase;
+import org.junit.Before;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 
-public class CobolDecimalPatternParserTest extends TestCase {
+public class CobolDecimalPatternParserTest {
     private CobolDecimalPatternParser parser;
 
-    protected void setUp() throws Exception {
-        super.setUp();
+    @Before
+    public void setUp() throws Exception {
         parser = new CobolDecimalPatternParser();
     }
 
+    @Test
     public void test_problemWithCobolPattern() {
         try {
             parser.parseDecimalPlaces("999");

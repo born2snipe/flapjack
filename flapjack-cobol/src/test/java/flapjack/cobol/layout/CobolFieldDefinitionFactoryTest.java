@@ -13,19 +13,23 @@
 package flapjack.cobol.layout;
 
 import flapjack.layout.PaddingDescriptor;
-import junit.framework.TestCase;
+import org.junit.Before;
+import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 
-public class CobolFieldDefinitionFactoryTest extends TestCase {
+public class CobolFieldDefinitionFactoryTest {
     private CobolFieldDefinitionFactory factory;
     private StubPaddingDescriptor paddingDescriptor;
 
-    protected void setUp() throws Exception {
-        super.setUp();
+    @Before
+    public void setUp() throws Exception {
         factory = new CobolFieldDefinitionFactory();
         paddingDescriptor = new StubPaddingDescriptor();
     }
 
+    @Test
     public void test_integer() {
         CobolFieldDefinition fieldDefinition = factory.build(createInfo(CobolFieldType.INTEGER, "name", "9", 0), paddingDescriptor);
         assertTrue(fieldDefinition instanceof IntegerFieldDefinition);
@@ -34,7 +38,8 @@ public class CobolFieldDefinitionFactoryTest extends TestCase {
         assertEquals(0, fieldDefinition.getPosition());
         assertSame(paddingDescriptor, fieldDefinition.getPaddingDescriptor());
     }
-    
+
+    @Test
     public void test_decimal() {
         CobolFieldDefinition fieldDefinition = factory.build(createInfo(CobolFieldType.DECIMAL, "name", "9v9", 0), paddingDescriptor);
         assertTrue(fieldDefinition instanceof DecimalFieldDefinition);
@@ -44,7 +49,7 @@ public class CobolFieldDefinitionFactoryTest extends TestCase {
         assertSame(paddingDescriptor, fieldDefinition.getPaddingDescriptor());
     }
 
-    
+    @Test
     public void test_alphaNumeric() {
         CobolFieldDefinition fieldDefinition = factory.build(createInfo(CobolFieldType.ALPHA_NUMERIC, "name", "pattern", 0), paddingDescriptor);
 

@@ -12,7 +12,7 @@
  */
 package flapjack.annotation.util;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -20,9 +20,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import static org.junit.Assert.assertEquals;
 
-public class AbstractClassLocatorTest extends TestCase {
 
+public class AbstractClassLocatorTest {
+
+    @Test
     public void test_ensureClassesAreSorted() {
         StubClassLocator classLocator = new StubClassLocator();
         classLocator.classesFound.add(String.class);

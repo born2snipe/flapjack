@@ -12,16 +12,20 @@
  */
 package flapjack.annotation.util;
 
-import junit.framework.TestCase;
+import org.junit.Before;
+import org.junit.Test;
 
-import java.net.URLClassLoader;
 import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.List;
 
+import static org.junit.Assert.assertEquals;
 
-public class JarFileClassLocatorTest extends TestCase {
+
+public class JarFileClassLocatorTest {
     private JarFileClassLocator locator;
 
+    @Before
     public void setUp() {
         ClassLoader loader = Thread.currentThread().getContextClassLoader();
 
@@ -32,6 +36,7 @@ public class JarFileClassLocatorTest extends TestCase {
         locator = new JarFileClassLocator();
     }
 
+    @Test
     public void test_exactPackagename() {
         URL url = Thread.currentThread().getContextClassLoader().getResource("flapjack/annotation/test");
 
@@ -41,7 +46,8 @@ public class JarFileClassLocatorTest extends TestCase {
         assertEquals("flapjack.annotation.test.Dog", classes.get(0).getName());
         assertEquals("flapjack.annotation.test.DogRecordLayout", classes.get(1).getName());
     }
-    
+
+    @Test
     public void test_matchingPattern() {
         URL url = Thread.currentThread().getContextClassLoader().getResource("flapjack/annotation/test");
 
@@ -52,6 +58,7 @@ public class JarFileClassLocatorTest extends TestCase {
         assertEquals("flapjack.annotation.test.DogRecordLayout", classes.get(1).getName());
     }
 
+    @Test
     public void test_noMatches() {
         URL url = Thread.currentThread().getContextClassLoader().getResource("flapjack/annotation/test");
 

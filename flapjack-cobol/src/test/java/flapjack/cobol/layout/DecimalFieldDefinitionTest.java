@@ -12,10 +12,14 @@
  */
 package flapjack.cobol.layout;
 
-import junit.framework.TestCase;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 
-public class DecimalFieldDefinitionTest extends TestCase {
+public class DecimalFieldDefinitionTest {
+    @Test
     public void test_constructor() {
         assertEquals(2, new DecimalFieldDefinition("name", 0, "9v9").getLength());
         assertEquals(2, new DecimalFieldDefinition("name", 0, "9V9").getLength());

@@ -23,14 +23,17 @@ import flapjack.model.SameRecordFactoryResolver;
 import flapjack.parser.ParseResult;
 import flapjack.parser.RecordParserImpl;
 import flapjack.parser.SameRecordLayoutResolver;
-import junit.framework.TestCase;
+import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Arrays;
 
+import static org.junit.Assert.assertEquals;
 
-public class UseAnnotationTest extends TestCase {
+
+public class UseAnnotationTest {
+    @Test
     public void test() throws IOException {
         String records = "Coldplay  Clocks    03:45";
 

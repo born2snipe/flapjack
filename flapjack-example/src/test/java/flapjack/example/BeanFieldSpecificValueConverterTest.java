@@ -12,6 +12,8 @@
  */
 package flapjack.example;
 
+import flapjack.builder.RecordBuilder;
+import flapjack.builder.SameBuilderRecordLayoutResolver;
 import flapjack.io.LineRecordReader;
 import flapjack.io.LineRecordWriter;
 import flapjack.io.StreamRecordWriter;
@@ -25,21 +27,24 @@ import flapjack.model.SameRecordFactoryResolver;
 import flapjack.parser.ParseResult;
 import flapjack.parser.RecordParserImpl;
 import flapjack.parser.SameRecordLayoutResolver;
-import flapjack.util.TypeConverter;
-import flapjack.util.ValueConverter;
 import flapjack.util.AbstractTextValueConverter;
-import flapjack.builder.RecordBuilder;
-import flapjack.builder.SameBuilderRecordLayoutResolver;
-import junit.framework.TestCase;
+import flapjack.util.TypeConverter;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 
+import static junit.framework.TestCase.assertTrue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
-public class BeanFieldSpecificValueConverterTest extends TestCase {
+
+public class BeanFieldSpecificValueConverterTest {
     private ObjectMappingStore objectMappingStore;
     private TypeConverter typeConverter;
 
+    @Before
     public void setUp() {
 
         /**
@@ -60,6 +65,7 @@ public class BeanFieldSpecificValueConverterTest extends TestCase {
         typeConverter.registerConverter(new YesNoValueConverter());
     }
 
+    @Test
     public void test_build() {
 
         /**
@@ -80,7 +86,8 @@ public class BeanFieldSpecificValueConverterTest extends TestCase {
 
         assertEquals("Joe        Schmoe     N\n", new String(output.toByteArray()));
     }
-    
+
+    @Test
     public void test_parser() throws Exception {
         String records = "Joe        Schmoe     Y";
 

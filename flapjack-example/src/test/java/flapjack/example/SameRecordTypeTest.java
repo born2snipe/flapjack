@@ -23,13 +23,17 @@ import flapjack.model.SameRecordFactoryResolver;
 import flapjack.parser.ParseResult;
 import flapjack.parser.RecordParserImpl;
 import flapjack.parser.SameRecordLayoutResolver;
-import junit.framework.TestCase;
+import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
-public class SameRecordTypeTest extends TestCase {
 
+public class SameRecordTypeTest {
+
+    @Test
     public void test_success() throws Exception {
         String records = "Joe        Schmoe     jschmoe111 #\n" +
                 "Jimmy      Smith      jsmith     #";
